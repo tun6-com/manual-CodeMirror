@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <title>样式_CodeMirror_用户手册_Tun6</title>
+    <meta name="keywords" content="CodeMirror,样式,CSS,中文,文档,手册,说明,API,"/>
+    <meta name="description" content="CodeMirror是一个可以嵌入到网页中运行的代码编辑器组件，CodeMirror官方说明文档的中文翻译版。">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="../common.css">
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?d5f982237a80a8b72feeaa6caac3f4fc";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+  </head>
+  <body>
+    <div id="app" class="page">
+      <el-container v-bind:style="{height: ch}">
+        <el-aside>
+          <h1>CodeMirror中文说明文档</h1>
+
+
+          <h3>文档大纲</h3>
+          <ul>
+            <li><a href="../">基本用法</a></li>
+            <li><a href="../config/">配置</a></li>
+            <li><a href="../events/">事件</a></li>
+            <li><a href="../keymaps/">快捷键</a></li>
+            <li><a href="../commands/">命令</a></li>
+            <li>样式</li>
+            <li><a href="../api/">API调用</a></li>
+            <li><a href="../addons/">插件</a></li>
+            <li><a href="../modeapi/">自定义Mode</a></li>
+            <li><a href="../vimapi/">Vim Mode API</a></li>
+          </ul>
+        </el-aside>
+        <el-main>
+          <el-alert
+            title="须知"
+            type="warning"
+            :closable="false"
+            show-icon>
+            本文档并未完全翻译完成，我需要你的帮助。<a href="https://github.com/tun6-com/manual-CodeMirror" target="_blank">前往GitHub编辑</a>。
+          </el-alert>
+          <section id=styling>
+              <h2>自定义样式</h2>
+
+              <p>可以通过修改CSS文件来调整CodeMirror的外观。
+              Mode提供的外观只针对其自身，可以直接修改。
+              修改 <a href="../lib/codemirror.css"><code>codemirror.css</code></a> 文件可以调整编辑器自身的外观。</p>
+
+              <p>修改该文件需要遵守一些规则。
+              修改颜色等时需要非常小心。
+              CSS定义规则如下：</p>
+
+              <dl>
+                <dt id="class_CodeMirror"><code><strong>CodeMirror</strong></code></dt>
+                <dd>编辑器父元素。
+                用来定义编辑器的宽、高、边框和定位。
+                也可以用来设置编辑器通用的样式（比如字体和字体大小），或背景。
+                设置该元素的 <code>height</code> 为 <code>auto</code> 会让编辑器 <a href="../demo/resize.html">调整到合适的高度</a>
+                （推荐与 <a href="#option_viewportMargin"><code>viewportMargin</code> 选项</a> 一起使用）。</dd>
+
+                <dt id="class_CodeMirror_focused"><code><strong>CodeMirror-focused</strong></code></dt>
+                <dd>当编辑器获得焦点时，父元素将使用该样式。
+                编辑器失去焦点时将隐藏光标、更换选区的颜色。</dd>
+
+                <dt id="class_CodeMirror_gutters"><code><strong>CodeMirror-gutters</strong></code></dt>
+                <dd>这个是所有侧边栏的基础样式。
+                一般用来设置侧边栏的默认背景色，也可以给侧边栏加右边框。</dd>
+
+                <dt id="class_CodeMirror_linenumbers"><code><strong>CodeMirror-linenumbers</strong></code></dt>
+                <dd>用来设置行号侧边栏的背景或宽度。</dd>
+
+                <dt id="class_CodeMirror_linenumber"><code><strong>CodeMirror-linenumber</strong></code></dt>
+                <dd>用来设置行号侧边栏中的数字。
+                这些数字不是 <code>CodeMirror-linenumbers</code> 的子元素，而是使用绝对定位覆盖的。
+                可以用来设置对齐方式或文字样式。</dd>
+
+                <dt id="class_CodeMirror_lines"><code><strong>CodeMirror-lines</strong></code></dt>
+                <dd>可视行。
+                用来设置编辑器正文的上下内填充。</dd>
+
+                <dt id="class_CodeMirror_cursor"><code><strong>CodeMirror-cursor</strong></code></dt>
+                <dd>光标是一个绝对定位的block元素。
+                可以随意修改样式。</dd>
+
+                <dt id="class_CodeMirror_selected"><code><strong>CodeMirror-selected</strong></code></dt>
+                <dd>选区是用带有该样式的 <code>span</code> 元素代替的。</dd>
+
+                <dt id="class_CodeMirror_matchingbracket"><code><strong>CodeMirror-matchingbracket</strong></code>,
+                  <code><strong>CodeMirror-nonmatchingbracket</strong></code></dt>
+                <dd>用来设置匹配（不匹配）的括号。</dd>
+              </dl>
+
+              <p>如果你给页面中的所有 <code>div</code> 或 <code>pre</code> 都定义了样式（不该这么做），你必须重写规则来消除对 <code>CodeMirror</code> 下所有元素的影响。</p>
+
+              <p>主题也是简单的CSS文件，用来给关键字着色。
+              参考 <a href="../theme/"><code>theme</code></a> 文件夹下的文件。</p>
+          </section>
+
+
+        </el-main>
+      </el-container>
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/element-ui/lib/index.js"></script>
+    <script type="text/javascript">
+    var app = new Vue({
+      el: '#app',
+      data: {
+        ph:document.documentElement.clientHeight,
+        pw:document.documentElement.clientWidth,
+        ch:'auto',
+      },
+      mounted:function(){
+        if(this.pw>1200) this.ch=this.ph+'px';
+      },
+      methods:{
+
+      }
+    })
+    </script>
+  </body>
+</html>

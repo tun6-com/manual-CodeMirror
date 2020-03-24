@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <title>快捷键_CodeMirror_用户手册_Tun6</title>
+    <meta name="keywords" content="CodeMirror,快捷键,按键,中文,文档,手册,说明,API,"/>
+    <meta name="description" content="CodeMirror是一个可以嵌入到网页中运行的代码编辑器组件，CodeMirror官方说明文档的中文翻译版。">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="../common.css">
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?d5f982237a80a8b72feeaa6caac3f4fc";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+  </head>
+  <body>
+    <div id="app" class="page">
+      <el-container v-bind:style="{height: ch}">
+        <el-aside>
+          <h1>CodeMirror中文说明文档</h1>
+
+
+          <h3>文档大纲</h3>
+          <ul>
+            <li><a href="../">基本用法</a></li>
+            <li><a href="../config/">配置</a></li>
+            <li><a href="../events/">事件</a></li>
+            <li>快捷键</li>
+            <li><a href="../commands/">命令</a></li>
+            <li><a href="../styling/">样式</a></li>
+            <li><a href="../api/">API调用</a></li>
+            <li><a href="../addons/">插件</a></li>
+            <li><a href="../modeapi/">自定义Mode</a></li>
+            <li><a href="../vimapi/">Vim Mode API</a></li>
+          </ul>
+        </el-aside>
+        <el-main>
+          <el-alert
+            title="须知"
+            type="warning"
+            :closable="false"
+            show-icon>
+            本文档并未完全翻译完成，我需要你的帮助。<a href="https://github.com/tun6-com/manual-CodeMirror" target="_blank">前往GitHub编辑</a>。
+          </el-alert>
+          <section id=keymaps>
+              <h2>按键绑定</h2>
+
+              <p>快捷键可以给按键和鼠标绑定功能。
+              一个快捷键对象，标识了按键与功能对应关系。</p>
+
+              <p>CodeMirror发行版带有<a href="../demo/emacs.html">Emacs</a>、<a href="../demo/vim.html">Vim</a> 和 <a href="../demo/sublime.html">Sublime Text</a>风格的快捷键。</p>
+
+              <p>可以通用名字或键值来标识快捷键。
+              <code>CodeMirror.keyNames</code> 对象定义了常用键的名字和ID。
+              名字如<code>Enter</code>、<code>F5</code>、<code>Q</code> 等。
+              可以与<code>Shift-</code>、<code>Cmd-</code>、<code>Ctrl-</code>、<code>Alt-</code> 组合使用。
+              比如 <code>Shift-Ctrl-Space</code> 就是一个有效的快捷键。</p>
+
+              <p>下面是替换Tab键为空格的例子：</p>
+
+              <pre data-lang="javascript">
+          editor.setOption("extraKeys", {
+            Tab: function(cm) {
+              var spaces = Array(cm.getOption("indentUnit") + 1).join(" ");
+              cm.replaceSelection(spaces);
+            }
+          });</pre>
+
+              <p>也可以直接定义一个字符需要用单引号包围，比如 <code>'$'</code> 或 <code>'q'</code> 。
+                由于按键事件是浏览器触发的，所以可能实现不了该效果。</p>
+
+              <p>鼠标的按键可以用 <code>LeftClick</code>、<code>MiddleClick</code> 和 <code>RightClick</code> 来绑定。
+                这些名字也可以加前修饰词，<code>Double</code>、<code>Triple</code> 可以放在 <code>Click</code> 前（如<code>LeftDoubleClick</code>）来说明点击次数。
+                The function for such a binding is passed the position that was clicked as second argument.</p>
+
+              <p id="normalizeKeyMap">用空格把多个键名分开，可以形成组合键，比如 <code>Ctrl-X Ctrl-V</code>。
+              当按键绑定中有组合键或前修饰键时（<code>Shift-Cmd-Ctrl-Alt</code>），必须调用 <code>CodeMirror.normalizeKeyMap</code> 后才能正常使用。
+              这个函数会调整按键绑定顺序。
+              返回调整后的按键绑定。</p>
+
+              <p><code>CodeMirror.keyMap</code> 对象用名字区分了几种快捷键组。
+              用户可以基于这个对象来定义新的快捷键。
+              定义新快捷键时应该检查该对象中是否已经存在。
+              该对象提供 <code>"default"</code> 快捷键组，包含一些默认快捷键。</p>
+
+              <p>按键对应的值可以是带有一个参数（CodeMirror实例）的函数，也可以是字符串，或者<code>false</code>。
+              值为字符串时，参考<a href="#commands">commands</a>。
+              值为 <code>false</code>时，CodeMirror将不再响应该按键。
+              值为函数时，该函数可以返回 <code>CodeMirror.Pass</code> 来声明不再响应该按键。</p>
+
+              <p>按键绑定值为 <code>"go"</code> 开头的命令时，
+              或带有 <code>motion</code> 属性（本来用于光标移动）的函数时，
+              即使有用 <code>Shift</code> 修饰的值，也会被触发（比如 <code>"Up": "goLineUp"</code> 会同时触发 up 和 shift-up）。
+              这么做是为了简化shift-selection。</p>
+
+              <p>快捷键可以定义 <code>fallthrough</code> 属性来延迟执行。
+              当没有在当前按键表中找到按键时，这个值用来指定间隔多久后去别的按键表中查找。
+              这个值支持单表或多表。</p>
+
+              <p>按键表创建时会调用<code>attach</code>属性，销毁时会调用<code>detach</code>属性，属性值为带有编辑器实例和按键表的函数。
+              请注意，这个只在 <a href="#option_keyMap">top-level keymap</a> 有效，通过 <a href="#option_extraKeys"><code>extraKeys</code></a> 或 <a href="#addKeyMap"><code>addKeyMap</code></a> 添加的按键表无效。</p>
+          </section>
+
+        </el-main>
+      </el-container>
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/element-ui/lib/index.js"></script>
+    <script type="text/javascript">
+    var app = new Vue({
+      el: '#app',
+      data: {
+        ph:document.documentElement.clientHeight,
+        pw:document.documentElement.clientWidth,
+        ch:'auto',
+      },
+      mounted:function(){
+        if(this.pw>1200) this.ch=this.ph+'px';
+      },
+      methods:{
+
+      }
+    })
+    </script>
+  </body>
+</html>

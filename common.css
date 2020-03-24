@@ -1,0 +1,16 @@
+body{display: flex;justify-content: center;margin: 0;}
+.page{width: 100%;font-size: 14px;padding: 0 10px;overflow: hidden;}
+
+/* 小屏幕（平板，大于等于 768px） */
+@media (min-width: 768px) { .page{width: 700px;} }
+/* 中等屏幕（桌面显示器，大于等于 992px） */
+@media (min-width: 992px) { .page{width: 700px;} }
+/* 大屏幕（大桌面显示器，大于等于 1200px） */
+@media (min-width: 1200px) { .page{width: 1200px;} .el-container{flex-wrap: nowrap;} }
+
+.el-row{margin-bottom: 10px;align-items: center;}
+.el-col{display: flex;align-items: center;}
+
+h1{font-size: 20px;}
+h2{font-size: 18px;}
+h3{font-size: 16px;}

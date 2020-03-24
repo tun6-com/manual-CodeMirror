@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <title>自定义mode_CodeMirror_用户手册_Tun6</title>
+    <meta name="keywords" content="CodeMirror,自定义,mode,中文,文档,手册,说明,API,"/>
+    <meta name="description" content="CodeMirror是一个可以嵌入到网页中运行的代码编辑器组件，CodeMirror官方说明文档的中文翻译版。">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="../common.css">
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?d5f982237a80a8b72feeaa6caac3f4fc";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+  </head>
+  <body>
+    <div id="app" class="page">
+      <el-container v-bind:style="{height: ch}">
+        <el-aside>
+          <h1>CodeMirror中文说明文档</h1>
+
+
+          <h3>文档大纲</h3>
+          <ul>
+            <li><a href="../">基本用法</a></li>
+            <li><a href="../config/">配置</a></li>
+            <li><a href="../events/">事件</a></li>
+            <li><a href="../keymaps/">快捷键</a></li>
+            <li><a href="../commands/">命令</li>
+            <li><a href="../styling/">样式</a></li>
+            <li><a href="../api/">API调用</a></li>
+            <li><a href="../addons/">插件</a></li>
+            <li>自定义Mode</li>
+            <li><a href="../vimapi/">Vim Mode API</a></li>
+          </ul>
+        </el-aside>
+        <el-main>
+          <el-alert
+            title="须知"
+            type="warning"
+            :closable="false"
+            show-icon>
+            本文档并未完全翻译完成，我需要你的帮助。<a href="https://github.com/tun6-com/manual-CodeMirror" target="_blank">前往GitHub编辑</a>。
+          </el-alert>
+          <section id=modeapi>
+              <h2>自定义Mode</h2>
+
+              <p>Modes typically consist of a single JavaScript file. This file
+              defines, in the simplest case, a lexer (tokenizer) for your
+              language—a function that takes a character stream as input,
+              advances it past a token, and returns a style for that token. More
+              advanced modes can also handle indentation for the language.</p>
+
+              <p>This section describes the low-level mode interface. Many modes
+              are written directly against this, since it offers a lot of
+              control, but for a quick mode definition, you might want to use
+              the <a href="../demo/simplemode.html">simple mode addon</a>.</p>
+
+              <p id="defineMode">The mode script should
+              call <code><strong>CodeMirror.defineMode</strong></code> to
+              register itself with CodeMirror. This function takes two
+              arguments. The first should be the name of the mode, for which you
+              should use a lowercase string, preferably one that is also the
+              name of the files that define the mode (i.e. <code>"xml"</code> is
+              defined in <code>xml.js</code>). The second argument should be a
+              function that, given a CodeMirror configuration object (the thing
+              passed to the <code>CodeMirror</code> function) and an optional
+              mode configuration object (as in
+              the <a href="#option_mode"><code>mode</code></a> option), returns
+              a mode object.</p>
+
+              <p>Typically, you should use this second argument
+              to <code>defineMode</code> as your module scope function (modes
+              should not leak anything into the global scope!), i.e. write your
+              whole mode inside this function.</p>
+
+              <p>The main responsibility of a mode script is <em>parsing</em>
+              the content of the editor. Depending on the language and the
+              amount of functionality desired, this can be done in really easy
+              or extremely complicated ways. Some parsers can be stateless,
+              meaning that they look at one element (<em>token</em>) of the code
+              at a time, with no memory of what came before. Most, however, will
+              need to remember something. This is done by using a <em>state
+              object</em>, which is an object that is always passed when
+              reading a token, and which can be mutated by the tokenizer.</p>
+
+              <p id="startState">Modes that use a state must define
+              a <code><strong>startState</strong></code> method on their mode
+              object. This is a function of no arguments that produces a state
+              object to be used at the start of a document.</p>
+
+              <p id="token">The most important part of a mode object is
+              its <code><strong>token</strong>(stream, state)</code> method. All
+              modes must define this method. It should read one token from the
+              stream it is given as an argument, optionally update its state,
+              and return a style string, or <code>null</code> for tokens that do
+              not have to be styled. For your styles, you are encouraged to use
+              the 'standard' names defined in the themes (without
+              the <code>cm-</code> prefix). If that fails, it is also possible
+              to come up with your own and write your own CSS theme file.<p>
+
+              <p id="token_style_line">A typical token string would
+              be <code>"variable"</code> or <code>"comment"</code>. Multiple
+              styles can be returned (separated by spaces), for
+              example <code>"string error"</code> for a thing that looks like a
+              string but is invalid somehow (say, missing its closing quote).
+              When a style is prefixed by <code>"line-"</code>
+              or <code>"line-background-"</code>, the style will be applied to
+              the whole line, analogous to what
+              the <a href="#addLineClass"><code>addLineClass</code></a> method
+              does—styling the <code>"text"</code> in the simple case, and
+              the <code>"background"</code> element
+              when <code>"line-background-"</code> is prefixed.</p>
+
+              <p id="StringStream">The stream object that's passed
+              to <code>token</code> encapsulates a line of code (tokens may
+              never span lines) and our current position in that line. It has
+              the following API:</p>
+
+              <dl>
+                <dt><code><strong>eol</strong>() → boolean</code></dt>
+                <dd>Returns true only if the stream is at the end of the
+                line.</dd>
+                <dt><code><strong>sol</strong>() → boolean</code></dt>
+                <dd>Returns true only if the stream is at the start of the
+                line.</dd>
+
+                <dt><code><strong>peek</strong>() → string</code></dt>
+                <dd>Returns the next character in the stream without advancing
+                it. Will return a <code>null</code> at the end of the
+                line.</dd>
+                <dt><code><strong>next</strong>() → string</code></dt>
+                <dd>Returns the next character in the stream and advances it.
+                Also returns <code>null</code> when no more characters are
+                available.</dd>
+
+                <dt><code><strong>eat</strong>(match: string|regexp|function(char: string) → boolean) → string</code></dt>
+                <dd><code>match</code> can be a character, a regular expression,
+                or a function that takes a character and returns a boolean. If
+                the next character in the stream 'matches' the given argument,
+                it is consumed and returned. Otherwise, <code>undefined</code>
+                is returned.</dd>
+                <dt><code><strong>eatWhile</strong>(match: string|regexp|function(char: string) → boolean) → boolean</code></dt>
+                <dd>Repeatedly calls <code>eat</code> with the given argument,
+                until it fails. Returns true if any characters were eaten.</dd>
+                <dt><code><strong>eatSpace</strong>() → boolean</code></dt>
+                <dd>Shortcut for <code>eatWhile</code> when matching
+                white-space.</dd>
+                <dt><code><strong>skipToEnd</strong>()</code></dt>
+                <dd>Moves the position to the end of the line.</dd>
+                <dt><code><strong>skipTo</strong>(str: string) → boolean</code></dt>
+                <dd>Skips to the start of the next occurrence of the given string, if
+                found on the current line (doesn't advance the stream if the
+                string does not occur on the line). Returns true if the
+                string was found.</dd>
+                <dt><code><strong>match</strong>(pattern: string, ?consume: boolean, ?caseFold: boolean) → boolean</code></dt>
+                <dt><code><strong>match</strong>(pattern: regexp, ?consume: boolean) → array&lt;string&gt;</code></dt>
+                <dd>Act like a
+                multi-character <code>eat</code>—if <code>consume</code> is true
+                or not given—or a look-ahead that doesn't update the stream
+                position—if it is false. <code>pattern</code> can be either a
+                string or a regular expression starting with <code>^</code>.
+                When it is a string, <code>caseFold</code> can be set to true to
+                make the match case-insensitive. When successfully matching a
+                regular expression, the returned value will be the array
+                returned by <code>match</code>, in case you need to extract
+                matched groups.</dd>
+
+                <dt><code><strong>backUp</strong>(n: integer)</code></dt>
+                <dd>Backs up the stream <code>n</code> characters. Backing it up
+                further than the start of the current token will cause things to
+                break, so be careful.</dd>
+                <dt><code><strong>column</strong>() → integer</code></dt>
+                <dd>Returns the column (taking into account tabs) at which the
+                current token starts.</dd>
+                <dt><code><strong>indentation</strong>() → integer</code></dt>
+                <dd>Tells you how far the current line has been indented, in
+                spaces. Corrects for tab characters.</dd>
+
+                <dt><code><strong>current</strong>() → string</code></dt>
+                <dd>Get the string between the start of the current token and
+                the current stream position.</dd>
+
+                <dt><code><strong>lookAhead</strong>(n: number) → ?string</code></dt>
+                <dd>Get the line <code>n</code> (&gt;0) lines after the current
+                one, in order to scan ahead across line boundaries. Note that
+                you want to do this carefully, since looking far ahead will make
+                mode state caching much less effective.</dd>
+
+                <dt id="baseToken"><code><strong>baseToken</strong>() → ?{type: ?string, size: number}</code></dt>
+                <dd>Modes added
+                through <a href="#addOverlay"><code>addOverlay</code></a>
+                (and <em>only</em> such modes) can use this method to inspect
+                the current token produced by the underlying mode.</dd>
+              </dl>
+
+              <p id="blankLine">By default, blank lines are simply skipped when
+              tokenizing a document. For languages that have significant blank
+              lines, you can define
+              a <code><strong>blankLine</strong>(state)</code> method on your
+              mode that will get called whenever a blank line is passed over, so
+              that it can update the parser state.</p>
+
+              <p id="copyState">Because state object are mutated, and CodeMirror
+              needs to keep valid versions of a state around so that it can
+              restart a parse at any line, copies must be made of state objects.
+              The default algorithm used is that a new state object is created,
+              which gets all the properties of the old object. Any properties
+              which hold arrays get a copy of these arrays (since arrays tend to
+              be used as mutable stacks). When this is not correct, for example
+              because a mode mutates non-array properties of its state object, a
+              mode object should define
+              a <code><strong>copyState</strong></code> method, which is given a
+              state and should return a safe copy of that state.</p>
+
+              <p id="indent">If you want your mode to provide smart indentation
+              (through the <a href="#indentLine"><code>indentLine</code></a>
+              method and the <code>indentAuto</code>
+              and <code>newlineAndIndent</code> commands, to which keys can be
+              <a href="#option_extraKeys">bound</a>), you must define
+              an <code><strong>indent</strong>(state, textAfter)</code> method
+              on your mode object.</p>
+
+              <p>The indentation method should inspect the given state object,
+              and optionally the <code>textAfter</code> string, which contains
+              the text on the line that is being indented, and return an
+              integer, the amount of spaces to indent. It should usually take
+              the <a href="#option_indentUnit"><code>indentUnit</code></a>
+              option into account. An indentation method may
+              return <code>CodeMirror.Pass</code> to indicate that it
+              could not come up with a precise indentation.</p>
+
+              <p id="mode_comment">To work well with
+              the <a href="#addon_comment">commenting addon</a>, a mode may
+              define <code><strong>lineComment</strong></code> (string that
+              starts a line
+              comment), <code><strong>blockCommentStart</strong></code>, <code><strong>blockCommentEnd</strong></code>
+              (strings that start and end block comments),
+              and <code>blockCommentLead</code> (a string to put at the start of
+              continued lines in a block comment). All of these are
+              optional.</p>
+
+              <p id="electricChars">Finally, a mode may define either
+              an <code>electricChars</code> or an <code>electricInput</code>
+              property, which are used to automatically reindent the line when
+              certain patterns are typed and
+              the <a href="#option_electricChars"><code>electricChars</code></a>
+              option is enabled. <code>electricChars</code> may be a string, and
+              will trigger a reindent whenever one of the characters in that
+              string are typed. Often, it is more appropriate to
+              use <code>electricInput</code>, which should hold a regular
+              expression, and will trigger indentation when the part of the
+              line <em>before</em> the cursor matches the expression. It should
+              usually end with a <code>$</code> character, so that it only
+              matches when the indentation-changing pattern was just typed, not when something was
+              typed after the pattern.</p>
+
+              <p>So, to summarize, a mode <em>must</em> provide
+              a <code>token</code> method, and it <em>may</em>
+              provide <code>startState</code>, <code>copyState</code>,
+              and <code>indent</code> methods. For an example of a trivial mode,
+              see the <a href="../mode/diff/diff.js">diff mode</a>, for a more
+              involved example, see the <a href="../mode/clike/clike.js">C-like
+              mode</a>.</p>
+
+              <p>Sometimes, it is useful for modes to <em>nest</em>—to have one
+              mode delegate work to another mode. An example of this kind of
+              mode is the <a href="../mode/htmlmixed/htmlmixed.js">mixed-mode HTML
+              mode</a>. To implement such nesting, it is usually necessary to
+              create mode objects and copy states yourself. To create a mode
+              object, there are <code>CodeMirror.getMode(options,
+              parserConfig)</code>, where the first argument is a configuration
+              object as passed to the mode constructor function, and the second
+              argument is a mode specification as in
+              the <a href="#option_mode"><code>mode</code></a> option. To copy a
+              state object, call <code>CodeMirror.copyState(mode, state)</code>,
+              where <code>mode</code> is the mode that created the given
+              state.</p>
+
+              <p id="innerMode">In a nested mode, it is recommended to add an
+              extra method, <code><strong>innerMode</strong></code> which, given
+              a state object, returns a <code>{state, mode}</code> object with
+              the inner mode and its state for the current position. These are
+              used by utility scripts such as the <a href="#addon_closetag">tag
+              closer</a> to get context information. Use
+              the <code>CodeMirror.innerMode</code> helper function to, starting
+              from a mode and a state, recursively walk down to the innermost
+              mode and state.</p>
+
+              <p>To make indentation work properly in a nested parser, it is
+              advisable to give the <code>startState</code> method of modes that
+              are intended to be nested an optional argument that provides the
+              base indentation for the block of code. The JavaScript and CSS
+              parser do this, for example, to allow JavaScript and CSS code
+              inside the mixed-mode HTML mode to be properly indented.</p>
+
+              <p id="defineMIME">It is possible, and encouraged, to associate
+              your mode, or a certain configuration of your mode, with
+              a <a href="http://en.wikipedia.org/wiki/MIME">MIME</a> type. For
+              example, the JavaScript mode associates itself
+              with <code>text/javascript</code>, and its JSON variant
+              with <code>application/json</code>. To do this,
+              call <code><strong>CodeMirror.defineMIME</strong>(mime,
+              modeSpec)</code>, where <code>modeSpec</code> can be a string or
+              object specifying a mode, as in
+              the <a href="#option_mode"><code>mode</code></a> option.</p>
+
+              <p>If a mode specification wants to add some properties to the
+              resulting mode object, typically for use
+              with <a href="#getHelpers"><code>getHelpers</code></a>, it may
+              contain a <code>modeProps</code> property, which holds an object.
+              This object's properties will be copied to the actual mode
+              object.</p>
+
+              <p id="extendMode">Sometimes, it is useful to add or override mode
+              object properties from external code.
+              The <code><strong>CodeMirror.extendMode</strong></code> function
+              can be used to add properties to mode objects produced for a
+              specific mode. Its first argument is the name of the mode, its
+              second an object that specifies the properties that should be
+              added. This is mostly useful to add utilities that can later be
+              looked up through <a href="#getMode"><code>getMode</code></a>.</p>
+          </section>
+
+
+        </el-main>
+      </el-container>
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/element-ui/lib/index.js"></script>
+    <script type="text/javascript">
+    var app = new Vue({
+      el: '#app',
+      data: {
+        ph:document.documentElement.clientHeight,
+        pw:document.documentElement.clientWidth,
+        ch:'auto',
+      },
+      mounted:function(){
+        if(this.pw>1200) this.ch=this.ph+'px';
+      },
+      methods:{
+
+      }
+    })
+    </script>
+  </body>
+</html>

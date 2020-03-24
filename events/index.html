@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <title>事件_CodeMirror_用户手册_Tun6</title>
+    <meta name="keywords" content="CodeMirror,事件,处理,中文,文档,手册,说明,API,"/>
+    <meta name="description" content="CodeMirror是一个可以嵌入到网页中运行的代码编辑器组件，CodeMirror官方说明文档的中文翻译版。">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="../common.css">
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?d5f982237a80a8b72feeaa6caac3f4fc";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+  </head>
+  <body>
+    <div id="app" class="page">
+      <el-container v-bind:style="{height: ch}">
+        <el-aside>
+          <h1>CodeMirror中文说明文档</h1>
+
+          <h3>文档大纲</h3>
+          <ul>
+            <li><a href="../">基本用法</a></li>
+            <li><a href="../config/">配置</a></li>
+            <li>事件</li>
+            <li><a href="../keymaps/">快捷键</a></li>
+            <li><a href="../commands/">命令</a></li>
+            <li><a href="../styling/">样式</a></li>
+            <li><a href="../api/">API调用</a></li>
+            <li><a href="../addons/">插件</a></li>
+            <li><a href="../modeapi/">自定义Mode</a></li>
+            <li><a href="../vimapi/">Vim Mode API</a></li>
+          </ul>
+        </el-aside>
+        <el-main>
+          <el-alert
+            title="须知"
+            type="warning"
+            :closable="false"
+            show-icon>
+            本文档并未完全翻译完成，我需要你的帮助。<a href="https://github.com/tun6-com/manual-CodeMirror" target="_blank">前往GitHub编辑</a>。
+          </el-alert>
+<section id=events>
+  <h2>事件</h2>
+
+  <p>多数与CodeMirror相关的对象都提供事件给客户端来响应不同的情况。
+  调用这些对象的 <a href="#on"><code>on</code></a> 和 <a href="#off"><code>off</code></a> 方法可以注册事件的响应方法。
+  使用 <code>CodeMirror.signal(target, name, args...)</code> 可以实现自定义事件，<code>target</code> 是non-DOM-node对象。</p>
+
+  <p>创建一个编辑器实例会触发下面的事件。
+  <code>instance</code> 参数为编辑器实例本身。</p>
+
+  <dl>
+    <dt id="event_change"><code><strong>"change"</strong> (instance: CodeMirror, changeObj: object)</code></dt>
+    <dd>编辑器正文发生修改时触发。
+    第二个参数 <code>changeObj</code> 是一个包含所发生修改的 <code>{from, to, text, removed,origin}</code> 对象。
+    <code>from</code> 和 <code>to</code> 是修改区域的开始位置和结束位置（变更前的坐标），（比如 <code>{ch:0, line:18}</code> 表示#19行的行首）。
+    <code>text</code> 字符串数组（按行拆分）用来表示要替换的文本。
+    <code>removed</code> 是修改之前在 <code>from</code> 和 <code>to</code> 之间的文本。
+    该事件在一个 <a href="../api/#operation">operation</a> 结束<em>之前</em>，DOM更新前触发。</dd>
+
+    <dt id="event_changes"><code><strong>"changes"</strong> (instance: CodeMirror, changes: array&lt;object&gt;)</code></dt>
+    <dd>与 <a href="#event_change"><code>"change"</code></a> 事件近似，但是在<a href="../api/#operation">operation</a>中所有的修改都被打包成一个数组。
+    在operation结束时触发，显示所有的修改会触发一个新的operation。</dd>
+
+    <dt id="event_beforeChange"><code><strong>"beforeChange"</strong> (instance: CodeMirror, changeObj: object)</code></dt>
+    <dd>在修改应用前触发，该事件的处理程序可以选择调整或取消该修改。
+    <code>changeObj</code> 对象有跟 <a href="#event_change"><code>"change"</code></a> 事件一样的 <code>from</code>, <code>to</code>, and <code>text</code> 属性。
+    该事件还有 <code>cancel()</code> 函数，可以取消不是来自undo和redo事件发出的修改，和一个可以调整修改的 <code>update(from, to, text)</code> 函数。
+    不能调整Undo或redo事件发出的修改，因为该修改包含过去的修改范围元信息。
+    <code>update</code> 函数的三个参数都是可选的，来保证存在的值不变。
+    <strong>提示：</strong>不能在 <code>"beforeChange"</code> 处理程序中做任何会导致文档改变的操作。
+    因为该事件的处理程序是从CodeMirror底层调用的，这么做可能会造成编辑器异常。</dd>
+
+    <dt id="event_cursorActivity"><code><strong>"cursorActivity"</strong> (instance: CodeMirror)</code></dt>
+    <dd>光标或选区移动，或者正文的改变都会触发该事件。</dd>
+
+    <dt id="event_keyHandled"><code><strong>"keyHandled"</strong> (instance: CodeMirror, name: string, event: Event)</code></dt>
+    <dd>按键后触发。
+    <code>name</code> 是要处理的键名（比如 <code>"Ctrl-X"</code> 或 <code>"'q'"</code>），<code>event</code> 是一个DOM的 <code>keydown</code> 或者 <code>keypress</code> 事件。</dd>
+
+    <dt id="event_inputRead"><code><strong>"inputRead"</strong> (instance: CodeMirror, changeObj: object)</code></dt>
+    <dd>从隐藏的textarea读取输入时触发（不管是输入或粘贴）。</dd>
+
+    <dt id="event_electricInput"><code><strong>"electricInput"</strong> (instance: CodeMirror, line: integer)</code></dt>
+    <dd>当输入字符匹配<a href="../config/#option_electricChars">electric</a>正则时触发，会造成该行的改变。</dd>
+
+    <dt id="event_beforeSelectionChange"><code><strong>"beforeSelectionChange"</strong> (instance: CodeMirror, obj: {ranges, origin, update})</code></dt>
+    <dd>在选区移动前触发。
+    该事件的处理程序需要校验选区列表参数，也就是由<code>{anchor, head}</code> 对象构成的数组（<code>obj</code> 参数的 <code>ranges</code> 属性），
+    通过调用该对象的<code>update</code> 函数可以调整修改，参数是与前面结构相同的选区数组。
+    这个对象也可能包含传递给selection-changing函数的原始字符串 <code>origin</code> 属性。
+    处理这个事件有跟 <a href="#event_beforeChange"><code>"beforeChange"</code></a> 的处理程序相同的限制 -- 不能直接更新编辑器的状态。</dd>
+
+    <dt id="event_viewportChange"><code><strong>"viewportChange"</strong> (instance: CodeMirror, from: number, to: number)</code></dt>
+    <dd>当<a href="../api/#getViewport">view port</a> 改变时触发（滚动、编辑或其他）。
+    <code>from</code> 和 <code>to</code> 参数提供了新viewport的开始和结束。</dd>
+
+    <dt id="event_swapDoc"><code><strong>"swapDoc"</strong> (instance: CodeMirror, oldDoc: Doc)</code></dt>
+    <dd>当编辑的正文被 <a href="../api/#swapDoc"><code>swapDoc</code></a> 函数替换时触发。</dd>
+
+    <dt id="event_gutterClick"><code><strong>"gutterClick"</strong> (instance: CodeMirror, line: integer, gutter: string, clickEvent: Event)</code></dt>
+    <dd>当编辑器的侧边栏（行号区域）被点击时触发。
+    第一个参数为编辑器实例，
+    第二个参数是所点击的行号（从0计），
+    第三个参数是所点击的侧边栏的CSS样式，
+    第四个参数是 <code>mousedown</code> 事件对象。</dd>
+
+    <dt id="event_gutterContextMenu"><code><strong>"gutterContextMenu"</strong> (instance: CodeMirror, line: integer, gutter: string, contextMenu: Event: Event)</code></dt>
+    <dd> 当编辑器的侧边栏（行号区域）收到 <code>contextmenu</code> 事件时触发。
+    第一个参数为编辑器实例，
+    第二个参数是所点击的行号（从0计），
+    第三个参数是所点击的侧边栏的CSS样式，
+    第四个参数是 <code>mousedown</code> 事件对象。
+    你可以 <code>preventDefault</code> 事件来让CodeMirror不再处理该事件。</dd>
+
+    <dt id="event_focus"><code><strong>"focus"</strong> (instance: CodeMirror, event: Event)</code></dt>
+    <dd>编辑器获得焦点时触发。</dd>
+
+    <dt id="event_blur"><code><strong>"blur"</strong> (instance: CodeMirror, event: Event)</code></dt>
+    <dd>编辑器失去焦点时触发。</dd>
+
+    <dt id="event_scroll"><code><strong>"scroll"</strong> (instance: CodeMirror)</code></dt>
+    <dd>编辑器滚动时触发。</dd>
+
+    <dt id="event_refresh"><code><strong>"refresh"</strong> (instance: CodeMirror)</code></dt>
+    <dd>当编辑器 <a href="../api/#refresh">refreshed</a> 或 <a href="../api/#setSize">resized</a> 后触发。
+    主要用来清空依赖于编辑器的缓存值或字符大小的缓存值。</dd>
+
+    <dt id="event_optionChange"><code><strong>"optionChange"</strong> (instance: CodeMirror, option: string)</code></dt>
+    <dd>通过 <a href="../api/#setOption"><code>setOption</code></a> 修改配置时触发。</dd>
+
+    <dt id="event_scrollCursorIntoView"><code><strong>"scrollCursorIntoView"</strong> (instance: CodeMirror, event: Event)</code></dt>
+    <dd>当编辑器尝试把光标移动到可视范围内时触发。
+    可以用来处理在编辑器周围可以滚动的容器。
+    当event参数调用了 <code>preventDefault</code> 函数时，CodeMirror不会尝试滚动窗口。</dd>
+
+    <dt id="event_update"><code><strong>"update"</strong> (instance: CodeMirror)</code></dt>
+    <dd>CodeMirror更新DOM时触发。</dd>
+
+    <dt id="event_renderLine"><code><strong>"renderLine"</strong> (instance: CodeMirror, line: LineHandle, element: Element)</code></dt>
+    <dd>当某行被（重新）渲染成DOM时触发。
+    在DOM元素创建后，添加到文档<em>之前</em> 触发。
+    该事件的处理函数可以修改DOM元素的样式，或者添加事件，但是<em>不能</em>修改编辑器的状态。</dd>
+
+    <dt id="event_dom"><code><strong>"mousedown"</strong>,
+    <strong>"dblclick"</strong>, <strong>"touchstart"</strong>, <strong>"contextmenu"</strong>,
+    <strong>"keydown"</strong>, <strong>"keypress"</strong>,
+    <strong>"keyup"</strong>, <strong>"cut"</strong>, <strong>"copy"</strong>, <strong>"paste"</strong>,
+    <strong>"dragstart"</strong>, <strong>"dragenter"</strong>,
+    <strong>"dragover"</strong>, <strong>"dragleave"</strong>,
+    <strong>"drop"</strong>
+    (instance: CodeMirror, event: Event)</code></dt>
+    <dd>当CodeMirror处理这些DOM事件时触发。
+    你可以 <code>preventDefault</code> 事件，或者提供一个 <code>codemirrorIgnore</code> 属性，来提醒CodeMirror不要处理。</dd>
+  </dl>
+
+  <p>文档对象（<a href="#Doc"><code>CodeMirror.Doc</code></a>）有以下事件：</p>
+
+  <dl>
+    <dt id="event_doc_change"><code><strong>"change"</strong> (doc: CodeMirror.Doc, changeObj: object)</code></dt>
+    <dd>文档被修改时触发。
+    <code>changeObj</code> 参数比编辑器的 <a href="#event_change"><code>"change"</code></a> 事件的参数更简单。</dd>
+
+    <dt id="event_doc_beforeChange"><code><strong>"beforeChange"</strong> (doc: CodeMirror.Doc, change: object)</code></dt>
+    <dd>参考编辑器的<a href="#event_beforeChange">同名事件</a>。</dd>
+
+    <dt id="event_doc_cursorActivity"><code><strong>"cursorActivity"</strong> (doc: CodeMirror.Doc)</code></dt>
+    <dd>光标或选区在文档中改变时触发。</dd>
+
+    <dt id="event_doc_beforeSelectionChange"><code><strong>"beforeSelectionChange"</strong> (doc: CodeMirror.Doc, selection: {head, anchor})</code></dt>
+    <dd>参考编辑器的<a href="#event_beforeSelectionChange">同名事件</a>。</dd>
+  </dl>
+
+  <p>行处理事件（<a href="../api/#getLineHandle"><code>getLineHandle</code></a> 函数的返回值）有这些：</p>
+
+  <dl>
+    <dt id="event_delete"><code><strong>"delete"</strong> ()</code></dt>
+    <dd>行对象删除时触发。
+    <em>开始新行</em>时会创建行对象。
+    最有用的是找出何时<a href="../api/#setGutterMarker">gutter markers</a>会被删除</dd>
+
+    <dt id="event_line_change"><code><strong>"change"</strong> (line: LineHandle, changeObj: object)</code></dt>
+    <dd>行中的文本内容被修改时触发（除了删除行）。
+    <code>change</code> 对象跟编辑器的 <a href="#event_change">change 事件</a> 中的参数一致。</dd>
+  </dl>
+
+  <p>区域标记事件（<code>CodeMirror.TextMarker</code>），也就是 <a href="../api/#markText"><code>markText</code></a> 和 <a href="../api/#setBookmark"><code>setBookmark</code></a> 的返回值，有以下事件：</p>
+
+  <dl>
+    <dt id="event_beforeCursorEnter"><code><strong>"beforeCursorEnter"</strong> ()</code></dt>
+    <dd>Fired when the cursor enters the marked range. From this
+    event handler, the editor state may be inspected
+    but <em>not</em> modified, with the exception that the range on
+    which the event fires may be cleared.</dd>
+
+    <dt id="event_clear"><code><strong>"clear"</strong> (from: {line, ch}, to: {line, ch})</code></dt>
+    <dd>Fired when the range is cleared, either through cursor
+    movement in combination
+    with <a href="../api/#mark_clearOnEnter"><code>clearOnEnter</code></a>
+    or through a call to its <code>clear()</code> method. Will only
+    be fired once per handle. Note that deleting the range through
+    text editing does not fire this event, because an undo action
+    might bring the range back into existence. <code>from</code>
+    and <code>to</code> give the part of the document that the range
+    spanned when it was cleared.</dd>
+
+    <dt id="event_hide"><code><strong>"hide"</strong> ()</code></dt>
+    <dd>Fired when the last part of the marker is removed from the
+    document by editing operations.</dd>
+
+    <dt id="event_unhide"><code><strong>"unhide"</strong> ()</code></dt>
+    <dd>Fired when, after the marker was removed by editing, a undo
+    operation brought the marker back.</dd>
+  </dl>
+
+  <p>Line widgets (<code>CodeMirror.LineWidget</code>), returned
+  by <a href="../api/#addLineWidget"><code>addLineWidget</code></a>, fire
+  these events:</p>
+
+  <dl>
+    <dt id="event_redraw"><code><strong>"redraw"</strong> ()</code></dt>
+    <dd>Fired whenever the editor re-adds the widget to the DOM.
+    This will happen once right after the widget is added (if it is
+    scrolled into view), and then again whenever it is scrolled out
+    of view and back in again, or when changes to the editor options
+    or the line the widget is on require the widget to be
+    redrawn.</dd>
+  </dl>
+</section>
+
+        </el-main>
+      </el-container>
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/element-ui/lib/index.js"></script>
+    <script type="text/javascript">
+    var app = new Vue({
+      el: '#app',
+      data: {
+        ph:document.documentElement.clientHeight,
+        pw:document.documentElement.clientWidth,
+        ch:'auto',
+      },
+      mounted:function(){
+        if(this.pw>1200) this.ch=this.ph+'px';
+      },
+      methods:{
+
+      }
+    })
+    </script>
+  </body>
+</html>
