@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <title>Code Folding_Demo_CodeMirror_用户手册_Tun6</title>
+    <meta name="keywords" content=","/>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror/lib/codemirror.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/lib/codemirror.js"></script>
+
+    <style>
+      .some-css {
+        color: red;
+        line-height: 2;
+      }
+    </style>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror/addon/fold/foldgutter.css" />
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/addon/fold/foldcode.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/addon/fold/foldgutter.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/addon/fold/brace-fold.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/addon/fold/xml-fold.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/addon/fold/indent-fold.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/addon/fold/markdown-fold.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/addon/fold/comment-fold.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/mode/javascript/javascript.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/mode/xml/xml.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/mode/css/css.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/mode/htmlmixed/htmlmixed.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/mode/python/python.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/mode/markdown/markdown.js"></script>
+
+    <style>
+      .CodeMirror {border-top: 1px solid black; border-bottom: 1px solid black;}
+    </style>
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?d5f982237a80a8b72feeaa6caac3f4fc";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+  </head>
+  <body>
+    <h2>Code Folding Demo</h2>
+    <form>
+      <div style="max-width: 50em; margin-bottom: 1em">JavaScript:<br>
+      <textarea id="code" name="code"></textarea></div>
+      <div style="max-width: 50em; margin-bottom: 1em">HTML:<br>
+      <textarea id="code-html" name="code-html"></textarea></div>
+      <div style="max-width: 50em; margin-bottom: 1em">JSON with custom widget:<br>
+      <textarea id="code-json" name="code-json">
+{
+  "menu": {
+    "id": "file",
+    "value": "File",
+    "popup": {
+      "menuitem": [
+        {"value": "New", "onclick": "CreateNewDoc()"},
+        {"value": "Open", "onclick": "OpenDoc()"},
+        {"value": "Close", "onclick": "CloseDoc()"}
+      ]
+    }
+  }
+}
+      </textarea></div>
+      <div style="max-width: 50em">Python:<br>
+        <textarea id="code-python" name="code">
+def foo():
+  do_some_stuff()
+  here
+  return None
+
+class Bar:
+  __init__(self):
+    if True:
+      print("True")
+    else:
+      print("False")
+
+  this_code_makes_no_sense():
+    pass
+
+# A comment
+        </textarea>
+      </div>
+      <div style="max-width: 50em">Markdown:<br>
+      <textarea id="code-markdown" name="code"></textarea></div>
+    </form>
+
+    <script id="script">
+      /*
+       * Demonstration of code folding
+       */
+      window.onload = function() {
+        var te = document.getElementById("code");
+        var sc = document.getElementById("script");
+        te.value = (sc.textContent || sc.innerText || sc.innerHTML).replace(/^\s*/, "");
+        sc.innerHTML = "";
+        var te_html = document.getElementById("code-html");
+        te_html.value = document.documentElement.innerHTML;
+        var te_python = document.getElementById("code-python");
+        var te_markdown = document.getElementById("code-markdown");
+        te_markdown.value = "# Foo\n## Bar\n\nblah blah\n\n## Baz\n\nblah blah\n\n# Quux\n\nblah blah\n"
+        var te_json = document.getElementById("code-json");
+
+        window.editor = CodeMirror.fromTextArea(te, {
+          mode: "javascript",
+          lineNumbers: true,
+          lineWrapping: true,
+          extraKeys: {"Ctrl-Q": function(cm){ cm.foldCode(cm.getCursor()); }},
+          foldGutter: true,
+          gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
+        });
+        editor.foldCode(CodeMirror.Pos(13, 0));
+
+        window.editor_json = CodeMirror.fromTextArea(te_json, {
+          mode: {name: "javascript", json: true},
+          lineNumbers: true,
+          lineWrapping: true,
+          extraKeys: {"Ctrl-Q": function(cm){ cm.foldCode(cm.getCursor()); }},
+          foldGutter: true,
+          gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+          foldOptions: {
+            widget: (from, to) => {
+              var count = undefined;
+
+              // Get open / close token
+              var startToken = '{', endToken = '}';
+              var prevLine = window.editor_json.getLine(from.line);
+              if (prevLine.lastIndexOf('[') > prevLine.lastIndexOf('{')) {
+                startToken = '[', endToken = ']';
+              }
+
+              // Get json content
+              var internal = window.editor_json.getRange(from, to);
+              var toParse = startToken + internal + endToken;
+
+              // Get key count
+              try {
+                var parsed = JSON.parse(toParse);
+                count = Object.keys(parsed).length;
+              } catch(e) { }
+
+              return count ? `\u21A4${count}\u21A6` : '\u2194';
+            }
+          }
+        });
+        editor_json.foldCode(CodeMirror.Pos(5, 0));
+
+        window.editor_html = CodeMirror.fromTextArea(te_html, {
+          mode: "text/html",
+          lineNumbers: true,
+          lineWrapping: true,
+          extraKeys: {"Ctrl-Q": function(cm){ cm.foldCode(cm.getCursor()); }},
+          foldGutter: true,
+          gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
+        });
+        editor_html.foldCode(CodeMirror.Pos(0, 0));
+        editor_html.foldCode(CodeMirror.Pos(34, 0));
+
+        window.editor_python = CodeMirror.fromTextArea(te_python, {
+          mode: "python",
+          lineNumbers: true,
+          extraKeys: {"Ctrl-Q": function(cm){ cm.foldCode(cm.getCursor()); }},
+          foldGutter: true,
+          gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
+        });
+
+        window.editor_markdown = CodeMirror.fromTextArea(te_markdown, {
+          mode: "markdown",
+          lineNumbers: true,
+          lineWrapping: true,
+          extraKeys: {"Ctrl-Q": function(cm){ cm.foldCode(cm.getCursor()); }},
+          foldGutter: true,
+          gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
+        });
+      };
+    </script>
+  </body>
+</html>

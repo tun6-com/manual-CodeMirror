@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <title>Variable Height_Demo_CodeMirror_用户手册_Tun6</title>
+    <meta name="keywords" content=","/>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror/lib/codemirror.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/lib/codemirror.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/mode/markdown/markdown.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/mode/xml/xml.js"></script>
+    <style>
+      .CodeMirror {border: 1px solid silver; border-width: 1px 2px; }
+      .cm-header { font-family: arial; }
+      .cm-header-1 { font-size: 150%; }
+      .cm-header-2 { font-size: 130%; }
+      .cm-header-3 { font-size: 120%; }
+      .cm-header-4 { font-size: 110%; }
+      .cm-header-5 { font-size: 100%; }
+      .cm-header-6 { font-size: 90%; }
+      .cm-strong { font-size: 140%; }
+    </style>
+
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?d5f982237a80a8b72feeaa6caac3f4fc";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+  </head>
+  <body>
+    <h2>Variable Height Demo</h2>
+    <form>
+      <textarea id="code" name="code">
+# A First Level Header
+
+**Bold** text in a normal-size paragraph.
+
+And a very long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long, wrapped line with a piece of **big** text inside of it.
+
+## A Second Level Header
+
+Now is the time for all good men to come to
+the aid of their country. This is just a
+regular paragraph.
+
+The quick brown fox jumped over the lazy
+dog's back.
+
+### Header 3
+
+> This is a blockquote.
+>
+> This is the second paragraph in the blockquote.
+>
+> ## This is an H2 in a blockquote
+      </textarea>
+    </form>
+    <script id="script">
+      var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+        lineNumbers: true,
+        lineWrapping: true,
+        mode: "markdown"
+      });
+    </script>
+
+  </body>
+</html>

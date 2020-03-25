@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <title>Full Screen Editing_Demo_CodeMirror_用户手册_Tun6</title>
+    <meta name="keywords" content=","/>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror/lib/codemirror.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/lib/codemirror.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror/addon/display/fullscreen.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror/theme/night.css">
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/mode/xml/xml.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/addon/display/fullscreen.js"></script>
+
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?d5f982237a80a8b72feeaa6caac3f4fc";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+  </head>
+  <body>
+    <h2>Full Screen Editing</h2>
+    <form>
+      <textarea id="code" name="code" rows="5">
+<dl>
+  <dt id="option_indentWithTabs"><code><strong>indentWithTabs</strong>: boolean</code></dt>
+  <dd>Whether, when indenting, the first N*<code>tabSize</code>
+  spaces should be replaced by N tabs. Default is false.</dd>
+
+  <dt id="option_electricChars"><code><strong>electricChars</strong>: boolean</code></dt>
+  <dd>Configures whether the editor should re-indent the current
+  line when a character is typed that might change its proper
+  indentation (only works if the mode supports indentation).
+  Default is true.</dd>
+
+  <dt id="option_specialChars"><code><strong>specialChars</strong>: RegExp</code></dt>
+  <dd>A regular expression used to determine which characters
+  should be replaced by a
+  special <a href="#option_specialCharPlaceholder">placeholder</a>.
+  Mostly useful for non-printing special characters. The default
+  is <code>/[\u0000-\u0019\u00ad\u200b\u2028\u2029\ufeff]/</code>.</dd>
+  <dt id="option_specialCharPlaceholder"><code><strong>specialCharPlaceholder</strong>: function(char) → Element</code></dt>
+  <dd>A function that, given a special character identified by
+  the <a href="#option_specialChars"><code>specialChars</code></a>
+  option, produces a DOM node that is used to represent the
+  character. By default, a red dot (<span style="color: red">•</span>)
+  is shown, with a title tooltip to indicate the character code.</dd>
+
+  <dt id="option_rtlMoveVisually"><code><strong>rtlMoveVisually</strong>: boolean</code></dt>
+  <dd>Determines whether horizontal cursor movement through
+  right-to-left (Arabic, Hebrew) text is visual (pressing the left
+  arrow moves the cursor left) or logical (pressing the left arrow
+  moves to the next lower index in the string, which is visually
+  right in right-to-left text). The default is <code>false</code>
+  on Windows, and <code>true</code> on other platforms.</dd>
+</dl>
+      </textarea>
+    </form>
+
+    <script type="text/javascript">
+      var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+        lineNumbers: true,
+        theme: "night",
+        extraKeys: {
+          "F11": function(cm) {
+            cm.setOption("fullScreen", !cm.getOption("fullScreen"));
+          },
+          "Esc": function(cm) {
+            if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false);
+          }
+        }
+      });
+    </script>
+    <p>Demonstration of
+    the <a href="../doc/manual.html#addon_fullscreen">fullscreen</a>
+    addon. Press <strong>F11</strong> when cursor is in the editor to
+    toggle full screen editing. <strong>Esc</strong> can also be used
+    to <i>exit</i> full screen editing.</p>
+  </body>
+</html>

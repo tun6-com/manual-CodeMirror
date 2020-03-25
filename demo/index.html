@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <title>Demo_CodeMirror_用户手册_Tun6</title>
+    <meta name="keywords" content="CodeMirror,中文,文档,手册,说明,API,Demo,"/>
+    <meta name="description" content="CodeMirror是一个可以嵌入到网页中运行的代码编辑器组件，CodeMirror官方说明文档的中文翻译版。">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror/lib/codemirror.css">
+    <link rel="stylesheet" href="../common.css">
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?d5f982237a80a8b72feeaa6caac3f4fc";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+  </head>
+  <body>
+    <div id="app" class="page">
+      <el-container v-bind:style="{height: ch}">
+        <el-aside>
+          <h1>CodeMirror中文用户手册</h1>
+          <h3>文档大纲</h3>
+          <ul>
+            <li><a href="../">基本用法</a></li>
+            <li><a href="../config/">配置</a></li>
+            <li><a href="../events/">事件</a></li>
+            <li><a href="../keymaps/">快捷键</a></li>
+            <li><a href="../commands/">命令</a></li>
+            <li><a href="../styling/">样式</a></li>
+            <li><a href="../api/">API调用</a></li>
+            <li><a href="../addons/">插件</a></li>
+            <li><a href="../modeapi/">自定义Mode</a></li>
+            <li><a href="../vimapi/">Vim Mode API</a></li>
+            <li>Demo</li>
+          </ul>
+        </el-aside>
+        <el-main>
+          <el-alert
+            title="须知"
+            type="warning"
+            :closable="false"
+            show-icon>
+            本文档并未完全翻译完成，我需要你的帮助。<a href="https://github.com/tun6-com/manual-CodeMirror" target="_blank">前往GitHub编辑</a>。
+          </el-alert>
+
+          <h2>Demo</h2>
+          <ul>
+            <li><a href="./demos/activeline.html">activeline</a></li>
+            <li><a href="./demos/anywordhint.html">anywordhint</a></li>
+            <li><a href="./demos/bidi.html">bidi</a></li>
+            <li><a href="./demos/btree.html">btree</a></li>
+            <li><a href="./demos/buffers.html">buffers</a></li>
+            <li><a href="./demos/changemode.html">changemode</a></li>
+            <li><a href="./demos/closebrackets.html">closebrackets</a></li>
+            <li><a href="./demos/closetag.html">closetag</a></li>
+            <li><a href="./demos/complete.html">complete</a></li>
+            <li><a href="./demos/emacs.html">emacs</a></li>
+            <li><a href="./demos/folding.html">folding</a></li>
+            <li><a href="./demos/fullscreen.html">fullscreen</a></li>
+            <li><a href="./demos/hardwrap.html">hardwrap</a></li>
+            <li><a href="./demos/html5complete.html">html5complete</a></li>
+            <li><a href="./demos/indentwrap.html">indentwrap</a></li>
+            <li><a href="./demos/lint.html">lint</a></li>
+            <li><a href="./demos/loadmode.html">loadmode</a></li>
+            <li><a href="./demos/marker.html">marker</a></li>
+            <li><a href="./demos/markselection.html">markselection</a></li>
+            <li><a href="./demos/matchhighlighter.html">matchhighlighter</a></li>
+            <li><a href="./demos/matchtags.html">matchtags</a></li>
+            <li><a href="./demos/merge.html">merge</a></li>
+            <li><a href="./demos/multiplex.html">multiplex</a></li>
+            <li><a href="./demos/mustache.html">mustache</a></li>
+            <li><a href="./demos/panel.html">panel</a></li>
+            <li><a href="./demos/placeholder.html">placeholder</a></li>
+            <li><a href="./demos/preview.html">preview</a></li>
+            <li><a href="./demos/requirejs.html">requirejs</a></li>
+            <li><a href="./demos/resize.html">resize</a></li>
+            <li><a href="./demos/rulers.html">rulers</a></li>
+            <li><a href="./demos/runmode.html">runmode</a></li>
+            <li><a href="./demos/search.html">search</a></li>
+            <li><a href="./demos/simplemode.html">simplemode</a></li>
+            <li><a href="./demos/simplescrollbars.html">simplescrollbars</a></li>
+            <li><a href="./demos/spanaffectswrapping_shim.html">spanaffectswrapping_shim</a></li>
+            <li><a href="./demos/sublime.html">sublime</a></li>
+            <li><a href="./demos/tern.html">tern</a></li>
+            <li><a href="./demos/theme.html">theme</a></li>
+            <li><a href="./demos/trailingspace.html">trailingspace</a></li>
+            <li><a href="./demos/variableheight.html">variableheight</a></li>
+            <li><a href="./demos/vim.html">vim</a></li>
+            <li><a href="./demos/visibletabs.html">visibletabs</a></li>
+            <li><a href="./demos/widget.html">widget</a></li>
+            <li><a href="./demos/xmlcomplete.html">xmlcomplete</a></li>
+          </ul>
+
+        </el-main>
+      </el-container>
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/element-ui/lib/index.js"></script>
+    <script type="text/javascript">
+    var app = new Vue({
+      el: '#app',
+      data: {
+        ph:document.documentElement.clientHeight,
+        pw:document.documentElement.clientWidth,
+        ch:'auto',
+      },
+      mounted:function(){
+        if(this.pw>1200) this.ch=this.ph+'px';
+      },
+      methods:{
+      }
+    })
+    </script>
+  </body>
+</html>

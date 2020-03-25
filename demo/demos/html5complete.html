@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <title>HTML completion_Demo_CodeMirror_用户手册_Tun6</title>
+    <meta name="keywords" content=","/>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror/lib/codemirror.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/lib/codemirror.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror/addon/hint/show-hint.css">
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/addon/hint/show-hint.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/addon/hint/xml-hint.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/addon/hint/html-hint.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/mode/xml/xml.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/mode/javascript/javascript.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/mode/css/css.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/mode/htmlmixed/htmlmixed.js"></script>
+
+    <style>
+      .CodeMirror {border-top: 1px solid #888; border-bottom: 1px solid #888;}
+    </style>
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?d5f982237a80a8b72feeaa6caac3f4fc";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+  </head>
+  <body>
+    <h2>HTML completion demo</h2>
+
+    <p>Shows the <a href="xmlcomplete.html">XML completer</a>
+    parameterized with information about the tags in HTML.
+    Press <strong>ctrl-space</strong> to activate completion.</p>
+
+    <div id="code"></div>
+
+    <script type="text/javascript">
+      window.onload = function() {
+        editor = CodeMirror(document.getElementById("code"), {
+          mode: "text/html",
+          extraKeys: {"Ctrl-Space": "autocomplete"},
+          value: document.documentElement.innerHTML
+        });
+      };
+    </script>
+  </body>
+</html>

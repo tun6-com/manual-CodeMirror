@@ -36,6 +36,7 @@
             <li>插件</li>
             <li><a href="../modeapi/">自定义Mode</a></li>
             <li><a href="../vimapi/">Vim Mode API</a></li>
+            <li><a href="../demo/">Demo</a></li>
           </ul>
         </el-aside>
         <el-main>
@@ -141,14 +142,12 @@
       </dl></dd>
 
     <dt id="addon_closebrackets"><a href="../addon/edit/closebrackets.js"><code>edit/closebrackets.js</code></a></dt>
-    <dd>Defines an option <code>autoCloseBrackets</code> that will auto-close brackets and quotes when typed.
-    By default, it'll auto-close <code>()[]{}''""</code>, but you can pass it a string similar to that (containing pairs of matching characters),
-    or an object with <code>pairs</code> and optionally <code>explode</code> properties to customize it.
-    <code>explode</code> should be a similar string that gives the pairs of characters that, when enter is pressed between them,
-    should have the second character also moved to its own line.
-    By default, if the active mode has a <code>closeBrackets</code> property, that overrides the configuration given in the option.
-    But you can add an <code>override</code> property with a truthy value to override mode-specific configuration.
-    <a href="../demo/closebrackets.html">Demo here</a>.</dd>
+    <dd>定义一个 <code>autoCloseBrackets</code> 选项，将自动补全括号和引号。
+    默认情况下，它将自动补全 <code>()[]{}''""</code>，但是您可以向其传递与之相似的字符串（包含成对的匹配字符），或传递具有 <code>pairs</code> 的对象，还可以用 <code>explode</code> 属性自定义 。
+    <code>explode</code> 应该是一个相似的字符串，该字符串应提供成对的字符，当在它们之间按Enter键时，应该让第二个字符也移到自己的行。
+    默认情况下，如果活动模式具有 <code>closeBrackets</code> 属性，则该属性将覆盖该选项中给定的配置。
+    但是，您可以添加带有真实值的 <code>override</code> 属性以覆盖特定于模式的配置。
+    <a href="../demo/closebrackets.html">参考Demo</a>。</dd>
 
     <dt id="addon_matchtags"><a href="../addon/edit/matchtags.js"><code>edit/matchtags.js</code></a></dt>
     <dd>Defines an option <code>matchTags</code> that, when enabled,

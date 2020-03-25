@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <title>RequireJS module loading_Demo_CodeMirror_用户手册_Tun6</title>
+    <meta name="keywords" content=","/>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror/lib/codemirror.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/lib/codemirror.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror/addon/hint/show-hint.css">
+    <script src="https://requirejs.org/docs/release/2.3.6/minified/require.js"></script>
+    <style>
+      .CodeMirror {border-top: 1px solid #888; border-bottom: 1px solid #888;}
+    </style>
+
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?d5f982237a80a8b72feeaa6caac3f4fc";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+  </head>
+  <body>
+    <h2>RequireJS module loading demo</h2>
+
+    <p>This demo does the same thing as
+    the <a href="html5complete.html">HTML5 completion demo</a>, but
+    loads its dependencies
+    with <a href="http://requirejs.org/">Require.js</a>, rather than
+    explicitly. Press <strong>ctrl-space</strong> to activate
+    completion.</p>
+
+    <div id="code"></div>
+
+    <button id="markdown">Dynamically load Markdown mode</button>
+
+    <script>
+      require.config({
+        packages: [{
+          name: "codemirror",
+          location: "https://cdn.jsdelivr.net/npm/codemirror",
+          main: "lib/codemirror"
+        }]
+      });
+      require(["codemirror", "codemirror/mode/htmlmixed/htmlmixed",
+               "codemirror/addon/hint/show-hint", "codemirror/addon/hint/html-hint",
+               "codemirror/addon/mode/loadmode"], function(CodeMirror) {
+        editor = CodeMirror(document.getElementById("code"), {
+          mode: "text/html",
+          extraKeys: {"Ctrl-Space": "autocomplete"},
+          value: document.documentElement.innerHTML
+        });
+
+        CodeMirror.modeURL = "codemirror/mode/%N/%N";
+        document.getElementById("markdown").addEventListener("click", function() {
+          CodeMirror.requireMode("markdown", function() {
+            editor.replaceRange("This is **Markdown**.\n\n", {line: 0, ch: 0});
+            editor.setOption("mode", "markdown");
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

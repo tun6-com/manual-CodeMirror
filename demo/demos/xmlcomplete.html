@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <title>XML Autocomplete_Demo_CodeMirror_用户手册_Tun6</title>
+    <meta name="keywords" content=","/>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror/lib/codemirror.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/lib/codemirror.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror/addon/hint/show-hint.css">
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/addon/hint/show-hint.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/addon/hint/xml-hint.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/mode/xml/xml.js"></script>
+    <style>
+      .CodeMirror { border: 1px solid #eee; }
+    </style>
+
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?d5f982237a80a8b72feeaa6caac3f4fc";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+  </head>
+  <body>
+    <h2>XML Autocomplete Demo</h2>
+    <form>
+      <textarea id="code" name="code">
+<!-- write some xml below -->
+      </textarea>
+    </form>
+
+    <p>Press <strong>ctrl-space</strong>, or type a '&lt;' character to
+    activate autocompletion. This demo defines a simple schema that
+    guides completion. The schema can be customized—see
+    the <a href="../doc/manual.html#addon_xml-hint">manual</a>.</p>
+
+    <p>Development of the <code>xml-hint</code> addon was kindly
+    sponsored
+    by <a href="http://www.xperiment.mobi">www.xperiment.mobi</a>.</p>
+
+    <script>
+      var dummy = {
+        attrs: {
+          color: ["red", "green", "blue", "purple", "white", "black", "yellow"],
+          size: ["large", "medium", "small"],
+          description: null
+        },
+        children: []
+      };
+
+      var tags = {
+        "!top": ["top"],
+        "!attrs": {
+          id: null,
+          class: ["A", "B", "C"]
+        },
+        top: {
+          attrs: {
+            lang: ["en", "de", "fr", "nl"],
+            freeform: null
+          },
+          children: ["animal", "plant"]
+        },
+        animal: {
+          attrs: {
+            name: null,
+            isduck: ["yes", "no"]
+          },
+          children: ["wings", "feet", "body", "head", "tail"]
+        },
+        plant: {
+          attrs: {name: null},
+          children: ["leaves", "stem", "flowers"]
+        },
+        wings: dummy, feet: dummy, body: dummy, head: dummy, tail: dummy,
+        leaves: dummy, stem: dummy, flowers: dummy
+      };
+
+      function completeAfter(cm, pred) {
+        var cur = cm.getCursor();
+        if (!pred || pred()) setTimeout(function() {
+          if (!cm.state.completionActive)
+            cm.showHint({completeSingle: false});
+        }, 100);
+        return CodeMirror.Pass;
+      }
+
+      function completeIfAfterLt(cm) {
+        return completeAfter(cm, function() {
+          var cur = cm.getCursor();
+          return cm.getRange(CodeMirror.Pos(cur.line, cur.ch - 1), cur) == "<";
+        });
+      }
+
+      function completeIfInTag(cm) {
+        return completeAfter(cm, function() {
+          var tok = cm.getTokenAt(cm.getCursor());
+          if (tok.type == "string" && (!/['"]/.test(tok.string.charAt(tok.string.length - 1)) || tok.string.length == 1)) return false;
+          var inner = CodeMirror.innerMode(cm.getMode(), tok.state).state;
+          return inner.tagName;
+        });
+      }
+
+      var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+        mode: "xml",
+        lineNumbers: true,
+        extraKeys: {
+          "'<'": completeAfter,
+          "'/'": completeIfAfterLt,
+          "' '": completeIfInTag,
+          "'='": completeIfInTag,
+          "Ctrl-Space": "autocomplete"
+        },
+        hintOptions: {schemaInfo: tags}
+      });
+    </script>
+
+  </body>
+</html>

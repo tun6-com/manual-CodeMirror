@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <title>Tag Matcher_Demo_CodeMirror_用户手册_Tun6</title>
+    <meta name="keywords" content=","/>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror/lib/codemirror.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/lib/codemirror.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/addon/fold/xml-fold.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/addon/edit/matchtags.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/mode/xml/xml.js"></script>
+
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?d5f982237a80a8b72feeaa6caac3f4fc";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+  </head>
+  <body>
+    <h2>Tag Matcher Demo</h2>
+
+    <div id="editor"></div>
+
+    <p>Put the cursor on or inside a pair of tags to highlight them.
+      Press Ctrl-J to jump to the tag that matches the one under the
+      cursor.</p>
+
+    <script type="text/javascript">
+      window.onload = function() {
+        editor = CodeMirror(document.getElementById("editor"), {
+          value: "<html>\n  " + document.documentElement.innerHTML + "\n</html>",
+          mode: "text/html",
+          matchTags: {
+            bothTags: true
+          },
+          extraKeys: {
+            "Ctrl-J": "toMatchingTag"
+          }
+        });
+      };
+    </script>
+  </body>
+</html>
