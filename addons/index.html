@@ -468,14 +468,10 @@
     参考<a href="../demo/demos/loadmode.html">Demo</a>。</dd>
 
     <dt id="addon_continuecomment"><code>comment/continuecomment.js</code></dt>
-    <dd>Adds a <code>continueComments</code> option, which sets whether the
-    editor will make the next line continue a comment when you press Enter
-    inside a comment block. Can be set to a boolean to enable/disable this
-    functionality. Set to a string, it will continue comments using a custom
-    shortcut. Set to an object, it will use the <code>key</code> property for
-    a custom shortcut and the boolean <code>continueLineComment</code>
-    property to determine whether single-line comments should be continued
-    (defaulting to <code>true</code>).</dd>
+    <dd>增加 <code>continueComments</code> 选项，当在注释块内按下回车键时，是否应该继续添加注释行。
+    可以是 boolean 值来启用/关闭该功能。
+    为字符串时，使用自定义字符来添加注释行。
+    为对象时，<code>key</code> 属性来自定义字符，<code>continueLineComment</code> 判断是否应该继续添加注释（默认为true）。</dd>
 
     <dt id="addon_placeholder"><code>display/placeholder.js</code></dt>
     <dd>增加 <code>placeholder</code> 选项，在编辑器为空且为选中时替换编辑器的内容。
@@ -489,27 +485,22 @@
     参考<a href="../demo/demos/fullscreen.html">Demo</a>。</dd>
 
     <dt id="addon_autorefresh"><code>display/autorefresh.js</code></dt>
-    <dd>This addon can be useful when initializing an editor in a hidden DOM node,
-    in cases where it is difficult to call <a href="#refresh"><code>refresh</code></a> when the editor becomes visible.
-    It defines an option <code>autoRefresh</code> which you can set to true to ensure that,
-    if the editor wasn't visible on initialization, it will be refreshed the first time it becomes visible.
-    This is done by polling every 250 milliseconds (you can pass a value like <code>{delay: 500}</code> as the option value to configure this).
-    Note that this addon will only refresh the editor <em>once</em> when it first becomes visible,
-    and won't take care of further restyling and resizing.</dd>
+    <dd>使用隐藏的DOM元素初始化编辑器时，很难在编辑器可见时调用 <a href="../api/#refresh"><code>refresh</code></a> 函数。
+    增加 <code>autoRefresh</code> 属性，设置为 true 来确保启用，如果编辑器初始化时不可见，这将确保在编辑器可见时进行刷新。
+    每 250 微秒（可以用 <code>{delay: 500}</code> 来配置该时间）调用一次。
+    注意：该插件只在编辑器可见时<em>刷新一次</em>编辑器，无视后续的 restyling 和 resizing 。</dd>
 
     <dt id="addon_simplescrollbars"><code>scroll/simplescrollbars.js</code></dt>
-    <dd>Defines two additional scrollbar models, <code>"simple"</code> and <code>"overlay"</code>
-    (see <a href="../demo/simplescrollbars.html">demo</a>) that can be selected with the <a href="#option_scrollbarStyle"><code>scrollbarStyle</code></a> option.
-    Depends on <a href="../addon/scroll/simplescrollbars.css"><code>simplescrollbars.css</code></a>,
-    which can be further overridden to style your own scrollbars.</dd>
+    <dd>增加两个滚动条模式 <code>"simple"</code> 和 <code>"overlay"</code>（参考 <a href="../demo/demos/simplescrollbars.html">Demo</a>），
+    可由 <a href="../config/#option_scrollbarStyle"><code>scrollbarStyle</code></a> 配置进行选择。
+    依赖 <code>addon/scroll/simplescrollbars.css</code>，可以覆盖该样式来自定义滚动条样式。</dd>
 
     <dt id="addon_annotatescrollbar"><code>scroll/annotatescrollbar.js</code></dt>
-    <dd>Provides functionality for showing markers on the scrollbar to call out certain parts of the document.
-    Adds a method <code>annotateScrollbar</code> to editor instances that can be called,
-    with a CSS class name as argument, to create a set of annotations.
-    The method returns an object whose <code>update</code> method can be called with a sorted array of <code>{from: Pos, to: Pos}</code> objects
-    marking the ranges to be highlighted. To detach the annotations,
-    call the object's <code>clear</code> method.</dd>
+    <dd>在滚动条上增加标记，可以跳转到文档的对应位置。
+    增加 <code>annotateScrollbar</code> 函数，参数为 CSS 样式名，来创建一组注释。
+    该函数返回 <code>update</code> 函数，参数为由 <code>{from: Pos, to: Pos}</code> 对象组成的有序数组，标记需要高亮的范围。
+    调用对象的 <code>clear</code> 函数可以清除标记。
+    </dd>
 
     <dt id="addon_rulers"><code>display/rulers.js</code></dt>
     <dd>增加 <code>rulers</code> 选项，为编辑器增加多条垂直标尺。
@@ -519,129 +510,94 @@
     参考<a href="../demo/demos/rulers.html">Demo</a>。</dd>
 
     <dt id="addon_panel"><code>display/panel.js</code></dt>
-    <dd>Defines an <code>addPanel</code> method for CodeMirror
-    instances, which places a DOM node above or below an editor, and
-    shrinks the editor to make room for the node. The method takes
-    as first argument as DOM node, and as second an optional options
-    object. The <code>Panel</code> object returned by this method
-    has a <code>clear</code> method that is used to remove the
-    panel, and a <code>changed</code> method that can be used to
-    notify the addon when the size of the panel's DOM node has
-    changed.<br/>
-    The method accepts the following options:
+    <dd>增加 <code>addPanel</code> 函数，可以在编辑器实例的上方或下方添加DOM元素，并缩小编辑器来为该元素腾出空间。
+    该函数第一个参数为DOM元素，第二个参数为可选的对象。
+    该函数返回的 <code>Panel</code> 对象的 <code>clear</code> 函数可以清除该面板，
+    <code>changed</code> 函数可以在面板的尺寸改变时通知插件。<br/>
+    该函数由下面的选项：
     <dl>
       <dt><code><strong>position</strong>: string</code></dt>
-      <dd>Controls the position of the newly added panel. The
-      following values are recognized:
+      <dd>新增面板的位置：
         <dl>
-          <dt><code><strong>top</strong> (default)</code></dt>
-          <dd>Adds the panel at the very top.</dd>
+          <dt><code><strong>top</strong>（默认）</code></dt>
+          <dd>最顶部。</dd>
           <dt><code><strong>after-top</strong></code></dt>
-          <dd>Adds the panel at the bottom of the top panels.</dd>
+          <dd>顶部区域内的底部。</dd>
           <dt><code><strong>bottom</strong></code></dt>
-          <dd>Adds the panel at the very bottom.</dd>
+          <dd>最底部。</dd>
           <dt><code><strong>before-bottom</strong></code></dt>
-          <dd>Adds the panel at the top of the bottom panels.</dd>
+          <dd>底部区域内的顶部。</dd>
         </dl>
       </dd>
       <dt><code><strong>before</strong>: Panel</code></dt>
-      <dd>The new panel will be added before the given panel.</dd>
+      <dd>指定面板的前面。</dd>
       <dt><code><strong>after</strong>: Panel</code></dt>
-      <dd>The new panel will be added after the given panel.</dd>
+      <dd>指定面板的后面。</dd>
       <dt><code><strong>replace</strong>: Panel</code></dt>
-      <dd>The new panel will replace the given panel.</dd>
+      <dd>替换指定面板。</dd>
       <dt><code><strong>stable</strong>: bool</code></dt>
-      <dd>Whether to scroll the editor to keep the text's vertical
-      position stable, when adding a panel above it. Defaults to false.</dd>
+      <dd>在指定面板上方添加面板时，是否滚动编辑器来确保文字的垂直位置固定。默认为false。</dd>
     </dl>
-    When using the <code>after</code>, <code>before</code> or <code>replace</code> options,
-    if the panel doesn't exists or has been removed,
-    the value of the <code>position</code> option will be used as a fallback.
-    <br>
+    使用 <code>after</code>、<code>before</code> 或 <code>replace</code> 时，如果指定面板不存在或已被删除，将会使用 <code>position</code> 选项作为备用。<br>
     参考<a href="../demo/demos/panel.html">Demo</a>。
     </dd>
 
     <dt id="addon_hardwrap"><code>wrap/hardwrap.js</code></dt>
-    <dd>Addon to perform hard line wrapping/breaking for paragraphs
-    of text. Adds these methods to editor instances:
+    <dd>段落硬换行插件。添加如下函数：
       <dl>
         <dt><code><strong>wrapParagraph</strong>(?pos: {line, ch}, ?options: object)</code></dt>
-        <dd>Wraps the paragraph at the given position.
-        If <code>pos</code> is not given, it defaults to the cursor
-        position.</dd>
+        <dd>分割指定位置的段落。
+        如果没有指定 <code>pos</code> ，默认将会使用光标的位置。</dd>
         <dt><code><strong>wrapRange</strong>(from: {line, ch}, to: {line, ch}, ?options: object)</code></dt>
-        <dd>Wraps the given range as one big paragraph.</dd>
+        <dd>将指定范围归为一段。</dd>
         <dt><code><strong>wrapParagraphsInRange</strong>(from: {line, ch}, to: {line, ch}, ?options: object)</code></dt>
-        <dd>Wraps the paragraphs in (and overlapping with) the
-        given range individually.</dd>
+        <dd>将指定范围内的段落归为一段。</dd>
       </dl>
-      The following options are recognized:
+      支持配置：
       <dl>
         <dt><code><strong>paragraphStart</strong>, <strong>paragraphEnd</strong>: RegExp</code></dt>
-        <dd>Blank lines are always considered paragraph boundaries.
-        These options can be used to specify a pattern that causes
-        lines to be considered the start or end of a paragraph.</dd>
+        <dd>一般把空白行作为段落分割。该配置可以把指定规则作为段落的开始和结束。</dd>
         <dt><code><strong>column</strong>: number</code></dt>
-        <dd>The column to wrap at. Defaults to 80.</dd>
+        <dd>行的列数。默认80。</dd>
         <dt><code><strong>wrapOn</strong>: RegExp</code></dt>
-        <dd>A regular expression that matches only those
-        two-character strings that allow wrapping. By default, the
-        addon wraps on whitespace and after dash characters.</dd>
+        <dd>正则表达式，只允许使用两个匹配字符进行分段。
+        该插件默认只在空白符和破折号后分段。</dd>
         <dt><code><strong>killTrailingSpace</strong>: boolean</code></dt>
-        <dd>Whether trailing space caused by wrapping should be
-        preserved, or deleted. Defaults to true.</dd>
+        <dd>判断分段后应该保留这串空格还是删除这串空格。默认为true。</dd>
       </dl>
       参考<a href="../demo/demos/hardwrap.html">Demo</a>。
     </dd>
 
     <dt id="addon_merge"><code>merge/merge.js</code></dt>
-    <dd>Implements an interface for merging changes, using either a
-    2-way or a 3-way view. The <code>CodeMirror.MergeView</code>
-    constructor takes arguments similar to
-    the <a href="#CodeMirror"><code>CodeMirror</code></a>
-    constructor, first a node to append the interface to, and then
-    an options object. Options are passed through to the editors
-    inside the view. These extra options are recognized:
+    <dd>使用2或3视图来合并更改。
+    <code>CodeMirror.MergeView</code> 构造函数与 <a href="../api/#CodeMirror"><code>CodeMirror</code></a> 构造函数的参数类似，
+    第一个参数为界面的DOM元素，第二个参数为配置对象。
+    配置会传递到视图内的编辑器中。
+    支持以下额外的配置：
       <dl>
         <dt><code><strong>origLeft</strong></code> and <code><strong>origRight</strong>: string</code></dt>
-        <dd>If given these provide original versions of the
-        document, which will be shown to the left and right of the
-        editor in non-editable CodeMirror instances. The merge
-        interface will highlight changes between the editable
-        document and the original(s). To create a 2-way (as opposed
-        to 3-way) merge view, provide only one of them.</dd>
+        <dd>如果提供了文档的多个原始版本，将会在左右两边创建只读的编辑器实例。
+        合并界面会高亮显示在原文件和可编辑文件直接的修改。
+        2视图（相对于3视图）只有一个原视图。</dd>
         <dt><code><strong>revertButtons</strong>: boolean</code></dt>
-        <dd>Determines whether buttons that allow the user to revert
-        changes are shown. Defaults to true.</dd>
+        <dd>是否显示还原更改按钮，默认为 true。</dd>
         <dt><code><strong>revertChunk</strong>: fn(mv: MergeView, from: CodeMirror, fromStart: Pos, fromEnd: Pos, to: CodeMirror, toStart: Pos, toEnd: Pos)</code></dt>
-        <dd>Can be used to define custom behavior when the user
-        reverts a changed chunk.</dd>
+        <dd>自定义还原一个块的更改的行为。</dd>
         <dt><code><strong>connect</strong>: string</code></dt>
-        <dd>Sets the style used to connect changed chunks of code.
-        By default, connectors are drawn. When this is set
-        to <code>"align"</code>, the smaller chunk is padded to
-        align with the bigger chunk instead.</dd>
+        <dd>修改块的连接器的样式。默认，连接器可见。设置为 <code>"align"</code> 时，使用更小的连接器。</dd>
         <dt><code><strong>collapseIdentical</strong>: boolean|number</code></dt>
-        <dd>When true (default is false), stretches of unchanged
-        text will be collapsed. When a number is given, this
-        indicates the amount of lines to leave visible around such
-        stretches (which defaults to 2).</dd>
+        <dd>When true (default is false), stretches of unchanged text will be collapsed.
+        为true时（默认 false），无修改的文本将被折叠。
+        为数字时，该段的头多少行将保留可见（默认为2）。</dd>
         <dt><code><strong>allowEditingOriginals</strong>: boolean</code></dt>
-        <dd>Determines whether the original editor allows editing.
-        Defaults to false.</dd>
+        <dd>原始编辑器是否可编辑，默认为false。</dd>
         <dt><code><strong>showDifferences</strong>: boolean</code></dt>
-        <dd>When true (the default), changed pieces of text are
-        highlighted.</dd>
+        <dd>为true时（默认），改动的文本高亮显示。</dd>
         <dt><code><strong>chunkClassLocation</strong>: string|Array</code></dt>
-        <dd>By default the chunk highlights are added
-        using <a href="#addLineClass"><code>addLineClass</code></a>
-        with "background". Override this to customize it to be any
-        valid `where` parameter or an Array of valid `where`
-        parameters.</dd>
+        <dd>默认使用 <a href="../api/#addLineClass"><code>addLineClass</code></a> 函数来为高亮行添加 "background" 。
+        使用该参数可以自定义。</dd>
       </dl>
-      The addon also defines commands <code>"goNextDiff"</code>
-      and <code>"goPrevDiff"</code> to quickly jump to the next
-      changed chunk.
+      该插件还提供 <code>"goNextDiff"</code> 和 <code>"goPrevDiff"</code> 函数来快速跳转修改块。
       参考<a href="../demo/demos/merge.html">Demo</a>。</dd>
 
     <dt id="addon_tern"><code>tern/tern.js</code></dt>
