@@ -152,7 +152,13 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/element-ui/lib/index.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/codemirror/lib/codemirror.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/addon/runmode/runmode.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/addon/runmode/colorize.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/mode/javascript/javascript.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/mode/xml/xml.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/mode/css/css.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/codemirror/mode/htmlmixed/htmlmixed.js"></script>
     <script type="text/javascript">
     var app = new Vue({
@@ -169,6 +175,8 @@
           lineNumbers:true,
           mode:'htmlmixed',
         });
+
+        CodeMirror.colorize();
       },
       methods:{
 

@@ -9,16 +9,12 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror/lib/codemirror.css"/>
     <script src="https://cdn.jsdelivr.net/npm/codemirror/lib/codemirror.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/codemirror/addon/edit/closetag.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/codemirror/addon/fold/xml-fold.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/codemirror/mode/xml/xml.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror/addon/hint/show-hint.css">
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/addon/hint/show-hint.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/addon/hint/javascript-hint.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/codemirror/mode/javascript/javascript.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/codemirror/mode/css/css.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/codemirror/mode/htmlmixed/htmlmixed.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/mode/markdown/markdown.js"></script>
 
-    <style>
-      .CodeMirror {border-top: 1px solid #888; border-bottom: 1px solid #888;}
-    </style>
     <script>
     var _hmt = _hmt || [];
     (function() {
@@ -71,7 +67,7 @@ function getCompletions(token, context) {
       </textarea>
     </form>
 
-    <p>Press <strong>ctrl-space</strong> to activate autocompletion. Built
+    <p>Press <strong>ctrl-m</strong> to activate autocompletion. Built
     on top of the <a href="../doc/manual.html#addon_show-hint"><code>show-hint</code></a>
     and <a href="../doc/manual.html#addon_javascript-hint"><code>javascript-hint</code></a>
     addons.</p>
@@ -87,7 +83,7 @@ hinting function can also return one.
     <script>
       var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
         lineNumbers: true,
-        extraKeys: {"Ctrl-Space": "autocomplete"},
+        extraKeys: {"Ctrl-M": "autocomplete"},
         mode: {name: "javascript", globalVars: true}
       });
 
@@ -122,7 +118,7 @@ hinting function can also return one.
         }
 
         var editor2 = CodeMirror.fromTextArea(document.getElementById("synonyms"), {
-          extraKeys: {"Ctrl-Space": "autocomplete"},
+          extraKeys: {"Ctrl-M": "autocomplete"},
           lineNumbers: true,
           lineWrapping: true,
           mode: "text/x-markdown",

@@ -141,534 +141,333 @@
         <dd>不要在一行中突出显示一个比这更长的括号。 预设为1000。</dd>
       </dl></dd>
 
-    <dt id="addon_closebrackets"><a href="../addon/edit/closebrackets.js"><code>edit/closebrackets.js</code></a></dt>
+    <dt id="addon_closebrackets"><code>edit/closebrackets.js</code></dt>
     <dd>定义一个 <code>autoCloseBrackets</code> 选项，将自动补全括号和引号。
     默认情况下，它将自动补全 <code>()[]{}''""</code>，但是您可以向其传递与之相似的字符串（包含成对的匹配字符），或传递具有 <code>pairs</code> 的对象，还可以用 <code>explode</code> 属性自定义 。
     <code>explode</code> 应该是一个相似的字符串，该字符串应提供成对的字符，当在它们之间按Enter键时，应该让第二个字符也移到自己的行。
     默认情况下，如果活动模式具有 <code>closeBrackets</code> 属性，则该属性将覆盖该选项中给定的配置。
     但是，您可以添加带有真实值的 <code>override</code> 属性以覆盖特定于模式的配置。
-    <a href="../demo/closebrackets.html">参考Demo</a>。</dd>
+    <a href="../demo/demos/closebrackets.html">参考Demo</a>。</dd>
 
-    <dt id="addon_matchtags"><a href="../addon/edit/matchtags.js"><code>edit/matchtags.js</code></a></dt>
-    <dd>Defines an option <code>matchTags</code> that, when enabled,
-    will cause the tags around the cursor to be highlighted (using
-    the <code>CodeMirror-matchingtag</code> class). Also
-    defines
-    a <a href="#commands">command</a> <code>toMatchingTag</code>,
-    which you can bind a key to in order to jump to the tag matching
-    the one under the cursor. Depends on
-    the <code>addon/fold/xml-fold.js</code>
-    addon. <a href="../demo/matchtags.html">Demo here.</a></dd>
+    <dt id="addon_matchtags"><code>edit/matchtags.js</code></dt>
+    <dd>新增 <code>matchTags</code> 选项，可以让光标处的标签高亮显示（使用 <code>CodeMirror-matchingtag</code> 样式）。
+    新增 <code>toMatchingTag</code> <a href="../commands/#commands">命令</a> ,
+    可以绑定一个快捷键来将光标移动到闭合标签处。
+    依赖 <code>addon/fold/xml-fold.js</code> 插件。
+    <a href="../demo/demos/matchtags.html">参考Demo</a>。</dd>
 
-    <dt id="addon_trailingspace"><a href="../addon/edit/trailingspace.js"><code>edit/trailingspace.js</code></a></dt>
-    <dd>Adds an option <code>showTrailingSpace</code> which, when
-    enabled, adds the CSS class <code>cm-trailingspace</code> to
-    stretches of whitespace at the end of lines.
-    The <a href="../demo/trailingspace.html">demo</a> has a nice
-    squiggly underline style for this class.</dd>
+    <dt id="addon_trailingspace"><code>edit/trailingspace.js</code></dt>
+    <dd>新增 <code>showTrailingSpace</code> 选项，使用 <code>cm-trailingspace</code> 样式标注到行位的空白。
+    参考使用下划线标注的 <a href="../demo/demos/trailingspace.html">Demo</a>。</dd>
 
-    <dt id="addon_closetag"><a href="../addon/edit/closetag.js"><code>edit/closetag.js</code></a></dt>
-    <dd>Defines an <code>autoCloseTags</code> option that will
-    auto-close XML tags when '<code>&gt;</code>' or '<code>/</code>'
-    is typed, and
-    a <code>closeTag</code> <a href="#commands">command</a> that
-    closes the nearest open tag. Depends on
-    the <code>fold/xml-fold.js</code> addon. See
-    the <a href="../demo/closetag.html">demo</a>.</dd>
+    <dt id="addon_closetag"><code>edit/closetag.js</code></dt>
+    <dd>新增 <code>autoCloseTags</code> 选项，当输入 '<code>&gt;</code>' 或 '<code>/</code>' 时自动闭合 XML 标签，
+    新增 <code>closeTag</code> <a href="../commands/#commands">命令</a>，用来关闭打开的标签。
+    依赖 <code>fold/xml-fold.js</code> 插件。
+    参考 <a href="../demo/demos/closetag.html">Demo</a>。</dd>
 
-    <dt id="addon_continuelist"><a href="../addon/edit/continuelist.js"><code>edit/continuelist.js</code></a></dt>
-    <dd>Markdown specific. Defines
-    a <code>"newlineAndIndentContinueMarkdownList"</code> <a href="#commands">command</a>
-    that can be bound to <code>enter</code> to automatically
-    insert the leading characters for continuing a list. See
-    the <a href="../mode/markdown/index.html">Markdown mode
-    demo</a>.</dd>
+    <dt id="addon_continuelist"><code>edit/continuelist.js</code></dt>
+    <dd>Markdown 的插件。
+    新增 <code>"newlineAndIndentContinueMarkdownList"</code> <a href="../commands/#commands">命令</a>，
+    按下 <code>enter</code> 键时自动插入列表头字符。
+    参考 <a href="https://codemirror.net/mode/markdown/index.html" target="_blank">Markdown mode demo</a>。</dd>
 
-    <dt id="addon_comment"><a href="../addon/comment/comment.js"><code>comment/comment.js</code></a></dt>
-    <dd>Addon for commenting and uncommenting code. Adds four
-    methods to CodeMirror instances:
+    <dt id="addon_comment"><code>comment/comment.js</code></dt>
+    <dd>注释和取消注释。增加四个函数：
     <dl>
       <dt id="toggleComment"><code><strong>toggleComment</strong>(?options: object)</code></dt>
-      <dd>Tries to uncomment the current selection, and if that
-      fails, line-comments it.</dd>
+      <dd>尝试取消选择区域的注释，如果失败，则注释该行。</dd>
       <dt id="lineComment"><code><strong>lineComment</strong>(from: {line, ch}, to: {line, ch}, ?options: object)</code></dt>
-      <dd>Set the lines in the given range to be line comments. Will
-      fall back to <code>blockComment</code> when no line comment
-      style is defined for the mode.</dd>
+      <dd>对给定行进行行注释。
+      如果当前Mode未定义行注释样式，则使用 <code>blockComment</code>。</dd>
       <dt id="blockComment"><code><strong>blockComment</strong>(from: {line, ch}, to: {line, ch}, ?options: object)</code></dt>
-      <dd>Wrap the code in the given range in a block comment. Will
-      fall back to <code>lineComment</code> when no block comment
-      style is defined for the mode.</dd>
+      <dd>对指定范围进行块注释。
+      如果当前Mode未定义块注释样式，则使用 <code>lineComment</code>。</dd>
       <dt id="uncomment"><code><strong>uncomment</strong>(from: {line, ch}, to: {line, ch}, ?options: object) → boolean</code></dt>
-      <dd>Try to uncomment the given range.
-        Returns <code>true</code> if a comment range was found and
-        removed, <code>false</code> otherwise.</dd>
+      <dd>取消指定范围的注释。
+        指定范围内有注释并成功取消注释，则返回 <code>true</code>。</dd>
     </dl>
-    The <code>options</code> object accepted by these methods may
-    have the following properties:
+    这四个函数的 <code>options</code> 对象可包含一下属性：
     <dl>
       <dt><code>blockCommentStart, blockCommentEnd, blockCommentLead, lineComment: string</code></dt>
-      <dd>Override the <a href="#mode_comment">comment string
-      properties</a> of the mode with custom comment strings.</dd>
+      <dd>使用自定义注释字符覆盖Mode的 <a href="../modeapi/#mode_comment">comment 属性</a>。</dd>
       <dt><code><strong>padding</strong>: string</code></dt>
-      <dd>A string that will be inserted after opening and leading
-      markers, and before closing comment markers. Defaults to a
-      single space.</dd>
+      <dd>关闭注释标记之前，在打开和头标记之后插入一个字符串。默认是一个空格。</dd>
       <dt><code><strong>commentBlankLines</strong>: boolean</code></dt>
-      <dd>Whether, when adding line comments, to also comment lines
-      that contain only whitespace.</dd>
+      <dd>添加行注释时，判断是否为空白行进行注释。</dd>
       <dt><code><strong>indent</strong>: boolean</code></dt>
-      <dd>When adding line comments and this is turned on, it will
-      align the comment block to the current indentation of the
-      first line of the block.</dd>
+      <dd>当为true时，在添加行注释时，将该行与注释快的第一行进行缩进来对齐。</dd>
       <dt><code><strong>fullLines</strong>: boolean</code></dt>
-      <dd>When block commenting, this controls whether the whole
-      lines are indented, or only the precise range that is given.
-      Defaults to <code>true</code>.</dd>
+      <dd>处理块注释时，该选项用来决定应该将整行缩进，还是仅缩进指定范围。
+      默认 <code>true</code> 。</dd>
     </dl>
-    The addon also defines
-    a <code>toggleComment</code> <a href="#commands">command</a>,
-    which is a shorthand command for calling
-    <code>toggleComment</code> with no options.</dd>
+    该插件还增加了 <code>toggleComment</code> <a href="../commands/#commands">命令</a>，方便调用无配置的 <code>toggleComment</code> 函数。
+    </dd>
 
-    <dt id="addon_foldcode"><a href="../addon/fold/foldcode.js"><code>fold/foldcode.js</code></a></dt>
-    <dd>Helps with code folding. Adds a <code>foldCode</code> method
-    to editor instances, which will try to do a code fold starting
-    at the given line, or unfold the fold that is already present.
-    The method takes as first argument the position that should be
-    folded (may be a line number or
-    a <a href="#Pos"><code>Pos</code></a>), and as second optional
-    argument either a range-finder function, or an options object,
-    supporting the following properties:
+    <dt id="addon_foldcode"><code>fold/foldcode.js</code></dt>
+    <dd>折叠代码块。
+    新增 <code>foldCode</code> 函数，在指定的行处尝试折叠，或展开已折叠的代码块。
+    第一个参数为应该开始折叠的行（可以是行号或 <a href="../api/#Pos"><code>Pos</code></a>），
+    第二个可选参数可以是一个范围查找函数或一个配置对象，支持以下配置：
     <dl>
       <dt><code><strong>rangeFinder</strong>: fn(CodeMirror, Pos)</code></dt>
-      <dd id="helper_fold_auto">The function that is used to find
-      foldable ranges. If this is not directly passed, it will
-      default to <code>CodeMirror.fold.auto</code>, which
-      uses <a href="#getHelpers"><code>getHelpers</code></a> with
-      a <code>"fold"</code> type to find folding functions
-      appropriate for the local mode. There are files in
-      the <a href="../addon/fold/"><code>addon/fold/</code></a>
-      directory providing <code>CodeMirror.fold.brace</code>, which
-      finds blocks in brace languages (JavaScript, C, Java,
-      etc), <code>CodeMirror.fold.indent</code>, for languages where
-      indentation determines block structure (Python, Haskell),
-      and <code>CodeMirror.fold.xml</code>, for XML-style languages,
-      and <code>CodeMirror.fold.comment</code>, for folding comment
-      blocks.</dd>
+      <dd id="helper_fold_auto">范围查找函数。
+      默认使用 <code>CodeMirror.fold.auto</code> ，
+      即使用 <a href="../api/#getHelpers"><code>getHelpers</code></a> 函数来查找当前 mode 下 <code>"fold"</code> 类型对应的查找函数。
+      <code>addon/fold/</code> 目录下的文件提供 <code>CodeMirror.fold.brace</code>，
+      可以在多种编程语言（JavaScript、C、Java等）中查找代码块，
+      <code>CodeMirror.fold.indent</code> 用来给缩进确定代码块的编程语言（Python、Haskell），
+      <code>CodeMirror.fold.xml</code> 用来给 XML 类型的变成语言查找代码块，
+      <code>CodeMirror.fold.comment</code> 判断注释代码块。</dd>
       <dt><code><strong>widget</strong>: string | Element | fn(from: Pos, to: Pos) → string|Element</code></dt>
-      <dd>The widget to show for folded ranges. Can be either a
-      string, in which case it'll become a span with
-      class <code>CodeMirror-foldmarker</code>, or a DOM node.
-      To dynamically generate the widget, this can be a function
-      that returns a string or DOM node, which will then render
-      as described. The function will be invoked with parameters
-      identifying the range to be folded.</dd>
+      <dd>用来代表被折叠代码块的小部件。
+      可以是一个由 <code>CodeMirror-foldmarker</code> 样式修饰的字符串，或一个DOM元素。
+      为了动态的生成小部件，该参数可以是一个返回字符串或DOM元素的函数。
+      该函数被调用时，会传递需要折叠的代码块的范围。</dd>
       <dt><code><strong>scanUp</strong>: boolean</code></dt>
-      <dd>When true (default is false), the addon will try to find
-      foldable ranges on the lines above the current one if there
-      isn't an eligible one on the given line.</dd>
+      <dd>为 true 时（默认 false），如果指定行不可折叠，该插件会尝试从该行向上查找可折叠的代码块。</dd>
       <dt><code><strong>minFoldSize</strong>: integer</code></dt>
-      <dd>The minimum amount of lines that a fold should span to be
-      accepted. Defaults to 0, which also allows single-line
-      folds.</dd>
+      <dd>最少多少行可以被折叠。默认0，表示可折叠单行。</dd>
     </dl>
-    See <a href="../demo/folding.html">the demo</a> for an
-    example.</dd>
+    参考 <a href="../demo/demos/folding.html">Demo</a>。</dd>
 
-    <dt id="addon_foldgutter"><a href="../addon/fold/foldgutter.js"><code>fold/foldgutter.js</code></a></dt>
-    <dd>Provides an option <code>foldGutter</code>, which can be
-    used to create a gutter with markers indicating the blocks that
-    can be folded. Create a gutter using
-    the <a href="#option_gutters"><code>gutters</code></a> option,
-    giving it the class <code>CodeMirror-foldgutter</code> or
-    something else if you configure the addon to use a different
-    class, and this addon will show markers next to folded and
-    foldable blocks, and handle clicks in this gutter. Note that
-    CSS styles should be applied to make the gutter, and the fold
-    markers within it, visible. A default set of CSS styles are
-    available in:
-    <a href="../addon/fold/foldgutter.css">
-      <code>addon/fold/foldgutter.css</code>
-    </a>.
-    The option
-    can be either set to <code>true</code>, or an object containing
-    the following optional option fields:
+    <dt id="addon_foldgutter"><code>fold/foldgutter.js</code></dt>
+    <dd>新增 <code>foldGutter</code> 选项，可以用来创建一个侧边标记，标示可被折叠的块。
+    使用 <a href="../config/#option_gutters"><code>gutters</code></a> 选项创建一个侧边栏，
+    给它一个 <code>CodeMirror-foldgutter</code> 样式或其他样式，
+    然后该插件会在被折叠处或可折叠处在侧边栏上显示标记，并处理侧边栏的点击事件。
+    注意：需要为侧边栏指定CSS样式，并包含折叠标记的样式。
+    默认CSS样式在 <code>addon/fold/foldgutter.css</code> 中定义。
+    该选项可以是 <code>true</code> 或包含以下属性的对象：
     <dl>
       <dt><code><strong>gutter</strong>: string</code></dt>
-      <dd>The CSS class of the gutter. Defaults
-      to <code>"CodeMirror-foldgutter"</code>. You will have to
-      style this yourself to give it a width (and possibly a
-      background). See the default gutter style rules above.</dd>
+      <dd>侧边栏的CSS样式。
+      默认为 <code>"CodeMirror-foldgutter"</code>。
+      你需要自己设置它的宽度（和背景）。
+      参考上面的侧边栏规则。</dd>
       <dt><code><strong>indicatorOpen</strong>: string | Element</code></dt>
-      <dd>A CSS class or DOM element to be used as the marker for
-      open, foldable blocks. Defaults
-      to <code>"CodeMirror-foldgutter-open"</code>.</dd>
+      <dd>一个 CSS 样式或 DOM 元素用来标示可折叠的块。
+      默认为 <code>"CodeMirror-foldgutter-open"</code> 。</dd>
       <dt><code><strong>indicatorFolded</strong>: string | Element</code></dt>
-      <dd>A CSS class or DOM element to be used as the marker for
-      folded blocks. Defaults to <code>"CodeMirror-foldgutter-folded"</code>.</dd>
+      <dd>一个 CSS 样式或 DOM 元素用来标示已被折叠的块。
+      默认为 <code>"CodeMirror-foldgutter-folded"</code> 。</dd>
       <dt><code><strong>rangeFinder</strong>: fn(CodeMirror, Pos)</code></dt>
-      <dd>The range-finder function to use when determining whether
-      something can be folded. When not
-      given, <a href="#helper_fold_auto"><code>CodeMirror.fold.auto</code></a>
-      will be used as default.</dd>
+      <dd>用来确定可折叠块的范围查找函数。
+      默认为 <a href="#helper_fold_auto"><code>CodeMirror.fold.auto</code></a> 。</dd>
     </dl>
-    The <code>foldOptions</code> editor option can be set to an
-    object to provide an editor-wide default configuration.
-    Demo <a href="../demo/folding.html">here</a>.</dd>
+    编辑器的 <code>foldOptions</code> 选项可以设置为一个对象，提供大量默认配置。
+    参考<a href="../demo/demos/folding.html">Demo</a>。</dd>
 
-    <dt id="addon_runmode"><a href="../addon/runmode/runmode.js"><code>runmode/runmode.js</code></a></dt>
-    <dd>Can be used to run a CodeMirror mode over text without
-    actually opening an editor instance.
-    See <a href="../demo/runmode.html">the demo</a> for an example.
-    There are alternate versions of the file available for
-    running <a href="../addon/runmode/runmode-standalone.js">stand-alone</a>
-    (without including all of CodeMirror) and
-    for <a href="../addon/runmode/runmode.node.js">running under
-    node.js</a> (see <code>bin/source-highlight</code> for an example of using the latter).</dd>
+    <dt id="addon_runmode"><code>runmode/runmode.js</code></dt>
+    <dd>不创建编辑器实例，使用 mode 渲染文本。
+    参考 <a href="../demo/demos/runmode.html">Demo</a>。
+    还有备用文件版本，<code>addon/runmode/runmode-standalone.js</code> 单机版（不引入CodeMirror），
+    和 <code>addon/runmode/runmode.node.js</code>node.js 环境（参考 <code>bin/source-highlight</code>）。</dd>
 
-    <dt id="addon_colorize"><a href="../addon/runmode/colorize.js"><code>runmode/colorize.js</code></a></dt>
-    <dd>Provides a convenient way to syntax-highlight code snippets
-    in a webpage. Depends on
-    the <a href="#addon_runmode"><code>runmode</code></a> addon (or
-    its standalone variant). Provides
-    a <code>CodeMirror.colorize</code> function that can be called
-    with an array (or other array-ish collection) of DOM nodes that
-    represent the code snippets. By default, it'll get
-    all <code>pre</code> tags. Will read the <code>data-lang</code>
-    attribute of these nodes to figure out their language, and
-    syntax-color their content using the relevant CodeMirror mode
-    (you'll have to load the scripts for the relevant modes
-    yourself). A second argument may be provided to give a default
-    mode, used when no language attribute is found for a node. Used
-    in this manual to highlight example code.</dd>
+    <dt id="addon_colorize"><code>runmode/colorize.js</code></dt>
+    <dd>一个在网页中高亮代码的简单方法。
+    依赖于 <a href="#addon_runmode"><code>runmode</code></a> 插件（或它的变种）。
+    增加 <code>CodeMirror.colorize</code> 函数，参数为一个包含需要被高亮处理的DOM元素的数组（或可数组化的集合）。
+    默认为所有 <code>pre</code> 标签。
+    需要读取 <code>data-lang</code> 属性来确定它们的编程语言，和对应Mode的颜色（你需要自己引入相关Mode的依赖文件）。
+    第二个参数为默认的Mode，用来修饰其他元素。
+    本手册中就是用的该方法。</dd>
 
-    <dt id="addon_overlay"><a href="../addon/mode/overlay.js"><code>mode/overlay.js</code></a></dt>
-    <dd>Mode combinator that can be used to extend a mode with an
-    'overlay' — a secondary mode is run over the stream, along with
-    the base mode, and can color specific pieces of text without
-    interfering with the base mode.
-    Defines <code>CodeMirror.overlayMode</code>, which is used to
-    create such a mode. See <a href="../demo/mustache.html">this
-    demo</a> for a detailed example.</dd>
+    <dt id="addon_overlay"><code>mode/overlay.js</code></dt>
+    <dd>Mode 组合器，可以在基础 Mode 上扩展一个 Mode ，在不干扰基础 Mode 的基础上高亮部分文本。
+    Defines <code>CodeMirror.overlayMode</code>, which is used to create such a mode.
+    定义 <code>CodeMirror.overlayMode</code> 来创建这样一个mode。
+    参考 <a href="../demo/demos/mustache.html">Demo</a>。</dd>
 
-    <dt id="addon_multiplex"><a href="../addon/mode/multiplex.js"><code>mode/multiplex.js</code></a></dt>
-    <dd>Mode combinator that can be used to easily 'multiplex'
-    between several modes.
-    Defines <code>CodeMirror.multiplexingMode</code> which, when
-    given as first argument a mode object, and as other arguments
-    any number of <code>{open, close, mode [, delimStyle, innerStyle, parseDelimiters]}</code>
-    objects, will return a mode object that starts parsing using the
-    mode passed as first argument, but will switch to another mode
-    as soon as it encounters a string that occurs in one of
-    the <code>open</code> fields of the passed objects. When in a
-    sub-mode, it will go back to the top mode again when
-    the <code>close</code> string is encountered.
-    Pass <code>"\n"</code> for <code>open</code> or <code>close</code>
-    if you want to switch on a blank line.
-    <ul><li>When <code>delimStyle</code> is specified, it will be the token
-    style returned for the delimiter tokens (as well as
-    <code>[delimStyle]-open</code> on the opening token and
-    <code>[delimStyle]-close</code> on the closing token).</li>
-    <li>When <code>innerStyle</code> is specified, it will be the token
-    style added for each inner mode token.</li>
-    <li>When <code>parseDelimiters</code> is true, the content of
-    the delimiters will also be passed to the inner mode.
-    (And <code>delimStyle</code> is ignored.)</li></ul> The outer
-    mode will not see the content between the delimiters.
-    See <a href="../demo/multiplex.html">this demo</a> for an
-    example.</dd>
+    <dt id="addon_multiplex"><code>mode/multiplex.js</code></dt>
+    <dd>Mode 组合器，可以混合多个 Mode。
+    定义 <code>CodeMirror.multiplexingMode</code> ，第一个参数为Mode对象，
+    第二个参数为包含 <code>{open, close, mode [, delimStyle, innerStyle, parseDelimiters]}</code> 任意数量的对象，
+    将会返回一个 Mode 对象，使用第一个参数传递的Mode来解析，
+    但是在遇到 <code>open</code> 字段中的字符串时立马切换为另一种Mode。
+    在子Mode中，遇到 <code>close</code> 定义的字符串时返回父Mode。
+    将 <code>open</code> 或 <code>close</code> 设置为 <code>"\n"</code> 来在遇到空白行时切换Mode。
+    <ul>
+      <li>指定 <code>delimStyle</code> 时，会使用该样式来修饰切换关键词（<code>[delimStyle]-open</code> 修饰开始关键词，<code>[delimStyle]-close</code> 修饰结束关键词）。</li>
+      <li>指定 <code>innerStyle</code> 时，会修饰子Mode中所有的切换关键词。</li>
+      <li>当 <code>parseDelimiters</code> 为 true 时，切换关键词也会被定义为内部Mode（<code>delimStyle</code> 参数将会被忽略）。</li>
+    </ul>
+    外部Mode不会关注内部的内容。
+    参考 <a href="../demo/demos/multiplex.html">Demo</a>。</dd>
 
-    <dt id="addon_show-hint"><a href="../addon/hint/show-hint.js"><code>hint/show-hint.js</code></a></dt>
-    <dd>Provides a framework for showing autocompletion hints.
-    Defines <code>editor.showHint</code>, which takes an optional
-    options object, and pops up a widget that allows the user to
-    select a completion. Finding hints is done with a hinting
-    functions (the <code>hint</code> option), which is a function
-    that take an editor instance and options object, and return
-    a <code>{list, from, to}</code> object, where <code>list</code>
-    is an array of strings or objects (the completions),
-    and <code>from</code> and <code>to</code> give the start and end
-    of the token that is being completed as <code>{line, ch}</code>
-    objects. An optional <code>selectedHint</code> property (an
-    integer) can be added to the completion object to control the
-    initially selected hint.</dd>
-    <dd>If no hinting function is given, the addon will
-    use <code>CodeMirror.hint.auto</code>, which
-    calls <a href="#getHelpers"><code>getHelpers</code></a> with
-    the <code>"hint"</code> type to find applicable hinting
-    functions, and tries them one by one. If that fails, it looks
-    for a <code>"hintWords"</code> helper to fetch a list of
-    completable words for the mode, and
-    uses <code>CodeMirror.hint.fromList</code> to complete from
-    those.</dd>
-    <dd>When completions aren't simple strings, they should be
-    objects with the following properties:
+    <dt id="addon_show-hint"><code>hint/show-hint.js</code></dt>
+    <dd>自动补全提示框架。
+    增加 <code>editor.showHint</code> 配置，弹出一个小部件让用户选择补全。
+    由参数为编辑器实例和配置的函数（<code>hint</code>配置）完成查找，
+    返回 <code>{list, from, to}</code> 对象，<code>list</code> 为字符串或对象组成的数组（补全列表），
+    <code>from</code> 和 <code>to</code> 为需要替换字符串的开始与结束位置，为 <code>{line, ch}</code> 对象。
+    补全对象的 <code>selectedHint</code> 是可选属性（数字），用来控制默认选择的提示。</dd>
+    <dd>如果没有提供提示函数，插件会使用 <code>CodeMirror.hint.auto</code>，
+    基于 <code>"hint"</code> 类型调用 <a href="../api/#getHelpers"><code>getHelpers</code></a> 函数来查找可用的提示函数，并一个一个地尝试。
+    如果失败，将查找 <code>"hintWords"</code> 工具类来提取该Mode下可补全的单词，并调用 <code>CodeMirror.hint.fromList</code> 来完成自动补全。</dd>
+    <dd>当补全对象不是字符串时，应该是包含一下属性的对象：
     <dl>
       <dt><code><strong>text</strong>: string</code></dt>
-      <dd>The completion text. This is the only required
-      property.</dd>
+      <dd>补全文本，这是唯一必传的参数。</dd>
       <dt><code><strong>displayText</strong>: string</code></dt>
-      <dd>The text that should be displayed in the menu.</dd>
+      <dd>菜单中展示的文本。</dd>
       <dt><code><strong>className</strong>: string</code></dt>
-      <dd>A CSS class name to apply to the completion's line in the
-      menu.</dd>
+      <dd>菜单中补全行的CSS样式名。</dd>
       <dt><code><strong>render</strong>: fn(Element, self, data)</code></dt>
-      <dd>A method used to create the DOM structure for showing the
-      completion by appending it to its first argument.</dd>
+      <dd>使用第一个参数来创建补全的DOM结构的函数。</dd>
       <dt><code><strong>hint</strong>: fn(CodeMirror, self, data)</code></dt>
-      <dd>A method used to actually apply the completion, instead of
-      the default behavior.</dd>
+      <dd>应用补全的函数，可用来替代默认的补全函数。</dd>
       <dt><code><strong>from</strong>: {line, ch}</code></dt>
-      <dd>Optional <code>from</code> position that will be used by <code>pick()</code> instead
-      of the global one passed with the full list of completions.</dd>
+      <dd>指定 <code>pick()</code> 的开始位置，而不是整个补全列表。</dd>
       <dt><code><strong>to</strong>: {line, ch}</code></dt>
-      <dd>Optional <code>to</code> position that will be used by <code>pick()</code> instead
-      of the global one passed with the full list of completions.</dd>
+      <dd>指定 <code>pick()</code> 的结束位置，而不是整个补全列表。</dd>
     </dl></dd>
 
-    <dd>The plugin understands the following options, which may be
-    either passed directly in the argument to <code>showHint</code>,
-    or provided by setting an <code>hintOptions</code> editor
-    option to an object (the former takes precedence). The options
-    object will also be passed along to the hinting function, which
-    may understand additional options.
+    <dd>插件可以理解以下选项，这些选项可以直接传递到 <code>showHint</code> 的参数中，或通过为编辑器设置 <code>hintOptions</code> 选项来提供（前者优先）。
+    options对象也将传递给提示功能，该功能可能会理解其他选项。
     <dl>
       <dt><code><strong>hint</strong>: function</code></dt>
-      <dd>A hinting function, as specified above. It is possible to
-      set the <code>async</code> property on a hinting function to
-      true, in which case it will be called with
-      arguments <code>(cm, callback, ?options)</code>, and the
-      completion interface will only be popped up when the hinting
-      function calls the callback, passing it the object holding the
-      completions.
-      The hinting function can also return a promise, and the completion
-      interface will only be popped when the promise resolves.
-      By default, hinting only works when there is no
-      selection. You can give a hinting function
-      a <code>supportsSelection</code> property with a truthy value
-      to indicate that it supports selections.</dd>
+      <dd>补全函数。
+      可以将提示函数的 <code>async</code> 属性设置为true，在这种情况下，它将使用参数<code>(cm, callback, ?options)</code>进行调用，
+      并且仅当提示函数调用回调时才会弹出完成界面，并向回调传递包含补全对象的参数。
+      补全函数也可以返回 Promise 对象，当 Promise 完成时再弹出补全界面。
+      补全函数默认只在没有选区时启用。
+      你可以把 <code>supportsSelection</code> 属性设置为真实的值给补全函数来启用对选区的支持。</dd>
       <dt><code><strong>completeSingle</strong>: boolean</code></dt>
-      <dd>Determines whether, when only a single completion is
-      available, it is completed without showing the dialog.
-      Defaults to true.</dd>
+      <dd>当只有一个补全对象可用时是否完成补全而不显示对话框。默认为true。</dd>
       <dt><code><strong>alignWithWord</strong>: boolean</code></dt>
-      <dd>Whether the pop-up should be horizontally aligned with the
-      start of the word (true, default), or with the cursor (false).</dd>
+      <dd>弹出菜单应该与单词的头部对齐（默认），还是应该与光标对齐（false）。</dd>
       <dt><code><strong>closeOnUnfocus</strong>: boolean</code></dt>
-      <dd>When enabled (which is the default), the pop-up will close
-      when the editor is unfocused.</dd>
+      <dd>当编辑器失去焦点时，自动关闭弹出菜单（默认）。</dd>
       <dt><code><strong>customKeys</strong>: keymap</code></dt>
-      <dd>Allows you to provide a custom key map of keys to be active
-      when the pop-up is active. The handlers will be called with an
-      extra argument, a handle to the completion menu, which
-      has <code>moveFocus(n)</code>, <code>setFocus(n)</code>, <code>pick()</code>,
-      and <code>close()</code> methods (see the source for details),
-      that can be used to change the focused element, pick the
-      current element or close the menu. Additionally <code>menuSize()</code>
-      can give you access to the size of the current dropdown menu,
-      <code>length</code> give you the number of available completions, and
-      <code>data</code> give you full access to the completion returned by the
-      hinting function.</dd>
+      <dd>自定义在弹出菜单显示时的快捷键。
+      快捷键的处理函数在被调用时会被传递额外的参数，如被 <code>moveFocus(n)</code>、<code>setFocus(n)</code>、<code>pick()</code> 和 <code>close()</code> 函数（参考源代码）调用时，
+      这些函数用来修改选中对象，选择当前元素或关闭当前菜单。
+      另外 <code>menuSize()</code> 函数可以获取当前菜单中补全对象的数量，
+      <code>length</code> 属性为可用补全对象的数量，
+      <code>data</code> 属性可以获取补全函数的返回对象。</dd>
       <dt><code><strong>extraKeys</strong>: keymap</code></dt>
-      <dd>Like <code>customKeys</code> above, but the bindings will
-      be added to the set of default bindings, instead of replacing
-      them.</dd>
+      <dd>类似 <code>customKeys</code>，用来给默认快捷键做补充，而不是覆盖默认快捷键。</dd>
     </dl>
-    The following events will be fired on the completions object
-    during completion:
+    在补全过程中，会触发以下事件：
     <dl>
       <dt><code><strong>"shown"</strong> ()</code></dt>
-      <dd>Fired when the pop-up is shown.</dd>
+      <dd>菜单弹出时触发。</dd>
       <dt><code><strong>"select"</strong> (completion, Element)</code></dt>
-      <dd>Fired when a completion is selected. Passed the completion
-      value (string or object) and the DOM node that represents it
-      in the menu.</dd>
+      <dd>补全对象被选中时触发。参数为补全对象（字符串或对象）和菜单中的DOM元素。</dd>
       <dt><code><strong>"pick"</strong> (completion)</code></dt>
-      <dd>Fired when a completion is picked. Passed the completion value
-      (string or object).</dd>
+      <dd>补全对象被应用时触发。参数为补全对象（字符串或对象）。</dd>
       <dt><code><strong>"close"</strong> ()</code></dt>
-      <dd>Fired when the completion is finished.</dd>
+      <dd>补全完成时触发。</dd>
     </dl>
-    This addon depends on styles
-    from <code>addon/hint/show-hint.css</code>. Check
-    out <a href="../demo/complete.html">the demo</a> for an
-    example.</dd>
+    该插件依赖 <code>addon/hint/show-hint.css</code> 样式。
+    参考 <a href="../demo/demos/complete.html">Demo</a>。</dd>
 
-    <dt id="addon_javascript-hint"><a href="../addon/hint/javascript-hint.js"><code>hint/javascript-hint.js</code></a></dt>
-    <dd>Defines a simple hinting function for JavaScript
-    (<code>CodeMirror.hint.javascript</code>) and CoffeeScript
-    (<code>CodeMirror.hint.coffeescript</code>) code. This will
-    simply use the JavaScript environment that the editor runs in as
-    a source of information about objects and their properties.</dd>
+    <dt id="addon_javascript-hint"><code>hint/javascript-hint.js</code></dt>
+    <dd>为 JavaScript（<code>CodeMirror.hint.javascript</code>）和 CoffeeScript（<code>CodeMirror.hint.coffeescript</code>）实现了一个简单的代码提示函数。
+    只提供对象及其属性的信息提示。</dd>
 
-    <dt id="addon_xml-hint"><a href="../addon/hint/xml-hint.js"><code>hint/xml-hint.js</code></a></dt>
-    <dd>Defines <code>CodeMirror.hint.xml</code>, which produces
-    hints for XML tagnames, attribute names, and attribute values,
-    guided by a <code>schemaInfo</code> option (a property of the
-    second argument passed to the hinting function, or the third
-    argument passed to <code>CodeMirror.showHint</code>).<br>The
-    schema info should be an object mapping tag names to information
-    about these tags, with optionally a <code>"!top"</code> property
-    containing a list of the names of valid top-level tags. The
-    values of the properties should be objects with optional
-    properties <code>children</code> (an array of valid child
-    element names, omit to simply allow all tags to appear)
-    and <code>attrs</code> (an object mapping attribute names
-    to <code>null</code> for free-form attributes, and an array of
-    valid values for restricted
-    attributes).<br>The hint options accept an additional property:
+    <dt id="addon_xml-hint"><code>hint/xml-hint.js</code></dt>
+    <dd>定义 <code>CodeMirror.hint.xml</code> ，为 XML 标签名、属性名、属性值提供提示，
+    由 <code>schemaInfo</code> 选项控制（hinting 函数的第二个参数，或 <code>CodeMirror.showHint</code> 函数的第三个参数）。<br>
+    该参数应该为一个定义了标签名和信息对照信息的对象，
+    和可选参数 <code>"!top"</code>，包含顶级标签的名字列表。
+    这些参数有可选的 <code>children</code> 属性（由可用子类元素名子组成数组，省略时允许所有元素出现），
+    和 <code>attrs</code> 参数（<code>null</code> 时不作提示，和属性禁止使用的值）。<br>
+    额外的属性：
     <dl>
       <dt><code><strong>matchInMiddle</strong>: boolean</code></dt>
-      <dd>Determines whether typed characters are matched anywhere in
-      completions, not just at the beginning. Defaults to false.</dd>
+      <dd>是否可以在任意位置进行匹配，不只在行首处进行匹配。默认为false。</dd>
     </dl>
-    <a href="../demo/xmlcomplete.html">Demo here</a>.</dd>
+    参考<a href="../demo/demos/xmlcomplete.html">Demo</a>。</dd>
 
-    <dt id="addon_html-hint"><a href="../addon/hint/html-hint.js"><code>hint/html-hint.js</code></a></dt>
-    <dd>Provides schema info to
-    the <a href="#addon_xml-hint">xml-hint</a> addon for HTML
-    documents. Defines a schema
-    object <code>CodeMirror.htmlSchema</code> that you can pass to
-    as a <code>schemaInfo</code> option, and
-    a <code>CodeMirror.hint.html</code> hinting function that
-    automatically calls <code>CodeMirror.hint.xml</code> with this
-    schema data. See
-    the <a href="../demo/html5complete.html">demo</a>.</dd>
+    <dt id="addon_html-hint"><code>hint/html-hint.js</code></dt>
+    <dd>为 HTML 提供 <a href="#addon_xml-hint">xml</a> 提示。
+    增加 <code>CodeMirror.htmlSchema</code> 对象，可以传递给 <code>schemaInfo</code> 选项，
+    和 <code>CodeMirror.hint.html</code> 命中函数，自动调用 <code>CodeMirror.hint.xml</code> 函数。
+    参考<a href="../demo/demos/html5complete.html">Demo</a>。</dd>
 
-    <dt id="addon_css-hint"><a href="../addon/hint/css-hint.js"><code>hint/css-hint.js</code></a></dt>
-    <dd>A hinting function for CSS, SCSS, or LESS code.
-    Defines <code>CodeMirror.hint.css</code>.</dd>
+    <dt id="addon_css-hint"><code>hint/css-hint.js</code></dt>
+    <dd>为 CSS、SCSS、和 LESS 提供命中函数。
+    增加 <code>CodeMirror.hint.css</code> 。</dd>
 
-    <dt id="addon_anyword-hint"><a href="../addon/hint/anyword-hint.js"><code>hint/anyword-hint.js</code></a></dt>
-    <dd>A very simple hinting function
-    (<code>CodeMirror.hint.anyword</code>) that simply looks for
-    words in the nearby code and completes to those. Takes two
-    optional options, <code>word</code>, a regular expression that
-    matches words (sequences of one or more character),
-    and <code>range</code>, which defines how many lines the addon
-    should scan when completing (defaults to 500).</dd>
+    <dt id="addon_anyword-hint"><code>hint/anyword-hint.js</code></dt>
+    <dd>一个非常简单的命中函数（<code>CodeMirror.hint.anyword</code> ），只查找代码附近的单词并提示补全。
+    参数 <code>word</code> 可选，匹配单词的正则表达式（一个或多个字符），
+    参数 <code>range</code> 可选，补全时应该搜索多少行（默认500）。</dd>
 
-    <dt id="addon_sql-hint"><a href="../addon/hint/sql-hint.js"><code>hint/sql-hint.js</code></a></dt>
-    <dd>A simple SQL hinter. Defines <code>CodeMirror.hint.sql</code>.
-    Takes two optional options, <code>tables</code>, a object with
-    table names as keys and array of respective column names as values,
-    and <code>defaultTable</code>, a string corresponding to a
-    table name in <code>tables</code> for autocompletion.</dd>
+    <dt id="addon_sql-hint"><code>hint/sql-hint.js</code></dt>
+    <dd>SQL 提示。新增 <code>CodeMirror.hint.sql</code>。
+    参数 <code>tables</code>，表名与其对应字段名的对象，
+    参数 <code>defaultTable</code>，自动补全对应表名的字符串。</dd>
 
-    <dt id="addon_match-highlighter"><a href="../addon/search/match-highlighter.js"><code>search/match-highlighter.js</code></a></dt>
-    <dd>Adds a <code>highlightSelectionMatches</code> option that
-    can be enabled to highlight all instances of a currently
-    selected word. Can be set either to true or to an object
-    containing the following options: <code>minChars</code>, for the
-    minimum amount of selected characters that triggers a highlight
-    (default 2), <code>style</code>, for the style to be used to
-    highlight the matches (default <code>"matchhighlight"</code>,
-    which will correspond to CSS
-    class <code>cm-matchhighlight</code>), <code>trim</code>, which
-    controls whether whitespace is trimmed from the selection,
-    and <code>showToken</code> which can be set to <code>true</code>
-    or to a regexp matching the characters that make up a word. When
-    enabled, it causes the current word to be highlighted when
-    nothing is selected (defaults to off).
-    Demo <a href="../demo/matchhighlighter.html">here</a>.</dd>
+    <dt id="addon_match-highlighter"><code>search/match-highlighter.js</code></dt>
+    <dd>增加 <code>highlightSelectionMatches</code> 选项，高亮内容中所有与选择的单词一致的单词。
+    可以为 true 或拥有以下属性的对象：
+    <code>minChars</code>，高亮处理最少的单词数量（默认2），
+    <code>style</code>，高亮的样式（默认<code>"matchhighlight"</code>对应 <code>cm-matchhighlight</code> CSS样式），
+    <code>trim</code>，是否应该排除选择区域前后的空白符，
+    <code>showToken</code> 可为 <code>true</code>，或由一个单词组成的正则表达式。
+    为 true 时，没有选区时将当前单词高亮显示（默认关闭）。
+    参考<a href="../demo/demos/matchhighlighter.html">Demo</a>。</dd>
 
-    <dt id="addon_lint"><a href="../addon/lint/lint.js"><code>lint/lint.js</code></a></dt>
-    <dd>Defines an interface component for showing linting warnings,
-    with pluggable warning sources
-    (see <a href="../addon/lint/html-lint.js"><code>html-lint.js</code></a>,
-    <a href="../addon/lint/json-lint.js"><code>json-lint.js</code></a>,
-    <a href="../addon/lint/javascript-lint.js"><code>javascript-lint.js</code></a>,
-    <a href="../addon/lint/coffeescript-lint.js"><code>coffeescript-lint.js</code></a>,
-    and <a href="../addon/lint/css-lint.js"><code>css-lint.js</code></a>
-    in the same directory). Defines a <code>lint</code> option that
-    can be set to an annotation source (for
-    example <code>CodeMirror.lint.javascript</code>), to an options
-    object (in which case the <code>getAnnotations</code> field is
-    used as annotation source), or simply to <code>true</code>. When
-    no annotation source is
-    specified, <a href="#getHelper"><code>getHelper</code></a> with
-    type <code>"lint"</code> is used to find an annotation function.
-    An annotation source function should, when given a document
-    string, an options object, and an editor instance, return an
-    array of <code>{message, severity, from, to}</code> objects
-    representing problems. When the function has
-    an <code>async</code> property with a truthy value, it will be
-    called with an additional second argument, which is a callback
-    to pass the array to.
-    The linting function can also return a promise, in that case the linter
-    will only be executed when the promise resolves.
-    By default, the linter will run (debounced) whenever the document is changed.
-    You can pass a <code>lintOnChange: false</code> option to disable that.
-    You can pass a <code>selfContain: true</code> option to render the tooltip inside the editor instance.
-    Depends on <code>addon/lint/lint.css</code>. A demo can be
-    found <a href="../demo/lint.html">here</a>.</dd>
+    <dt id="addon_lint"><code>lint/lint.js</code></dt>
+    <dd>为源代码增加可插拔的格式警告界面（参考<code>addon/lint/html-lint.js</code>、<code>addon/lint/json-lint.js</code>、
+    <code>addon/lint/javascript-lint.js</code>、<code>addon/lint/coffeescript-lint.js</code> 和 <code>addon/lint/css-lint.js</code>）。
+    增加 <code>lint</code> 选项，可以是注解源（如 <code>CodeMirror.lint.javascript</code>），
+    可以是一个配置对象（包含 <code>getAnnotations</code> 属性作为注解源），或 <code>true</code>。
+    没有指定注解源时，使用 <a href="../api/#getHelper"><code>getHelper</code></a> 函数查找类型为 <code>"lint"</code> 的注解函数。
+    注解函数的参数应该包含：内容字符串、选项对象和编辑器实例，应该返回由 <code>{message, severity, from, to}</code> 对象组成的数组，代表所出现的问题。
+    当注解函数的 <code>async</code> 属性可用时，注解函数被调用时会被传递第二个参数，一个带有问题数组的回调函数。
+    注解函数也可以返回 Promise 对象，仅当 Promise 对象完成后处理格式警告。
+    默认的，每当修改文档时，格式警告函数都会被调用。
+    可以设置 <code>lintOnChange: false</code> 选项来禁用。
+    可以设置 <code>selfContain: true</code> 选项来在编辑器实例内渲染提示。
+    依赖 <code>addon/lint/lint.css</code>。
+    参考<a href="../demo/demos/lint.html">Demo</a>。</dd>
 
-    <dt id="addon_mark-selection"><a href="../addon/selection/mark-selection.js"><code>selection/mark-selection.js</code></a></dt>
-    <dd>Causes the selected text to be marked with the CSS class
-    <code>CodeMirror-selectedtext</code> when the <code>styleSelectedText</code> option
-    is enabled. Useful to change the colour of the selection (in addition to the background),
-    like in <a href="../demo/markselection.html">this demo</a>.</dd>
+    <dt id="addon_mark-selection"><code>selection/mark-selection.js</code></dt>
+    <dd>当启用 <code>styleSelectedText</code> 选项时，使用 <code>CodeMirror-selectedtext</code> CSS 样式来标记指定区域的文字。
+    用来修改指定区域的颜色（背景色）。
+    参考<a href="../demo/demos/markselection.html">Demo</a>。</dd>
 
-    <dt id="addon_active-line"><a href="../addon/selection/active-line.js"><code>selection/active-line.js</code></a></dt>
-    <dd>Defines a <code>styleActiveLine</code> option that, when
-    enabled, gives the wrapper of the line that contains the cursor
-    the class <code>CodeMirror-activeline</code>, adds a background
-    with the class <code>CodeMirror-activeline-background</code>,
-    and adds the class <code>CodeMirror-activeline-gutter</code> to
-    the line's gutter space is enabled. The option's value may be a
-    boolean or an object specifying the following options:
+    <dt id="addon_active-line"><code>selection/active-line.js</code></dt>
+    <dd>增加 <code>styleActiveLine</code> 选项，启用时，
+    为当前行增加由 <code>CodeMirror-activeline</code> 样式修饰的 wrapper，
+    增加由 <code>CodeMirror-activeline-background</code> 样式修饰的背景，
+    为当前行的侧边栏增加 <code>CodeMirror-activeline-gutter</code> 样式。
+    这些选项可以是 boolean 或包含下面属性的对象：
       <dl>
         <dt><code><strong>nonEmpty</strong>: bool</code></dt>
-        <dd>Controls whether single-line selections, or just cursor
-        selections, are styled. Defaults to false (only cursor
-        selections).</dd>
+        <dd>判断有选区时是否标记当前行。默认false（不标记）。</dd>
       </dl>
-    See the <a href="../demo/activeline.html">demo</a>.</dd>
+    参考<a href="../demo/demos/activeline.html">Demo</a>。</dd>
 
-    <dt id="addon_selection-pointer"><a href="../addon/selection/selection-pointer.js"><code>selection/selection-pointer.js</code></a></dt>
-    <dd>Defines a <code>selectionPointer</code> option which you can
-    use to control the mouse cursor appearance when hovering over
-    the selection. It can be set to a string,
-    like <code>"pointer"</code>, or to true, in which case
-    the <code>"default"</code> (arrow) cursor will be used. You can
-    see a demo <a href="../mode/htmlmixed/index.html">here</a>.</dd>
+    <dt id="addon_selection-pointer"><code>selection/selection-pointer.js</code></dt>
+    <dd>增加 <code>selectionPointer</code> 选项，用来控制当鼠标悬浮在选区上是的样式。
+    可以是一个字符串，例如 <code>"pointer"</code>，或 true，使用 <code>"default"</code> （箭头）。
+    参考 <code>mode/htmlmixed/index.html</code>。</dd>
 
-    <dt id="addon_loadmode"><a href="../addon/mode/loadmode.js"><code>mode/loadmode.js</code></a></dt>
-    <dd>Defines a <code>CodeMirror.requireMode(modename,
-    callback)</code> function that will try to load a given mode and
-    call the callback when it succeeded. You'll have to
-    set <code>CodeMirror.modeURL</code> to a string that mode paths
-    can be constructed from, for
-    example <code>"mode/%N/%N.js"</code>—the <code>%N</code>'s will
-    be replaced with the mode name. Also
-    defines <code>CodeMirror.autoLoadMode(instance, mode)</code>,
-    which will ensure the given mode is loaded and cause the given
-    editor instance to refresh its mode when the loading
-    succeeded. See the <a href="../demo/loadmode.html">demo</a>.</dd>
+    <dt id="addon_loadmode"><code>mode/loadmode.js</code></dt>
+    <dd>增加 <code>CodeMirror.requireMode(modename, callback)</code> 函数，加载指定的 Mode，成功后调用回调函数。
+    你需要指定 <code>CodeMirror.modeURL</code> 作为Mode加载路径，
+    例如 <code>"mode/%N/%N.js"</code>：<code>%N</code> 为Mode名。
+    增加 <code>CodeMirror.autoLoadMode(instance, mode)</code> 函数，确保给定的Mode被加载，并在加载成功后刷新指定编辑器实例的Mode。
+    参考<a href="../demo/demos/loadmode.html">Demo</a>。</dd>
 
-    <dt id="addon_meta"><a href="../mode/meta.js"><code>mode/meta.js</code></a></dt>
-    <dd>Provides meta-information about all the modes in the
-    distribution in a single file.
-    Defines <code>CodeMirror.modeInfo</code>, an array of objects
-    with <code>{name, mime, mode}</code> properties,
-    where <code>name</code> is the human-readable
-    name, <code>mime</code> the MIME type, and <code>mode</code> the
-    name of the mode file that defines this MIME. There are optional
-    properties <code>mimes</code>, which holds an array of MIME
-    types for modes with multiple MIMEs associated,
-    and <code>ext</code>, which holds an array of file extensions
-    associated with this mode. Four convenience
-    functions, <code>CodeMirror.findModeByMIME</code>,
-    <code>CodeMirror.findModeByExtension</code>,
-    <code>CodeMirror.findModeByFileName</code>
-    and <code>CodeMirror.findModeByName</code> are provided, which
-    return such an object given a MIME, extension, file name or mode name
-    string. Note that, for historical reasons, this file resides in the
-    top-level <code>mode</code> directory, not
-    under <code>addon</code>. <a href="../demo/loadmode.html">Demo</a>.</dd>
+    <dt id="addon_meta"><code>mode/meta.js</code></dt>
+    <dd>Provides meta-information about all the modes in the distribution in a single file.
+    将所有 Mode 的meta信息集中在一个文件中。
+    增加 <code>CodeMirror.modeInfo</code>，由 <code>{name, mime, mode}</code> 对象组成的数组，
+    <code>name</code> 是可阅读的名字，<code>mime</code> 是 MIME 类型，<code>mode</code> 是定义了该 MIME 的 Mode 的名字。
+    该对象还包含可选属性 <code>mimes</code>，是具有多个 MIME 关联的 Mode 的 MIME 数组，
+    可选属性 <code>ext</code>，为所关联的文件扩展名数组。
+    增加四个便捷的函数：<code>CodeMirror.findModeByMIME</code>、<code>CodeMirror.findModeByExtension</code>、<code>CodeMirror.findModeByFileName</code> 和 <code>CodeMirror.findModeByName</code>，
+    可根据MIME、扩展名、文件名、Mode名来查找 Mete 对象。
+    注意：由于历史原因，该文件位于根目录下的 <code>mode</code> 目录，而不是 <code>addon</code> 目录。
+    参考<a href="../demo/demos/loadmode.html">Demo</a>。</dd>
 
-    <dt id="addon_continuecomment"><a href="../addon/comment/continuecomment.js"><code>comment/continuecomment.js</code></a></dt>
+    <dt id="addon_continuecomment"><code>comment/continuecomment.js</code></dt>
     <dd>Adds a <code>continueComments</code> option, which sets whether the
     editor will make the next line continue a comment when you press Enter
     inside a comment block. Can be set to a boolean to enable/disable this
@@ -678,69 +477,48 @@
     property to determine whether single-line comments should be continued
     (defaulting to <code>true</code>).</dd>
 
-    <dt id="addon_placeholder"><a href="../addon/display/placeholder.js"><code>display/placeholder.js</code></a></dt>
-    <dd>Adds a <code>placeholder</code> option that can be used to
-    make content appear in the editor when it is empty and not
-    focused. It can hold either a string or a DOM node. Also gives
-    the editor a <code>CodeMirror-empty</code> CSS class whenever it
-    doesn't contain any text.
-    See <a href="../demo/placeholder.html">the demo</a>.</dd>
+    <dt id="addon_placeholder"><code>display/placeholder.js</code></dt>
+    <dd>增加 <code>placeholder</code> 选项，在编辑器为空且为选中时替换编辑器的内容。
+    可以是字符串或DOM元素。
+    增加 <code>CodeMirror-empty</code> CSS 样式，当编辑器内容为空时使用。
+    参考<a href="../demo/demos/placeholder.html">Demo</a>。</dd>
 
-    <dt id="addon_fullscreen"><a href="../addon/display/fullscreen.js"><code>display/fullscreen.js</code></a></dt>
-    <dd>Defines an option <code>fullScreen</code> that, when set
-    to <code>true</code>, will make the editor full-screen (as in,
-    taking up the whole browser window). Depends
-    on <a href="../addon/display/fullscreen.css"><code>fullscreen.css</code></a>. <a href="../demo/fullscreen.html">Demo
-    here</a>.</dd>
+    <dt id="addon_fullscreen"><code>display/fullscreen.js</code>/dt>
+    <dd>增加 <code>fullScreen</code> 选项，当为 <code>true</code> 时，将编辑器设置为浏览器全屏。
+    依赖 <code>addon/display/fullscreen.css</code>。
+    参考<a href="../demo/demos/fullscreen.html">Demo</a>。</dd>
 
-    <dt id="addon_autorefresh"><a href="../addon/display/autorefresh.js"><code>display/autorefresh.js</code></a></dt>
-    <dd>This addon can be useful when initializing an editor in a
-    hidden DOM node, in cases where it is difficult to
-    call <a href="#refresh"><code>refresh</code></a> when the editor
-    becomes visible. It defines an option <code>autoRefresh</code>
-    which you can set to true to ensure that, if the editor wasn't
-    visible on initialization, it will be refreshed the first time
-    it becomes visible. This is done by polling every 250
-    milliseconds (you can pass a value like <code>{delay:
-    500}</code> as the option value to configure this). Note that
-    this addon will only refresh the editor <em>once</em> when it
-    first becomes visible, and won't take care of further restyling
-    and resizing.</dd>
+    <dt id="addon_autorefresh"><code>display/autorefresh.js</code></dt>
+    <dd>This addon can be useful when initializing an editor in a hidden DOM node,
+    in cases where it is difficult to call <a href="#refresh"><code>refresh</code></a> when the editor becomes visible.
+    It defines an option <code>autoRefresh</code> which you can set to true to ensure that,
+    if the editor wasn't visible on initialization, it will be refreshed the first time it becomes visible.
+    This is done by polling every 250 milliseconds (you can pass a value like <code>{delay: 500}</code> as the option value to configure this).
+    Note that this addon will only refresh the editor <em>once</em> when it first becomes visible,
+    and won't take care of further restyling and resizing.</dd>
 
-    <dt id="addon_simplescrollbars"><a href="../addon/scroll/simplescrollbars.js"><code>scroll/simplescrollbars.js</code></a></dt>
-    <dd>Defines two additional scrollbar
-    models, <code>"simple"</code> and <code>"overlay"</code>
-    (see <a href="../demo/simplescrollbars.html">demo</a>) that can
-    be selected with
-    the <a href="#option_scrollbarStyle"><code>scrollbarStyle</code></a>
-    option. Depends
-    on <a href="../addon/scroll/simplescrollbars.css"><code>simplescrollbars.css</code></a>,
-    which can be further overridden to style your own
-    scrollbars.</dd>
+    <dt id="addon_simplescrollbars"><code>scroll/simplescrollbars.js</code></dt>
+    <dd>Defines two additional scrollbar models, <code>"simple"</code> and <code>"overlay"</code>
+    (see <a href="../demo/simplescrollbars.html">demo</a>) that can be selected with the <a href="#option_scrollbarStyle"><code>scrollbarStyle</code></a> option.
+    Depends on <a href="../addon/scroll/simplescrollbars.css"><code>simplescrollbars.css</code></a>,
+    which can be further overridden to style your own scrollbars.</dd>
 
-    <dt id="addon_annotatescrollbar"><a href="../addon/scroll/annotatescrollbar.js"><code>scroll/annotatescrollbar.js</code></a></dt>
-    <dd>Provides functionality for showing markers on the scrollbar
-    to call out certain parts of the document. Adds a
-    method <code>annotateScrollbar</code> to editor instances that
-    can be called, with a CSS class name as argument, to create a
-    set of annotations. The method returns an object
-    whose <code>update</code> method can be called with a sorted array
-    of <code>{from: Pos, to: Pos}</code> objects marking the ranges
-    to be highlighted. To detach the annotations, call the
-    object's <code>clear</code> method.</dd>
+    <dt id="addon_annotatescrollbar"><code>scroll/annotatescrollbar.js</code></dt>
+    <dd>Provides functionality for showing markers on the scrollbar to call out certain parts of the document.
+    Adds a method <code>annotateScrollbar</code> to editor instances that can be called,
+    with a CSS class name as argument, to create a set of annotations.
+    The method returns an object whose <code>update</code> method can be called with a sorted array of <code>{from: Pos, to: Pos}</code> objects
+    marking the ranges to be highlighted. To detach the annotations,
+    call the object's <code>clear</code> method.</dd>
 
-    <dt id="addon_rulers"><a href="../addon/display/rulers.js"><code>display/rulers.js</code></a></dt>
-    <dd>Adds a <code>rulers</code> option, which can be used to show
-    one or more vertical rulers in the editor. The option, if
-    defined, should be given an array of <code>{column [, className,
-    color, lineStyle, width]}</code> objects or numbers (which
-    indicate a column). The ruler will be displayed at the column
-    indicated by the number or the <code>column</code> property.
-    The <code>className</code> property can be used to assign a
-    custom style to a ruler. <a href="../demo/rulers.html">Demo
-    here</a>.</dd>
+    <dt id="addon_rulers"><code>display/rulers.js</code></dt>
+    <dd>增加 <code>rulers</code> 选项，为编辑器增加多条垂直标尺。
+    该值为 <code>{column [, className, color, lineStyle, width]}</code> 组成的数组或数字（列）组成的数组。
+    标尺在 <code>column</code> 属性指定的列处显示。
+    <code>className</code> 属性定义标尺使用的样式。
+    参考<a href="../demo/demos/rulers.html">Demo</a>。</dd>
 
-    <dt id="addon_panel"><a href="../addon/display/panel.js"><code>display/panel.js</code></a></dt>
+    <dt id="addon_panel"><code>display/panel.js</code></dt>
     <dd>Defines an <code>addPanel</code> method for CodeMirror
     instances, which places a DOM node above or below an editor, and
     shrinks the editor to make room for the node. The method takes
@@ -780,10 +558,10 @@
     if the panel doesn't exists or has been removed,
     the value of the <code>position</code> option will be used as a fallback.
     <br>
-    A demo of the addon is available <a href="../demo/panel.html">here</a>.
+    参考<a href="../demo/demos/panel.html">Demo</a>。
     </dd>
 
-    <dt id="addon_hardwrap"><a href="../addon/wrap/hardwrap.js"><code>wrap/hardwrap.js</code></a></dt>
+    <dt id="addon_hardwrap"><code>wrap/hardwrap.js</code></dt>
     <dd>Addon to perform hard line wrapping/breaking for paragraphs
     of text. Adds these methods to editor instances:
       <dl>
@@ -813,10 +591,10 @@
         <dd>Whether trailing space caused by wrapping should be
         preserved, or deleted. Defaults to true.</dd>
       </dl>
-      A demo of the addon is available <a href="../demo/hardwrap.html">here</a>.
+      参考<a href="../demo/demos/hardwrap.html">Demo</a>。
     </dd>
 
-    <dt id="addon_merge"><a href="../addon/merge/merge.js"><code>merge/merge.js</code></a></dt>
+    <dt id="addon_merge"><code>merge/merge.js</code></dt>
     <dd>Implements an interface for merging changes, using either a
     2-way or a 3-way view. The <code>CodeMirror.MergeView</code>
     constructor takes arguments similar to
@@ -863,23 +641,15 @@
       </dl>
       The addon also defines commands <code>"goNextDiff"</code>
       and <code>"goPrevDiff"</code> to quickly jump to the next
-      changed chunk. <a href="../demo/merge.html">Demo
-      here</a>.</dd>
+      changed chunk.
+      参考<a href="../demo/demos/merge.html">Demo</a>。</dd>
 
-    <dt id="addon_tern"><a href="../addon/tern/tern.js"><code>tern/tern.js</code></a></dt>
-    <dd>Provides integration with
-    the <a href="https://ternjs.net">Tern</a> JavaScript analysis
-    engine, for completion, definition finding, and minor
-    refactoring help. See the <a href="../demo/tern.html">demo</a>
-    for a very simple integration. For more involved scenarios, see
-    the comments at the top of
-    the <a href="../addon/tern/tern.js">addon</a> and the
-    implementation of the
-    (multi-file) <a href="https://ternjs.net/doc/demo/index.html">demonstration
-    on the Tern website</a>.</dd>
+    <dt id="addon_tern"><code>tern/tern.js</code></dt>
+    <dd>基于 <a href="https://ternjs.net" target="_blank">Tern</a> JavaScript 分析引擎，为补全、查找定义和重构提供帮助。
+    参考 <a href="../demo/demos/tern.html">Demo</a>。
+    更多使用场景参考 <code>addon/tern/tern.js</code> 和 <a href="https://ternjs.net/doc/demo/index.html" target="_blank">Tern官网上的例子</a>。</dd>
   </dl>
 </div>
-
 
         </el-main>
       </el-container>

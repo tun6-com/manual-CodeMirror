@@ -6,7 +6,9 @@ body{display: flex;justify-content: center;margin: 0;}
 /* 中等屏幕（桌面显示器，大于等于 992px） */
 @media (min-width: 992px) { .page{width: 700px;} }
 /* 大屏幕（大桌面显示器，大于等于 1200px） */
-@media (min-width: 1200px) { .page{width: 1200px;} .el-container{flex-wrap: nowrap;} }
+@media (min-width: 1200px) { .page{width: 1200px;} .el-container{flex-wrap: nowrap!important;} }
+
+.el-container{flex-wrap: wrap;}
 
 .el-row{margin-bottom: 10px;align-items: center;}
 .el-col{display: flex;align-items: center;}

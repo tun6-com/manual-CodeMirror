@@ -7,6 +7,7 @@
     <meta name="description" content="CodeMirror是一个可以嵌入到网页中运行的代码编辑器组件，CodeMirror官方说明文档的中文翻译版。">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror/lib/codemirror.css">
     <link rel="stylesheet" href="../common.css">
     <script>
     var _hmt = _hmt || [];
@@ -113,6 +114,14 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/element-ui/lib/index.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/lib/codemirror.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/addon/runmode/runmode.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/addon/runmode/colorize.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/mode/javascript/javascript.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/mode/xml/xml.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/mode/css/css.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror/mode/htmlmixed/htmlmixed.js"></script>
     <script type="text/javascript">
     var app = new Vue({
       el: '#app',
@@ -123,6 +132,8 @@
       },
       mounted:function(){
         if(this.pw>1200) this.ch=this.ph+'px';
+
+        CodeMirror.colorize();
       },
       methods:{
 
