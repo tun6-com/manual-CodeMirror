@@ -44,8 +44,8 @@
                 <li><a href="#api_history">历史记录</a></li>
                 <li><a href="#api_marker">文本标记</a></li>
                 <li><a href="#api_decoration">小部件, 侧边栏, 装饰</a></li>
-                <li><a href="#api_sizing">Sizing, scrolling, and positioning</a></li>
-                <li><a href="#api_mode">mode, state, and tokens</a></li>
+                <li><a href="#api_sizing">尺寸，滚动，定位</a></li>
+                <li><a href="#api_mode">Mode、state 和与 token 有关的函数</a></li>
                 <li><a href="#api_misc">其他方法</a></li>
                 <li><a href="#api_static">静态属性</a></li>
               </ul>
@@ -247,25 +247,18 @@
                 <dd>获取编辑器是否获得焦点。</dd>
 
                 <dt id="findPosH"><code><strong>cm.findPosH</strong>(start: {line, ch}, amount: integer, unit: string, visually: boolean) → {line, ch, ?hitSide: boolean}</code></dt>
-                <dd>Used to find the target position for horizontal cursor
-                motion. <code>start</code> is a <code>{line, ch}</code>
-                object, <code>amount</code> an integer (may be negative),
-                and <code>unit</code> one of the
-                string <code>"char"</code>, <code>"column"</code>,
-                or <code>"word"</code>. Will return a position that is produced
-                by moving <code>amount</code> times the distance specified
-                by <code>unit</code>. When <code>visually</code> is true, motion
-                in right-to-left text will be visual rather than logical. When
-                the motion was clipped by hitting the end or start of the
-                document, the returned value will have a <code>hitSide</code>
-                property set to true.</dd>
+                <dd>查找光标水平移动的目标位置。
+                <code>start</code> 是 <code>{line, ch}</code> 对象，
+                <code>amount</code> 是数字（可能为负数），
+                <code>unit</code> 是 <code>"char"</code>、<code>"column"</code> 和 <code>"word"</code> 中的一个。
+                返回移动后的目标位置，移动单位 <code>unit</code>，移动次数 <code>amount</code>。
+                当 <code>visually</code> 为true时，在从右往左书写的语言中，移动为相对的而不是绝对的。
+                当移动到文档的开始或结尾时，返回值包含 <code>hitSide</code> 属性（值为true）。</dd>
 
                 <dt id="findPosV"><code><strong>cm.findPosV</strong>(start: {line, ch}, amount: integer, unit: string) → {line, ch, ?hitSide: boolean}</code></dt>
-                <dd>Similar to <a href="#findPosH"><code>findPosH</code></a>,
-                but used for vertical motion. <code>unit</code> may
-                be <code>"line"</code> or <code>"page"</code>. The other
-                arguments and the returned value have the same interpretation as
-                they have in <code>findPosH</code>.</dd>
+                <dd>与 <a href="#findPosH"><code>findPosH</code></a> 类似，但为垂直方向。
+                <code>unit</code> 可以是 <code>"line"</code> 或 <code>"page"</code>。
+                其余参数和返回值与 <code>findPosH</code> 一致。</dd>
 
                 <dt id="findWordAt"><code><strong>cm.findWordAt</strong>(pos: {line, ch}) → {anchor: {line, ch}, head: {line, ch}}</code></dt>
                 <dd>返回指定位置的单词的开始与结束范围（一组字符、空白符、标点符号）。</dd>
@@ -659,10 +652,9 @@
                 参考 <a href="#addon_autorefresh">autorefresh addon</a> 。</dd>
               </dl>
 
-              <h3 id="api_mode">Mode, state, and token-related methods</h3>
+              <h3 id="api_mode">Mode、state 和与 token 有关的函数</h3>
 
-              <p>在开发语法提示功能之前，需要了解CodeMirror的mode知识。
-              参考 <a href="#modeapi">the section on modes</a> 了解详细信息。</p>
+              <p>在开发语法提示功能之前，需要了解CodeMirror的mode知识。参考 <a href="../modeapi/#modeapi">Mode 章节</a>。</p>
 
               <dl>
                 <dt id="getMode"><code><strong>doc.getMode</strong>() → object</code></dt>
@@ -670,81 +662,53 @@
                 注意：与 <code>getOption("mode")</code> 不同的是，该函数返回mode的定义，而不是初始化过的不可修改的<a href="#defineMode">mode对象</a>。</dd>
 
                 <dt id="getModeAt"><code><strong>cm.getModeAt</strong>(pos: {line, ch}) → object</code></dt>
-                <dd>Gets the inner mode at a given position. This will return
-                the same as <a href="#getMode"><code>getMode</code></a> for
-                simple modes, but will return an inner mode for nesting modes
-                (such as <code>htmlmixed</code>).</dd>
+                <dd>获取指定位置使用的具体 Mode。
+                返回值与 <a href="#getMode"><code>getMode</code></a> 相似，但是是具体的Mode，而不是混合Mode（如<code>htmlmixed</code>）。</dd>
 
                 <dt id="getTokenAt"><code><strong>cm.getTokenAt</strong>(pos: {line, ch}, ?precise: boolean) → object</code></dt>
-                <dd>Retrieves information about the token the current mode found
-                before the given position (a <code>{line, ch}</code> object). The
-                returned object has the following properties:
+                <dd>搜索在给的位置（<code>{line, ch}</code> 对象）之前的 Mode 的 token 信息。
+                返回值包含以下属性：
                 <dl>
-                  <dt><code><strong>start</strong></code></dt><dd>The character (on the given line) at which the token starts.</dd>
-                  <dt><code><strong>end</strong></code></dt><dd>The character at which the token ends.</dd>
-                  <dt><code><strong>string</strong></code></dt><dd>The token's string.</dd>
-                  <dt><code><strong>type</strong></code></dt><dd>The token type the mode assigned
-                  to the token, such as <code>"keyword"</code>
-                  or <code>"comment"</code> (may also be null).</dd>
-                  <dt><code><strong>state</strong></code></dt><dd>The mode's state at the end of this token.</dd>
+                  <dt><code><strong>start</strong></code></dt><dd>token 的起始字符（指定行）。</dd>
+                  <dt><code><strong>end</strong></code></dt><dd>token 的截止字符。</dd>
+                  <dt><code><strong>string</strong></code></dt><dd>Token 的字符串</dd>
+                  <dt><code><strong>type</strong></code></dt><dd>Mode 的 Token 的类型，例如 <code>"keyword"</code> 或 <code>"comment"</code> （也可能是 null）。</dd>
+                  <dt><code><strong>state</strong></code></dt><dd>token 结尾处的 Mode 状态。</dd>
                 </dl>
-                If <code>precise</code> is true, the token will be guaranteed to be accurate based on recent edits. If false or
-                not specified, the token will use cached state information, which will be faster but might not be accurate if
-                edits were recently made and highlighting has not yet completed.
+                如果 <code>precise</code> 为 true，token会根据最近的修改来确保准确。
+                为 false 或未指定时，会根据缓存的状态信息来获取 token 信息，
+                性能会更好，但如果最近进行了修改或高亮处理并未完成可能会不准确。
                 </dd>
 
                 <dt id="getLineTokens"><code><strong>cm.getLineTokens</strong>(line: integer, ?precise: boolean) → array&lt;{start, end, string, type, state}&gt;</code></dt>
-                <dd>This is similar
-                to <a href="#getTokenAt"><code>getTokenAt</code></a>, but
-                collects all tokens for a given line into an array. It is much
-                cheaper than repeatedly calling <code>getTokenAt</code>, which
-                re-parses the part of the line before the token for every call.</dd>
+                <dd>与 <a href="#getTokenAt"><code>getTokenAt</code></a> 类似，但会返回该行所有的 token 数组。
+                该函数比多次调用 <code>getTokenAt</code> 函数的性能更好，因为多次调用会多次格式化每个 token 前的剩余部分。</dd>
 
                 <dt id="getTokenTypeAt"><code><strong>cm.getTokenTypeAt</strong>(pos: {line, ch}) → string</code></dt>
-                <dd>This is a (much) cheaper version
-                of <a href="#getTokenAt"><code>getTokenAt</code></a> useful for
-                when you just need the type of the token at a given position,
-                and no other information. Will return <code>null</code> for
-                unstyled tokens, and a string, potentially containing multiple
-                space-separated style names, otherwise.</dd>
+                <dd>当你仅需要指定位置的 token 类型，并不需要其他信息时，该函数比 <a href="#getTokenAt"><code>getTokenAt</code></a> 更轻量。
+                可能返回 <code>null</code> 无样式的 token，或一个字符串，包含多个由空格分隔的样式名。</dd>
 
                 <dt id="getHelpers"><code><strong>cm.getHelpers</strong>(pos: {line, ch}, type: string) → array&lt;helper&gt;</code></dt>
-                <dd>Fetch the set of applicable helper values for the given
-                position. Helpers provide a way to look up functionality
-                appropriate for a mode. The <code>type</code> argument provides
-                the helper namespace (see
-                <a href="#registerHelper"><code>registerHelper</code></a>), in
-                which the values will be looked up. When the mode itself has a
-                property that corresponds to the <code>type</code>, that
-                directly determines the keys that are used to look up the helper
-                values (it may be either a single string, or an array of
-                strings). Failing that, the mode's <code>helperType</code>
-                property and finally the mode's name are used.</dd>
-                <dd>For example, the JavaScript mode has a
-                property <code>fold</code> containing <code>"brace"</code>. When
-                the <code>brace-fold</code> addon is loaded, that defines a
-                helper named <code>brace</code> in the <code>fold</code>
-                namespace. This is then used by
-                the <a href="#addon_foldcode"><code>foldcode</code></a> addon to
-                figure out that it can use that folding function to fold
-                JavaScript code.</dd>
-                <dd>When any <a href="#registerGlobalHelper">'global'</a>
-                helpers are defined for the given namespace, their predicates
-                are called on the current mode and editor, and all those that
-                declare they are applicable will also be added to the array that
-                is returned.</dd>
+                <dd>获取指定位置的所有可用的辅助函数。
+                该函数支持查找指定 Mode 的辅助函数。
+                <code>type</code> 参数为辅助函数的命名空间（参考 <a href="#registerHelper"><code>registerHelper</code></a>），规定要查找的值。
+                当 Mode 拥有对应的 <code>type</code> 时，直接确定了要查找值（可以是字符串，或字符串数组）的键。
+                如果失败，则使用 Mode 的 <code>helperType</code> 属性，最后使用 Mode 的名称。</dd>
+                例如：JavaScript Mode 有 <code>fold</code> 属性包含 <code>"brace"</code>。
+                当加载 <code>brace-fold</code> 插件时，插件在 <code>fold</code> 命名空间定义了 <code>brace</code> 辅助函数。
+                然后 <a href="../addons/#addon_foldcode"><code>foldcode</code></a> 插件就可以使用该折叠函数来折叠 JavaScript 代码。</dd>
+                <dd>当 <a href="#registerGlobalHelper">'global'</a> 辅助函数在指定命名空间定义时，
+                可以在当前 Mode 或编辑器中调用，并且所有适用它们定义的函数都将被返回。
+                </dd>
 
                 <dt id="getHelper"><code><strong>cm.getHelper</strong>(pos: {line, ch}, type: string) → helper</code></dt>
-                <dd>Returns the first applicable helper value.
-                See <a href="#getHelpers"><code>getHelpers</code></a>.</dd>
+                <dd>返回第一个可以用的帮助值。参考 <a href="#getHelpers"><code>getHelpers</code></a>。</dd>
 
                 <dt id="getStateAfter"><code><strong>cm.getStateAfter</strong>(?line: integer, ?precise: boolean) → object</code></dt>
-                <dd>Returns the mode's parser state, if any, at the end of the
-                given line number. If no line number is given, the state at the
-                end of the document is returned. This can be useful for storing
-                parsing errors in the state, or getting other kinds of
-                contextual information for a line. <code>precise</code> is defined
-                as in <code>getTokenAt()</code>.</dd>
+                <dd>返回指定行末尾的 Mode 的解析状态。
+                如果没有指定行号，将返回文档末尾的状态。
+                可以用来保存解析错误，或其他类似信息。
+                <code>precise</code> 在 <code>getTokenAt()</code> 中定义。</dd>
               </dl>
 
               <h3 id="api_misc">其他函数</h3>

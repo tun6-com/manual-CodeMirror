@@ -192,47 +192,34 @@
     <code>change</code> 对象跟编辑器的 <a href="#event_change">change 事件</a> 中的参数一致。</dd>
   </dl>
 
-  <p>区域标记事件（<code>CodeMirror.TextMarker</code>），也就是 <a href="../api/#markText"><code>markText</code></a> 和 <a href="../api/#setBookmark"><code>setBookmark</code></a> 的返回值，有以下事件：</p>
+  <p>区域标记事件（<code>CodeMirror.TextMarker</code>），
+  也就是 <a href="../api/#markText"><code>markText</code></a> 和 <a href="../api/#setBookmark"><code>setBookmark</code></a> 的返回值，
+  有以下事件：</p>
 
   <dl>
     <dt id="event_beforeCursorEnter"><code><strong>"beforeCursorEnter"</strong> ()</code></dt>
-    <dd>Fired when the cursor enters the marked range. From this
-    event handler, the editor state may be inspected
-    but <em>not</em> modified, with the exception that the range on
-    which the event fires may be cleared.</dd>
+    <dd>光标进入标记范围时触发。
+    在该事件响应函数中，可以检查但<em>不可以</em>修改编辑器的状态，但可以用来清除该事件的响应函数。</dd>
 
     <dt id="event_clear"><code><strong>"clear"</strong> (from: {line, ch}, to: {line, ch})</code></dt>
-    <dd>Fired when the range is cleared, either through cursor
-    movement in combination
-    with <a href="../api/#mark_clearOnEnter"><code>clearOnEnter</code></a>
-    or through a call to its <code>clear()</code> method. Will only
-    be fired once per handle. Note that deleting the range through
-    text editing does not fire this event, because an undo action
-    might bring the range back into existence. <code>from</code>
-    and <code>to</code> give the part of the document that the range
-    spanned when it was cleared.</dd>
+    <dd>标记被清除时触发，在 <a href="../api/#mark_clearOnEnter"><code>clearOnEnter</code></a> 时也会触发，在 <code>clear()</code> 时也会触发。
+    只会触发一次事件。
+    注意：编辑时删除标记不会触发该事件，因为撤销操作可以恢复标记。
+    <code>from</code> 和 <code>to</code> 是被删除的部分文档。</dd>
 
     <dt id="event_hide"><code><strong>"hide"</strong> ()</code></dt>
-    <dd>Fired when the last part of the marker is removed from the
-    document by editing operations.</dd>
+    <dd>编辑时删除标记的最后一个字符时触发。</dd>
 
     <dt id="event_unhide"><code><strong>"unhide"</strong> ()</code></dt>
-    <dd>Fired when, after the marker was removed by editing, a undo
-    operation brought the marker back.</dd>
+    <dd>在编辑时删除标记后，或撤销恢复标记时触发。</dd>
   </dl>
 
-  <p>Line widgets (<code>CodeMirror.LineWidget</code>), returned
-  by <a href="../api/#addLineWidget"><code>addLineWidget</code></a>, fire
-  these events:</p>
+  <p><a href="../api/#addLineWidget"><code>addLineWidget</code></a> 函数返回的行内小部件（<code>CodeMirror.LineWidget</code>）有以下事件：</p>
 
   <dl>
     <dt id="event_redraw"><code><strong>"redraw"</strong> ()</code></dt>
-    <dd>Fired whenever the editor re-adds the widget to the DOM.
-    This will happen once right after the widget is added (if it is
-    scrolled into view), and then again whenever it is scrolled out
-    of view and back in again, or when changes to the editor options
-    or the line the widget is on require the widget to be
-    redrawn.</dd>
+    <dd>当插入新的小部件时触发。
+    在添加小部件后触发一次（在可视范围内），在滚动到可视范围时或滚出可视范围时会再次触发，在编辑器的配置修改时触发，或小部件所在行要求重绘时触发。</dd>
   </dl>
 </section>
 
