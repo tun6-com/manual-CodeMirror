@@ -51,281 +51,153 @@
           <section id=modeapi>
               <h2>自定义Mode</h2>
 
-              <p>Modes typically consist of a single JavaScript file. This file
-              defines, in the simplest case, a lexer (tokenizer) for your
-              language—a function that takes a character stream as input,
-              advances it past a token, and returns a style for that token. More
-              advanced modes can also handle indentation for the language.</p>
+              <p>Mode 通常由一个 JavaScript 文件组成。
+              在最简单的情况下，该文件为编程语言定义了词法分析器（Token 生成器），该函数将字符流作为输入，
+              生成 token ，然后返回该 token 的样式。
+              更高级的 Mode 也可以处理该语言的缩进。</p>
 
-              <p>This section describes the low-level mode interface. Many modes
-              are written directly against this, since it offers a lot of
-              control, but for a quick mode definition, you might want to use
-              the <a href="../demo/simplemode.html">simple mode addon</a>.</p>
+              <p>本节介绍了常用的 Mode 接口。
+              许多 Mode 直接参考本节编写，因为它有很多控制细节，但是为了快速开始，你可以基于 <a href="../demo/demos/simplemode.html">Demo</a> 修改。</p>
 
-              <p id="defineMode">The mode script should
-              call <code><strong>CodeMirror.defineMode</strong></code> to
-              register itself with CodeMirror. This function takes two
-              arguments. The first should be the name of the mode, for which you
-              should use a lowercase string, preferably one that is also the
-              name of the files that define the mode (i.e. <code>"xml"</code> is
-              defined in <code>xml.js</code>). The second argument should be a
-              function that, given a CodeMirror configuration object (the thing
-              passed to the <code>CodeMirror</code> function) and an optional
-              mode configuration object (as in
-              the <a href="#option_mode"><code>mode</code></a> option), returns
-              a mode object.</p>
+              <p id="defineMode">调用 <code><strong>CodeMirror.defineMode</strong></code> 向 CodeMirror 注册 Mode。
+              第一个参数为 Mode 的名称，应为小写的字符串，最好是 Mode 的文件名（如 <code>"xml"</code> 在 <code>xml.js</code> 中定义）。
+              第二个参数是一个函数，该函数的第一个参数为 CodeMirror 配置对象（<code>CodeMirror</code> 构造函数的配置对象），
+              该函数的第二个可选参数为 Mode 的配置对象（<a href="../config/#option_mode"><code>mode</code></a>），返回值为 Mode 对象。</p>
 
-              <p>Typically, you should use this second argument
-              to <code>defineMode</code> as your module scope function (modes
-              should not leak anything into the global scope!), i.e. write your
-              whole mode inside this function.</p>
+              <p>通常，应该将 <code>defineMode</code> 函数的第二个参数作为 Mode 的作用域（Mode 不应暴露任何内容给全局），即在该函数内完成整个 Mode 的编写。</p>
 
-              <p>The main responsibility of a mode script is <em>parsing</em>
-              the content of the editor. Depending on the language and the
-              amount of functionality desired, this can be done in really easy
-              or extremely complicated ways. Some parsers can be stateless,
-              meaning that they look at one element (<em>token</em>) of the code
-              at a time, with no memory of what came before. Most, however, will
-              need to remember something. This is done by using a <em>state
-              object</em>, which is an object that is always passed when
-              reading a token, and which can be mutated by the tokenizer.</p>
+              <p>Mode 的主要工作是<em>解析</em>编辑器的内容。Mode 的复杂度取决于语言和所需功能的复杂度。
+              有些解析器可能是无状态的，表示一次只查看代码的一个元素（<em>token</em>），没有任何记忆。然而，通常都需要记住一些东西。
+              这是通过使用<em> state 对象</em>实现的，在读取 token 时会被传递，并且 token 生成器可以对其进行更改。</p>
 
-              <p id="startState">Modes that use a state must define
-              a <code><strong>startState</strong></code> method on their mode
-              object. This is a function of no arguments that produces a state
-              object to be used at the start of a document.</p>
+              <p id="startState">使用 status 的 Mode 必须在其对象上定义 <code><strong>startState</strong></code> 函数。
+              该函数没有参数，生成在文档开头处使用的 status 对象。</p>
 
-              <p id="token">The most important part of a mode object is
-              its <code><strong>token</strong>(stream, state)</code> method. All
-              modes must define this method. It should read one token from the
-              stream it is given as an argument, optionally update its state,
-              and return a style string, or <code>null</code> for tokens that do
-              not have to be styled. For your styles, you are encouraged to use
-              the 'standard' names defined in the themes (without
-              the <code>cm-</code> prefix). If that fails, it is also possible
-              to come up with your own and write your own CSS theme file.<p>
+              <p id="token">Mode 对象最重要的部分是 <code><strong>token</strong>(stream, state)</code> 函数。
+              所有 Mode 都必须定义此方法。
+              该函数从 stream 参数中提取 token，可选的更新状态，并返回样式字符串，或 <code>null</code> 表示 token 无需样式。
+              对于返回的样式字符串，建议使用在主题中定义的 'standard' 名（带有 <code>cm-</code> 前缀）。
+              如果主题中没有，你也可以编写新的CSS文件来自定义。<p>
 
-              <p id="token_style_line">A typical token string would
-              be <code>"variable"</code> or <code>"comment"</code>. Multiple
-              styles can be returned (separated by spaces), for
-              example <code>"string error"</code> for a thing that looks like a
-              string but is invalid somehow (say, missing its closing quote).
-              When a style is prefixed by <code>"line-"</code>
-              or <code>"line-background-"</code>, the style will be applied to
-              the whole line, analogous to what
-              the <a href="#addLineClass"><code>addLineClass</code></a> method
-              does—styling the <code>"text"</code> in the simple case, and
-              the <code>"background"</code> element
-              when <code>"line-background-"</code> is prefixed.</p>
+              <p id="token_style_line">token 一般是类似 <code>"variable"</code> 或 <code>"comment"</code> 的字符串。
+              可以返回多种样式（用空格分隔），例如，对于看起来像字符串但又不像的（例如，缺少其右引号），可以使用 <code>"string error"</code> 。
+              当以 <code>"line-"</code> 或 <code>"line-background-"</code> 作为前缀时，该样式将作用于整行，
+              类似 <a href="../api/#addLineClass"><code>addLineClass</code></a> 函数，
+              在 <code>"line-"</code> 时为 <code>"text"</code> 设置样式，
+              在 <code>"line-background-"</code> 时为 <code>"background"</code> 设置样式。</p>
 
-              <p id="StringStream">The stream object that's passed
-              to <code>token</code> encapsulates a line of code (tokens may
-              never span lines) and our current position in that line. It has
-              the following API:</p>
+              <p id="StringStream"><code>token</code> 函数的 stream 对象封装了一行的源码（token 不会跨行）和当前位置。提供以下API：</p>
 
               <dl>
                 <dt><code><strong>eol</strong>() → boolean</code></dt>
-                <dd>Returns true only if the stream is at the end of the
-                line.</dd>
+                <dd>当 stream 在行尾时返回 true。</dd>
                 <dt><code><strong>sol</strong>() → boolean</code></dt>
-                <dd>Returns true only if the stream is at the start of the
-                line.</dd>
+                <dd>当 stream 在行首时返回 true。</dd>
 
                 <dt><code><strong>peek</strong>() → string</code></dt>
-                <dd>Returns the next character in the stream without advancing
-                it. Will return a <code>null</code> at the end of the
-                line.</dd>
+                <dd>返回流中的下一个字符但不前进下标。在行尾时返回 <code>null</code>。</dd>
                 <dt><code><strong>next</strong>() → string</code></dt>
-                <dd>Returns the next character in the stream and advances it.
-                Also returns <code>null</code> when no more characters are
-                available.</dd>
+                <dd>返回流中的下一个字符且前进下标。在该行没有剩余字符时返回 <code>null</code>。</dd>
 
                 <dt><code><strong>eat</strong>(match: string|regexp|function(char: string) → boolean) → string</code></dt>
-                <dd><code>match</code> can be a character, a regular expression,
-                or a function that takes a character and returns a boolean. If
-                the next character in the stream 'matches' the given argument,
-                it is consumed and returned. Otherwise, <code>undefined</code>
-                is returned.</dd>
+                <dd><code>match</code> 可以是字符串、正则表达式或一个参数为字符串并返回 boolean 值的函数。
+                如果 stream 中的下一个字符与参数项匹配，将会被消耗掉并返回。否则返回 <code>undefined</code> 。</dd>
                 <dt><code><strong>eatWhile</strong>(match: string|regexp|function(char: string) → boolean) → boolean</code></dt>
-                <dd>Repeatedly calls <code>eat</code> with the given argument,
-                until it fails. Returns true if any characters were eaten.</dd>
+                <dd>重复调用 <code>eat</code> 直到截止。当所有的单词都被消耗掉后返回 true。</dd>
                 <dt><code><strong>eatSpace</strong>() → boolean</code></dt>
-                <dd>Shortcut for <code>eatWhile</code> when matching
-                white-space.</dd>
+                <dd>用 <code>eatWhile</code> 匹配空格的快捷函数。</dd>
                 <dt><code><strong>skipToEnd</strong>()</code></dt>
-                <dd>Moves the position to the end of the line.</dd>
+                <dd>移动当前位置到行尾。</dd>
                 <dt><code><strong>skipTo</strong>(str: string) → boolean</code></dt>
-                <dd>Skips to the start of the next occurrence of the given string, if
-                found on the current line (doesn't advance the stream if the
-                string does not occur on the line). Returns true if the
-                string was found.</dd>
+                <dd>如果再当前行上找到指定的字符，则跳转到下个字符的开始位置（如果没有找到则不跳转）。找到时返回 true。</dd>
                 <dt><code><strong>match</strong>(pattern: string, ?consume: boolean, ?caseFold: boolean) → boolean</code></dt>
                 <dt><code><strong>match</strong>(pattern: regexp, ?consume: boolean) → array&lt;string&gt;</code></dt>
-                <dd>Act like a
-                multi-character <code>eat</code>—if <code>consume</code> is true
-                or not given—or a look-ahead that doesn't update the stream
-                position—if it is false. <code>pattern</code> can be either a
-                string or a regular expression starting with <code>^</code>.
-                When it is a string, <code>caseFold</code> can be set to true to
-                make the match case-insensitive. When successfully matching a
-                regular expression, the returned value will be the array
-                returned by <code>match</code>, in case you need to extract
-                matched groups.</dd>
+                <dd><code>consume</code> 为 true 时，类似多字符的 <code>eat</code> 函数，
+                为 false 或未指定时，不会更新 stream 的位置。
+                <code>pattern</code> 可以是字符串或由 <code>^</code> 开头的正则表达式。
+                当为字符串时，<code>caseFold</code> 为 true 时则不区分大小写。
+                当为正则表达式时，<code>match</code> 的返回值是一个数组，可以用来提取匹配结果。</dd>
 
                 <dt><code><strong>backUp</strong>(n: integer)</code></dt>
-                <dd>Backs up the stream <code>n</code> characters. Backing it up
-                further than the start of the current token will cause things to
-                break, so be careful.</dd>
+                <dd>后退 <code>n</code> 个字符。
+                后退超过当前 token 的开始位置时会导致终端，请当心。</dd>
                 <dt><code><strong>column</strong>() → integer</code></dt>
-                <dd>Returns the column (taking into account tabs) at which the
-                current token starts.</dd>
+                <dd>返回当前 token 开始位置的列。</dd>
                 <dt><code><strong>indentation</strong>() → integer</code></dt>
-                <dd>Tells you how far the current line has been indented, in
-                spaces. Corrects for tab characters.</dd>
+                <dd>返回当前行缩进的数量（以空格为单位），不是 tab 符号。</dd>
 
                 <dt><code><strong>current</strong>() → string</code></dt>
-                <dd>Get the string between the start of the current token and
-                the current stream position.</dd>
+                <dd>返回当前 token 开始位置到当前 stream 位置之间的字符串。</dd>
 
                 <dt><code><strong>lookAhead</strong>(n: number) → ?string</code></dt>
-                <dd>Get the line <code>n</code> (&gt;0) lines after the current
-                one, in order to scan ahead across line boundaries. Note that
-                you want to do this carefully, since looking far ahead will make
-                mode state caching much less effective.</dd>
+                <dd>返回当前行后的 <code>n</code> (&gt;0) 行，用来跨行扫描。
+                注意：你需要小心地使用该函数，跨太多的行会降低 Mode 状态的缓存效率。</dd>
 
                 <dt id="baseToken"><code><strong>baseToken</strong>() → ?{type: ?string, size: number}</code></dt>
-                <dd>Modes added
-                through <a href="#addOverlay"><code>addOverlay</code></a>
-                (and <em>only</em> such modes) can use this method to inspect
-                the current token produced by the underlying mode.</dd>
+                <dd>通过 <a href="../api/#addOverlay"><code>addOverlay</code></a> 函数添加的 Mode 可以使用该函数来检查当前Mode 下的 Token 。</dd>
               </dl>
 
-              <p id="blankLine">By default, blank lines are simply skipped when
-              tokenizing a document. For languages that have significant blank
-              lines, you can define
-              a <code><strong>blankLine</strong>(state)</code> method on your
-              mode that will get called whenever a blank line is passed over, so
-              that it can update the parser state.</p>
+              <p id="blankLine">默认情况下，解析文档时会跳过空白行。
+              对于具有大量空白行的语言，您可以在模式中定义一个 <code><strong>blankLine</strong>(state)</code> 函数，每当遇到空白行时都会调用该方法，用来更新解析器状态。</p>
 
-              <p id="copyState">Because state object are mutated, and CodeMirror
-              needs to keep valid versions of a state around so that it can
-              restart a parse at any line, copies must be made of state objects.
-              The default algorithm used is that a new state object is created,
-              which gets all the properties of the old object. Any properties
-              which hold arrays get a copy of these arrays (since arrays tend to
-              be used as mutable stacks). When this is not correct, for example
-              because a mode mutates non-array properties of its state object, a
-              mode object should define
-              a <code><strong>copyState</strong></code> method, which is given a
-              state and should return a safe copy of that state.</p>
+              <p id="copyState">因为状态对象是可变的，所以CodeMirror会保留所有有效的状态副本，以便在任意行上重新解析。
+              使用的默认算法是，在创建一个新的状态对象时从旧对象继承所有属性。
+              所有值为数组的属性都会被复制（因为数组倾向于用作可变堆栈）。
+              当这不正确时（例如，由数组变成非数组时），Mode 对象应定义一个 <code><strong>copyState</strong></code> 方法，来实现安全复制。</p>
 
-              <p id="indent">If you want your mode to provide smart indentation
-              (through the <a href="#indentLine"><code>indentLine</code></a>
-              method and the <code>indentAuto</code>
-              and <code>newlineAndIndent</code> commands, to which keys can be
-              <a href="#option_extraKeys">bound</a>), you must define
-              an <code><strong>indent</strong>(state, textAfter)</code> method
-              on your mode object.</p>
+              <p id="indent">如果希望 Mode 提供智能缩进
+              （通过 <a href="../api/#indentLine"><code>indentLine</code></a> 函数以及 <code>indentAuto</code> 和 <code>newlineAndIndent</code> 命令，绑定<a href="../config/#option_extraKeys">额外的快捷键</a>。），
+              则必须在 Mode 对象上定义一个 <code><strong>indent</strong>(state, textAfter)</code> 函数。</p>
 
-              <p>The indentation method should inspect the given state object,
-              and optionally the <code>textAfter</code> string, which contains
-              the text on the line that is being indented, and return an
-              integer, the amount of spaces to indent. It should usually take
-              the <a href="#option_indentUnit"><code>indentUnit</code></a>
-              option into account. An indentation method may
-              return <code>CodeMirror.Pass</code> to indicate that it
-              could not come up with a precise indentation.</p>
+              <p>缩进方法应检查 state 对象，并可选检查 <code>textAfter</code> 字符串，该字符串包含要缩进的行上的文本，并返回一个数字，即要缩进的空格量。
+              通常应该考虑 <a href="../config/#option_indentUnit"><code>indentUnit</code></a> 选项。
+              缩进方法可以返回 <code>CodeMirror.Pass</code> 来说明无法提供精确的缩进。</p>
 
-              <p id="mode_comment">To work well with
-              the <a href="#addon_comment">commenting addon</a>, a mode may
-              define <code><strong>lineComment</strong></code> (string that
-              starts a line
-              comment), <code><strong>blockCommentStart</strong></code>, <code><strong>blockCommentEnd</strong></code>
-              (strings that start and end block comments),
-              and <code>blockCommentLead</code> (a string to put at the start of
-              continued lines in a block comment). All of these are
-              optional.</p>
+              <p id="mode_comment">为了与<a href="../addons/#addon_comment">注释插件</a>良好配合，Mode 可以定义 <code><strong>lineComment</strong></code>（开始行注释的字符串），
+              <code><strong>blockCommentStart</strong></code>、<code><strong>blockCommentEnd</strong></code>（开始和结束注释的字符串）
+              和 <code>blockCommentLead</code>（在注释快中新增注释行的头部注释字符串）。
+              所有这些都是可选的。</p>
 
-              <p id="electricChars">Finally, a mode may define either
-              an <code>electricChars</code> or an <code>electricInput</code>
-              property, which are used to automatically reindent the line when
-              certain patterns are typed and
-              the <a href="#option_electricChars"><code>electricChars</code></a>
-              option is enabled. <code>electricChars</code> may be a string, and
-              will trigger a reindent whenever one of the characters in that
-              string are typed. Often, it is more appropriate to
-              use <code>electricInput</code>, which should hold a regular
-              expression, and will trigger indentation when the part of the
-              line <em>before</em> the cursor matches the expression. It should
-              usually end with a <code>$</code> character, so that it only
-              matches when the indentation-changing pattern was just typed, not when something was
-              typed after the pattern.</p>
+              <p id="electricChars">最后，Mode 可以定义 <code>electricChars</code> 或 <code>electricInput</code> 属性，
+              当键入某些单词并启用 <a href="../config/#option_electricChars"><code>electricChars</code></a> 选项时，会自动重新缩进行。
+              <code>electricChars</code> 可以是一个字符串，当键入该字符串中的任意字符时，都会触发重新缩进。
+              通常，更合适的方法是使用 <code>electricInput</code>，它应该包含一个正则表达式，在该行光标<em>之前</em>的部分与正则表达式匹配时触发缩进。
+              它通常应以 <code>$</code> 字符结尾，以便在与正则相匹配的字符刚被输入时触发，而不是在输入之后触发。</p>
 
-              <p>So, to summarize, a mode <em>must</em> provide
-              a <code>token</code> method, and it <em>may</em>
-              provide <code>startState</code>, <code>copyState</code>,
-              and <code>indent</code> methods. For an example of a trivial mode,
-              see the <a href="../mode/diff/diff.js">diff mode</a>, for a more
-              involved example, see the <a href="../mode/clike/clike.js">C-like
-              mode</a>.</p>
+              <p>因此，总而言之，模式<em>必须</em>提供 <code>token</code> 函数，
+              并且它<em>可以</em>提供 <code>startState</code>，<code>copyState</code> 和 <code>indent</code> 函数。
+              参考 <code>mode/diff/diff.js</code>，和更复杂的 <code>mode/clike/clike.js</code>。</p>
 
-              <p>Sometimes, it is useful for modes to <em>nest</em>—to have one
-              mode delegate work to another mode. An example of this kind of
-              mode is the <a href="../mode/htmlmixed/htmlmixed.js">mixed-mode HTML
-              mode</a>. To implement such nesting, it is usually necessary to
-              create mode objects and copy states yourself. To create a mode
-              object, there are <code>CodeMirror.getMode(options,
-              parserConfig)</code>, where the first argument is a configuration
-              object as passed to the mode constructor function, and the second
-              argument is a mode specification as in
-              the <a href="#option_mode"><code>mode</code></a> option. To copy a
-              state object, call <code>CodeMirror.copyState(mode, state)</code>,
-              where <code>mode</code> is the mode that created the given
-              state.</p>
+              <p>将一个 Mode 的功能委托给另外一个 Mode 实现，对于 Mode 嵌套很有用。
+              参考 HTML 混合 Mode <code>mode/htmlmixed/htmlmixed.js</code>。
+              这种模式的一个示例是混合模式HTML模式。
+              要实现这种嵌套，通常必须自己创建 Mode 对象并复制 State。
+              要创建模式对象，请使用 <code>CodeMirror.getMode(options, parserConfig)</code> 函数，
+              第一个参数与 Mode 构造函数一样的配置对象，
+              第二个参数与 <a href="#option_mode"><code>mode</code></a> 配置相同。
+              若要复制状态对象，请调用<code>CodeMirror.copyState(mode, state)</code>，其中<code>mode</code> 基于 state 创建的。</p>
 
-              <p id="innerMode">In a nested mode, it is recommended to add an
-              extra method, <code><strong>innerMode</strong></code> which, given
-              a state object, returns a <code>{state, mode}</code> object with
-              the inner mode and its state for the current position. These are
-              used by utility scripts such as the <a href="#addon_closetag">tag
-              closer</a> to get context information. Use
-              the <code>CodeMirror.innerMode</code> helper function to, starting
-              from a mode and a state, recursively walk down to the innermost
-              mode and state.</p>
+              <p id="innerMode">在嵌套 Mode 下，建议添加 <code><strong>innerMode</strong></code> 方法，给定一个状态对象，
+              返回一个 <code>{state, mode}</code> 对象，具有内部 Mode 及其当前位置状态。
+              工具类如 <a href="../addons/#addon_closetag">tag closer</a> 会用来获取上下文信息。
+              使用 <code>CodeMirror.innerMode</code> 辅助函数，从一个模式和一个状态开始，递归到最底层的Mode和state。</p>
 
-              <p>To make indentation work properly in a nested parser, it is
-              advisable to give the <code>startState</code> method of modes that
-              are intended to be nested an optional argument that provides the
-              base indentation for the block of code. The JavaScript and CSS
-              parser do this, for example, to allow JavaScript and CSS code
-              inside the mixed-mode HTML mode to be properly indented.</p>
+              <p>为了在嵌套解析器中正确缩进，建议为打算嵌套的 Mode 的 <code>startState</code> 函数提供一个可选参数，为代码块提供基本缩进。
+              JavaScript和CSS解析器执行此操作，例如，以使 HTML 混合 Mode 内的JavaScript和CSS代码正确缩进。</p>
 
-              <p id="defineMIME">It is possible, and encouraged, to associate
-              your mode, or a certain configuration of your mode, with
-              a <a href="http://en.wikipedia.org/wiki/MIME">MIME</a> type. For
-              example, the JavaScript mode associates itself
-              with <code>text/javascript</code>, and its JSON variant
-              with <code>application/json</code>. To do this,
-              call <code><strong>CodeMirror.defineMIME</strong>(mime,
-              modeSpec)</code>, where <code>modeSpec</code> can be a string or
-              object specifying a mode, as in
-              the <a href="#option_mode"><code>mode</code></a> option.</p>
+              <p id="defineMIME">鼓励将您的 Mode 或您的 Mode 的特定配置与 <a href="http://en.wikipedia.org/wiki/MIME" target="_blank">MIME</a> 相关联。
+              例如，JavaScript Mode 与 <code>text/javascript</code> 关联，并将其 JSON 变体与 <code>application/json</code> 关联。
+              为此，请调用 <code><strong>CodeMirror.defineMIME</strong>(mime, modeSpec)</code>，
+              其中 <code>modeSpec</code> 可以是 Mode 的字符串或对象，如 <a href="../config/#option_mode"><code>mode</code></a> 选项中所示。</p>
 
-              <p>If a mode specification wants to add some properties to the
-              resulting mode object, typically for use
-              with <a href="#getHelpers"><code>getHelpers</code></a>, it may
-              contain a <code>modeProps</code> property, which holds an object.
-              This object's properties will be copied to the actual mode
-              object.</p>
+              <p>如果想要为 Mode 对象增加属性（通常与 <a href="../api/#getHelpers"><code>getHelpers</code></a> 一起使用），
+              则它应该包含 <code>modeProps</code> 属性，包含一个对象。
+              该对象的属性将被复制到实际 Mode 对象。</p>
 
-              <p id="extendMode">Sometimes, it is useful to add or override mode
-              object properties from external code.
-              The <code><strong>CodeMirror.extendMode</strong></code> function
-              can be used to add properties to mode objects produced for a
-              specific mode. Its first argument is the name of the mode, its
-              second an object that specifies the properties that should be
-              added. This is mostly useful to add utilities that can later be
-              looked up through <a href="#getMode"><code>getMode</code></a>.</p>
+              <p id="extendMode">有时，从外部代码添加或覆盖 Mode 对象的属性很有用。
+              <code><strong>CodeMirror.extendMode</strong></code> 函数可为 Mode 对象添加属性来生成具体的 Mode。
+              它的第一个参数是 Mode 的名称，第二个参数需要添加的属性的对象。
+              这为以后通过 <a href="../api/#getMode"><code>getMode</code></a> 函数查找提供了支持。</p>
           </section>
 
 
