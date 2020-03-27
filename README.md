@@ -16,8 +16,8 @@
 * [x] 样式
 * [x] API调用
 * [x] 插件
-* [ ] 自定义mode
-* [ ] VIM Mode API
+* [x] 自定义mode
+* [x] VIM Mode API
 
 ### 校对进度
 

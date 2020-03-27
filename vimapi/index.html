@@ -57,126 +57,84 @@
           <section id="vimapi">
               <h2>VIM Mode API</h2>
 
-              <p>CodeMirror has a robust VIM mode that attempts to faithfully
-              emulate VIM's most useful features. It can be enabled by
-              including <a href="../keymap/vim.js"><code>keymap/vim.js</code>
-              </a> and setting the <code>keyMap</code> option to
-              <code>"vim"</code>.</p>
+              <p>CodeMirror 具有强大的 VIM Mode，可以准确地模拟 VIM 最有用的功能。
+              可以引入 <code>keymap/vim.js</code> 并将 <code>keyMap</code> 配置设置为 <code>"vim"</code> 来启用。</p>
 
               <h3 id="vimapi_configuration">配置</h3>
 
-              <p>VIM mode accepts configuration options for customizing
-              behavior at run time. These methods can be called at any time
-              and will affect all existing CodeMirror instances unless
-              specified otherwise. The methods are exposed on the
-              <code><strong>CodeMirror.Vim</strong></code> object.</p>
+              <p>VIM Mode 可在运行时修改配置对象。
+              这些函数可以在任意时刻调用，并应用到所有 CodeMirror 实例。
+              这些函数暴露在 <code><strong>CodeMirror.Vim</strong></code> 对象上。</p>
 
               <dl>
                 <dt id="vimapi_setOption"><code><strong>setOption(name: string, value: any, ?cm: CodeMirror, ?cfg: object)</strong></code></dt>
-                <dd>Sets the value of a VIM option. <code>name</code> should
-                be the name of an option. If <code>cfg.scope</code> is not set
-                and <code>cm</code> is provided, then sets the global and
-                instance values of the option. Otherwise, sets either the
-                global or instance value of the option depending on whether
-                <code>cfg.scope</code> is <code>global</code> or
-                <code>local</code>.</dd>
+                <dd>设置 VIM 选项的值。
+                <code>name</code> 是选项的名称。
+                如果未设置 <code>cfg.scope</code> 但提供了 <code>cm</code>，则设置该选项为全局的且为实例的。
+                否则，根据 <code>cfg.scope</code> 是 <code>global</code> 还是 <code>local</code>，判断该选项是全局的还是实例的。</dd>
+
                 <dt id="vimapi_getOption"><code><strong>getOption(name: string, ?cm: CodeMirror: ?cfg: object)</strong></code></dt>
-                <dd>Gets the current value of a VIM option. If
-                <code>cfg.scope</code> is not set and <code>cm</code> is
-                provided, then gets the instance value of the option, falling
-                back to the global value if not set. If <code>cfg.scope</code> is provided, then gets the <code>global</code> or
-                <code>local</code> value without checking the other.</dd>
+                <dd>获取VIM选项的当前值。
+                如果未设置 <code>cfg.scope</code> 但提供了 <code>cm</code>，则获取实例的值，如果失败则获取全局值。
+                如果提供了 <code>cfg.scope</code>，则将获取 <code>global</code> 或 <code>local</code> 的值。</dd>
 
                 <dt id="vimapi_map"><code><strong>map(lhs: string, rhs: string, ?context: string)</strong></code></dt>
-                <dd>Maps a key sequence to another key sequence. Implements
-                VIM's <code>:map</code> command. To map ; to : in VIM would be
-                <code><strong>:map ; :</strong></code>. That would translate to
-                <code><strong>CodeMirror.Vim.map(';', ':');</strong></code>.
-                The <code>context</code> can be <code>normal</code>,
-                <code>visual</code>, or <code>insert</code>, which correspond
-                to <code>:nmap</code>, <code>:vmap</code>, and
-                <code>:imap</code>
-                respectively.</dd>
+                <dd>  将一个快捷键替换为另一个快捷键。
+                VIM 的 <code>:map</code> 命令。
+                绑定 ; 为 : 在VIM命令中为 <code><strong>:map ; :</strong></code>。
+                <code>context</code> 可以是 <code>normal</code>、<code>visual</code> 或 <code>insert</code>，
+                与之对应的是 <code>:nmap</code>、<code>:vmap</code> 和 <code>:imap</code>。</dd>
 
                 <dt id="vimapi_mapCommand"><code><strong>mapCommand(keys: string, type: string, name: string, ?args: object, ?extra: object)</strong></code></dt>
-                <dd>Maps a key sequence to a <code>motion</code>,
-                <code>operator</code>, or <code>action</code> type command.
-                The args object is passed through to the command when it is
-                invoked by the provided key sequence.
-                <code>extras.context</code> can be <code>normal</code>,
-                <code>visual</code>, or <code>insert</code>, to map the key
-                sequence only in the corresponding mode.
-                <code>extras.isEdit</code> is applicable only to actions,
-                determining whether it is recorded for replay for the
-                <code>.</code> single-repeat command.
+                <dd>把一个键绑定为 <code>motion</code>、<code>operator</code> 或 <code>action</code> 类型的命令。
+                触发按键事件时，会把 args 对象传递给命令。
+                <code>extras.context</code> 可以是 <code>normal</code>、<code>visual</code> 或 <code>insert</code>，仅在对应的模式下启用。
+                <code>extras.isEdit</code> 仅适用于动作，确定是否为 <code>.</code> 单次重复命令。
               </dl>
 
               <h3 id="vimapi_extending">扩展VIM</h3>
 
-              <p>CodeMirror's VIM mode implements a large subset of VIM's core
-              editing functionality. But since there's always more to be
-              desired, there is a set of APIs for extending VIM's
-              functionality. As with the configuration API, the methods are
-              exposed on <code><strong>CodeMirror.Vim</strong></code> and may
-              be called at any time.</p>
+              <p>CodeMirror 的 VIM Mode 实现了大部分的 VIM 核心编辑功能。
+              但因为需求是无限的，所以还提供了一组 API 来扩展 VIM 的功能。
+              与配置API一样，这些方法暴露在 <code><strong>CodeMirror.Vim</strong></code> 中，并且可以随时调用。</p>
 
               <dl>
                 <dt id="vimapi_defineOption"><code><strong>defineOption(name: string, default: any, type: string, ?aliases: array&lt;string&gt;, ?callback: function (?value: any, ?cm: CodeMirror) → ?any)</strong></code></dt>
-                <dd>Defines a VIM style option and makes it available to the
-                <code>:set</code> command. Type can be <code>boolean</code> or
-                <code>string</code>, used for validation and by
-                <code>:set</code> to determine which syntax to accept. If a
-                <code>callback</code> is passed in, VIM does not store the value of the
-                option itself, but instead uses the callback as a setter/getter. If the
-                first argument to the callback is <code>undefined</code>, then the
-                callback should return the value of the option. Otherwise, it should set
-                instead. Since VIM options have global and instance values, whether a
-                <code>CodeMirror</code> instance is passed in denotes whether the global
-                or local value should be used. Consequently, it's possible for the
-                callback to be called twice for a single <code>setOption</code> or
-                <code>getOption</code> call. Note that right now, VIM does not support
-                defining buffer-local options that do not have global values. If an
-                option should not have a global value, either always ignore the
-                <code>cm</code> parameter in the callback, or always pass in a
-                <code>cfg.scope</code> to <code>setOption</code> and
-                <code>getOption</code>.</dd>
+                <dd>为 <code>:set</code> 命令定义了 VIM 样式的选项。
+                type 参数可以是 <code>boolean</code> 或 <code>string</code>，用于验证，通过 <code>:set</code> 来确定可接受的语法。
+                如果传入了 <code>callback</code>，则 VIM 不会存储选项本身的值，而是将回调用作 setter/getter 。
+                如果 <code>callback</code> 函数的第一个参数为 <code>undefined</code>，则返回配置的值。否则，应改为设置。
+                由于 VIM 选项具有全局值和实例值，因此使用全局值还是局部值由是否传入 <code>CodeMirror</code> 实例来判断。
+                因此，回调函数可能会被调用两次，一次 <code>setOption</code> 或 <code>getOption</code>。
+                请注意，VIM 目前没有全局值，所以不支持定义 buffer-local 选项。
+                如果配置不应该具有全局值时，请忽略回调函数中的 <code>cm</code> 参数，
+                或者始终将 <code>cfg.scope</code> 传递给 <code>setOption</code> 和 <code>getOption</code>。</dd>
 
                 <dt id="vimapi_defineMotion"><code><strong>defineMotion(name: string, fn: function(cm: CodeMirror, head: {line, ch}, ?motionArgs: object}) → {line, ch})</strong></code></dt>
-                <dd>Defines a motion command for VIM. The motion should return
-                the desired result position of the cursor. <code>head</code>
-                is the current position of the cursor. It can differ from
-                <code>cm.getCursor('head')</code> if VIM is in visual mode.
-                <code>motionArgs</code> is the object passed into
-                <strong><code>mapCommand()</code></strong>.</dd>
+                <dd>为 VIM 定义移动命令。
+                应返回光标的目标位置。
+                <code>head</code> 是光标的当前位置。
+                如果 VIM 处于 visual 模式，则它可能与 <code>cm.getCursor('head')</code> 不同。
+                <code>motionArgs</code> 是传递给 <strong><code>mapCommand()</code></strong> 的对象。</dd>
 
                 <dt id="vimapi_defineOperator"><strong><code>defineOperator(name: string, fn: function(cm: CodeMirror, ?operatorArgs: object, ranges: array&lt;{anchor, head}&gt;) → ?{line, ch})</code></strong></dt>
-                <dd>Defines an operator command, similar to <strong><code>
-                defineMotion</code></strong>. <code>ranges</code> is the range
-                of text the operator should operate on. If the cursor should
-                be set to a certain position after the operation finishes, it
-                can return a cursor object.</dd>
+                <dd>定义一个操作命令，类似于<strong><code>defineMotion</code></strong>。
+                <code>ranges</code> 是需要操作的文本的范围。
+                如果在操作完成后需要将光标移动到某个位置，则它可以返回一个光标对象。</dd>
 
                 <dt id="vimapi_defineActon"><strong><code>defineAction(name: string, fn: function(cm: CodeMirror, ?actionArgs: object))</code></strong></dt>
-                <dd>Defines an action command, similar to
-                <strong><code>defineMotion</code></strong>. Action commands
-                can have arbitrary behavior, making them more flexible than
-                motions and operators, at the loss of orthogonality.</dd>
+                <dd>定义一个动作命令，类似于 <strong><code>defineMotion</code></strong>。
+                动作命令可以具有任意的行为，比移动和操作命令更灵活，而不会造成正交。</dd>
 
                 <dt id="vimapi_defineEx"><strong><code>defineEx(name: string, ?prefix: string, fn: function(cm: CodeMirror, ?params: object))</code></strong></dt>
-                <dd>Defines an Ex command, and maps it to <code>:name</code>.
-                If a prefix is provided, it, and any prefixed substring of the
-                <code>name</code> beginning with the <code>prefix</code> can
-                be used to invoke the command. If the <code>prefix</code> is
-                falsy, then <code>name</code> is used as the prefix. <code>
-                params.argString</code> contains the part of the prompted
-                string after the command name. <code>params.args</code> is
-                <code>params.argString</code> split by whitespace. If the
-                command was prefixed with a
-                <code><strong><a href="http://vimdoc.sourceforge.net/htmldoc/cmdline.html#cmdline-ranges">line range</a></strong></code>,
-                <code>params.line</code> and <code>params.lineEnd</code> will
-                be set.
+                <dd>定义一个 Ex 命令，并将其映射到<code>:name</code>。
+                如果提供了前缀，则可以使用以 <code>prefix</code> 开头的 <code>name</code> 都可以用来调用命令。
+                如果 <code>prefix</code> 错误，则将 <code>name</code> 用作前缀。
+                <code>params.argString</code> 是命令名称后面的提示字符串。
+                <code>params.args</code> 是以空格分隔的 <code>params.argString</code>。
+                如果命令以 <code><strong><a href="http://vimdoc.sourceforge.net/htmldoc/cmdline.html#cmdline-ranges" target="_blank">line range</a></strong></code> 作为前缀，
+                则设置 <code>params.line</code> 和 <code>params.lineEnd</code> 。
               </dl>
-
           </section>
 
 
