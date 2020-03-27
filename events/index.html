@@ -47,11 +47,12 @@
             show-icon>
             本文档并未完全翻译完成，我需要你的帮助。<a href="https://github.com/tun6-com/manual-CodeMirror" target="_blank">前往GitHub编辑</a>。
           </el-alert>
+
 <section id=events>
   <h2>事件</h2>
 
   <p>多数与CodeMirror相关的对象都提供事件给客户端来响应不同的情况。
-  调用这些对象的 <a href="#on"><code>on</code></a> 和 <a href="#off"><code>off</code></a> 方法可以注册事件的响应方法。
+  调用这些对象的 <a href="../api/#on"><code>on</code></a> 和 <a href="../api/#off"><code>off</code></a> 方法可以注册事件的响应方法。
   使用 <code>CodeMirror.signal(target, name, args...)</code> 可以实现自定义事件，<code>target</code> 是non-DOM-node对象。</p>
 
   <p>创建一个编辑器实例会触发下面的事件。
@@ -162,7 +163,7 @@
     你可以 <code>preventDefault</code> 事件，或者提供一个 <code>codemirrorIgnore</code> 属性，来提醒CodeMirror不要处理。</dd>
   </dl>
 
-  <p>文档对象（<a href="#Doc"><code>CodeMirror.Doc</code></a>）有以下事件：</p>
+  <p>文档对象（<a href="../api/#Doc"><code>CodeMirror.Doc</code></a>）有以下事件：</p>
 
   <dl>
     <dt id="event_doc_change"><code><strong>"change"</strong> (doc: CodeMirror.Doc, changeObj: object)</code></dt>

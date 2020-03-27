@@ -97,7 +97,8 @@
   <p>如果你不想把编辑器附加到某个元素后，你可以用 <code>CodeMirror</code> 构造函数的第一个参数来实现，该参数可以是一个DOM元素，也可以是一个函数。
   例如替换一个textarea为编辑器：</p>
 
-  <pre data-lang="javascript">var myCodeMirror = CodeMirror(function(elt) {
+  <pre data-lang="javascript">
+var myCodeMirror = CodeMirror(function(elt) {
   myTextArea.parentNode.replaceChild(elt, myTextArea);
 }, {value: myTextArea.value});</pre>
 
@@ -120,7 +121,8 @@
 
   <p>使用RequireJS加载CodeMirror：</p>
 
-  <pre data-lang="javascript">require([
+  <pre data-lang="javascript">
+require([
   "cm/lib/codemirror", "cm/mode/htmlmixed/htmlmixed"
   ], function(CodeMirror) {
   CodeMirror.fromTextArea(document.getElementById("code"), {
@@ -133,7 +135,8 @@
   <em>不要</em>用 RequireJS 的 <code>paths</code> 参数配置CodeMirror路径，因为会打断从相对路径加载子模块的进程。
   而应使用 <a href="http://requirejs.org/docs/api.html#packages" target="_blank"><code>packages</code></a> 参数，例如：</p>
 
-  <pre data-lang=javascript>require.config({
+  <pre data-lang=javascript>
+require.config({
   packages: [{
     name: "codemirror",
     location: "../path/to/codemirror",
