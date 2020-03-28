@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <title>配置_CodeMirror_用户手册_Tun6</title>
-    <meta name="keywords" content="CodeMirror,配置,设置,中文,文档,手册,说明,API,"/>
-    <meta name="description" content="CodeMirror是一个可以嵌入到网页中运行的代码编辑器组件，CodeMirror官方说明文档的中文翻译版。">
+    <meta name="keywords" content="CodeMirror,编辑器,代码,在线,配置,选项,中文,文档,手册,说明,"/>
+    <meta name="description" content="本章节介绍了 CodeMirror 所有配置参数的说明及用法，如 value、mode、theme、keyMap、gutters 等。">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-ui/lib/theme-chalk/index.css">
     <link rel="stylesheet" href="../common.css">
@@ -47,231 +47,231 @@
             show-icon>
             本文档并未完全翻译完成，我需要你的帮助。<a href="https://github.com/tun6-com/manual-CodeMirror" target="_blank">前往GitHub编辑</a>。
           </el-alert>
-          
+
 <section id=config>
   <h2>配置</h2>
 
-  <p>可以通过 <code>CodeMirror</code> 构造函数或 <code>fromTextArea</code> 函数来指定配置对象。
-  其他函数从 <a href="../api/#defaults"><code>CodeMirror.defaults</code></a> 获取配置，也可以修改该参数。</p>
+  <p><code>CodeMirror</code> 构造函数和 <code>fromTextArea</code> 函数都有配置对象参数（可选）。
+  没有该参数的其他函数会从 <a href="../api/#defaults"><code>CodeMirror.defaults</code></a> 属性中获取默认配置，默认配置是可修改的。</p>
 
-  <p>所有函数都不会校验配置，但如果配置错误，会引发异常。</p>
+  <p>虽然所有函数都不校验配置的正确性，但如果配置错误，将会引发奇怪的异常。</p>
 
-  <p>支持的配置如下：</p>
+  <p>所有支持的配置如下：</p>
 
   <dl>
     <dt id="option_value"><code><strong>value</strong>: string|CodeMirror.Doc</code></dt>
-    <dd>初始内容。可以是字符串或 <a href="../api/#api_doc">document</a> 对象。</dd>
+    <dd>初始内容。参数：字符串或 <a href="../api/#api_doc">Document</a> 对象。</dd>
 
     <dt id="option_mode"><code><strong>mode</strong>: string|object</code></dt>
-    <dd>mode。
-    字符串，要么是mode名，要么是mode的<a href="http://en.wikipedia.org/wiki/MIME" target="_blank">MIME</a>类型。
-    如果是 <code>"null"</code> 则没有高亮。
-    也可以是包含 <code>name</code> 属性的 Map对象（例如：<code>{name: "javascript", json: true}</code>）。
-    每个mode的demo页面有该mode的配置参数。
-    通过 <code>CodeMirror.modes</code> 和 <code>CodeMirror.mimeModes</code> 对象可以拿到CodeMirror支持的所有mode。
-    第一个对象返回mode的构造方法，第二个对象返回mode的MIME类型。</dd>
+    <dd>语言 Mode。
+      <dl>
+        <dt>参数</dt>
+        <dd>字符串：Mode 名或 Mode 的 <a href="http://en.wikipedia.org/wiki/MIME" target="_blank">MIME</a> 类型。</dd>
+        <dd><code>"null"</code>：不处理代码高亮。</dd>
+        <dd>对象：必须含有 <code>name</code> 属性，可含有配置参数（如：<code>{name: "javascript", json: true}</code>）。</dd>
+      </dl>
+    Mode 的 Demo 页面提供了所支持的配置参数。<br/>
+    可以调用 <code>CodeMirror.modes</code> 和 <code>CodeMirror.mimeModes</code> 来查看已成功引入的 Mode，
+    <code>CodeMirror.modes</code> 返回 Mode 的构造函数，<code>CodeMirror.mimeModes</code> 返回 Mode 的 MIME 类型。</dd>
 
     <dt id="option_lineSeparator"><code><strong>lineSeparator</strong>: string|null</code></dt>
-    <dd>行分割符。默认(<code>"null"</code>)文档使用CRLFs分割（CRs+LFs），输出(<a href="../api/#getValue"><code>getValue</code></a>)时使用一个LF分割。
-    指定一个分隔符时，文档和输出都会用该分隔符分割。</dd>
+    <dd>行分割符。
+      <dl>
+        <dt>参数</dt>
+        <dd>字符串：文档和输出值都用该字符串分割。</dd>
+        <dd><code>"null"</code>：文档使用 CRLFs 分割（CRs+LFs），输出值使用 LF 分割 （如使用 <a href="../api/#getValue"><code>getValue</code></a> 获取值时）。</dd>
+      </dl>
+    </dd>
 
     <dt id="option_theme"><code><strong>theme</strong>: string</code></dt>
-    <dd>主题。确保成功加载有 <code>.cm-s-[name]</code> 的CSS（参考 <code>theme</code> 目录）。
-    默认值 <code>"default"</code> ，定义在 <code>codemirror.css</code> 中。
-    可以同时使用多个主题，比如 <code>"foo bar"</code> 包含 <code>cm-s-foo</code> 和 <code>cm-s-bar</code> 主题。</dd>
+    <dd>主题样式。<br/>
+      <dl>
+        <dt>参数</dt>
+        <dd><code>"default"</code>：默认值，在 <code>codemirror.css</code> 中定义。</dd>
+        <dd>字符串：主题名，可同时使用多个主题，如 <code>"foo bar"</code> 表示同时使用 <code>cm-s-foo</code> 和 <code>cm-s-bar</code>。</dd>
+      </dl>
+    需引入含有 <code>.cm-s-[name]</code> 的 CSS 文件（参考 <code>theme</code> 目录）。</dd>
 
     <dt id="option_indentUnit"><code><strong>indentUnit</strong>: integer</code></dt>
-    <dd>用几个空格缩进，默认为2。</dd>
+    <dd>每个缩进块由几个空格组成。默认为2。</dd>
 
     <dt id="option_smartIndent"><code><strong>smartIndent</strong>: boolean</code></dt>
-    <dd>是否启用自动缩进，默认值true。</dd>
+    <dd>应使用 Mode 提供的上下文自动缩进，还是仅保持前一行的缩进。默认为 true，使用上下文自动缩进。</dd>
 
     <dt id="option_tabSize"><code><strong>tabSize</strong>: integer</code></dt>
-    <dd>tab的宽度，默认值4。</dd>
+    <dd>Tab 的宽度。默认为 4 个英文字符。</dd>
 
     <dt id="option_indentWithTabs"><code><strong>indentWithTabs</strong>: boolean</code></dt>
-    <dd>是否用 N 个 tab 替换 N*<code>tabSize</code> 个空格缩进。默认值false。</dd>
+    <dd>是否将 N*<code>tabSize</code> 个空格替换为 N 个 Tab 来作为缩进块。默认为 false。</dd>
 
     <dt id="option_electricChars"><code><strong>electricChars</strong>: boolean</code></dt>
-    <dd>输入会影响缩进的字符时，是否重新缩进该行。默认值true。</dd>
+    <dd>在输入时，如果检测到当前的缩进有误（如果 Mode 实现了该功能），是否重新缩进该行。默认为 true。</dd>
 
     <dt id="option_specialChars"><code><strong>specialChars</strong>: RegExp</code></dt>
-    <dd>用来确定哪些字符需要被替换为<a href="#option_specialCharPlaceholder">占位符</a>的正则表达式。一般用于不可打印字符。
-    默认值为 <code>/[\u0000-\u001f\u007f-\u009f\u00ad\u061c\u200b-\u200f\u2028\u2029\ufeff\ufff9-\ufffc]/</code>。</dd>
+    <dd>正则表达式，把匹配到的字符替换为<a href="#option_specialCharPlaceholder">特殊占位符</a>，一般用于不可打印字符。<br/>
+    默认为 <code>/[\u0000-\u001f\u007f-\u009f\u00ad\u061c\u200b-\u200f\u2028\u2029\ufeff\ufff9-\ufffc]/</code>。</dd>
 
     <dt id="option_specialCharPlaceholder"><code><strong>specialCharPlaceholder</strong>: function(char) → Element</code></dt>
-    <dd>将 <a href="#option_specialChars"><code>specialChars</code></a> 发现的特殊字符，替换成DOM元素。
-    默认是一个红色圆点（<span style="color: red">•</span>）。</dd>
+    <dd>把 <a href="#option_specialChars"><code>specialChars</code></a> 匹配到的字符，替换成 DOM 元素来占位。
+    默认为红色的圆点（<span style="color: red">•</span>）。</dd>
 
     <dt id="option_direction"><code><strong>direction</strong>: "ltr" | "rtl"</code></dt>
-    <dd>布局方向和选择方向。默认为"ltr"，从左到右。
-    CodeMirror使用Unicode双向算法，但检测不到基础方向。
-    当基础方向与用户意图不一致时会出现问题。
-    因此需要多语种用户自行选择基础方向。</dd>
+    <dd>段落的书写方向。默认为 "ltr"，从左到右。<br/>
+    CodeMirror 使用 Unicode 双向算法，但无法检测基础方向。<br/>
+    基础方向应与用户的意图保持一致，所以应让多语种用户自行切换基础方向。</dd>
 
     <dt id="option_rtlMoveVisually"><code><strong>rtlMoveVisually</strong>: boolean</code></dt>
-    <dd>在从右往左书写的语言（阿拉伯语，希伯来语）中，指定水平光标的移动方向是虚拟的（左箭头，向左移动）还是逻辑的（左箭头，移动到字符串的前一位，从右往左书写的语言向右）。
-    Windows默认值为 <code>false</code>，其他平台默认为 <code>true</code>。</dd>
+    <dd>在从右往左书写的语言中（阿拉伯语，希伯来语），光标的移动方向是虚拟的（按左键，光标向左移动）还是逻辑的（按左键，光标向前一个字符移动，在从右往左书写的语言中是向右移动）。
+    在 Windows 中默认为 <code>false</code>，在其他操作系统中默认为 <code>true</code>。</dd>
 
     <dt id="option_keyMap"><code><strong>keyMap</strong>: string</code></dt>
-    <dd>快捷键。
-    默认值 <code>"default"</code> 在 <code>codemirror.js</code> 中定义。
+    <dd>快捷键表。
+    默认为 <code>"default"</code>，这是 <code>codemirror.js</code> 唯一定义的快捷键表。
     参考 <code>keymap</code> 目录，和 <a href="../keymaps/#keymaps">快捷键</a> 章节。</dd>
 
     <dt id="option_extraKeys"><code><strong>extraKeys</strong>: object</code></dt>
-    <dd>在 <a href="#option_keyMap"><code>keyMap</code></a> 基础上绑定额外的快捷键。可以是null或 <a href="../keymaps/#keymaps">快捷键</a> 的值。</dd>
+    <dd>在 <a href="#option_keyMap"><code>keyMap</code></a> 基础上增加额外的快捷键。可以是 null 或有效的<a href="../keymaps/#keymaps">快捷键</a>。</dd>
 
     <dt id="option_configureMouse"><code><strong>configureMouse</strong>: fn(cm: CodeMirror, repeat: "single" | "double" | "triple", event: Event) → Object</code></dt>
-    <dd>配置鼠标的选择和拖拽行为。
-      在鼠标左键按下时会调用该函数。
-      返回值可以包含一下属性：
+    <dd>控制鼠标选择和拖拽的行为。按下鼠标左键时会调用该函数，返回值可包含以下属性：
       <dl>
         <dt><code><strong>unit</strong>: "char" | "word" | "line" | "rectangle" | fn(CodeMirror, Pos) → {from: Pos, to: Pos}</code></dt>
-        <dd>选择对象。可以是选择的内容，可以是位置对象，或者是一个返回选择范围的函数。
-        默认双击返回 <code>"word"</code>，
-        连点三下返回 <code>"line"</code>，
-        按下Alt点击（Chrome OS meta-shift-clicks）返回<code>"rectangle"</code>，
-        其他情况返回 <code>"single"</code>。</dd>
+        <dd>选区的单位。可能是上述定义中的任意一个值，或一个参数为位置对象并返回该处的范围的函数。<br/>
+        默认情况下：
+        双击是 <code>"word"</code>，
+        连点三下是 <code>"line"</code>，
+        按下 Alt 并点击是 <code>"rectangle"</code>（Chrome OS 中是 meta-shift-clicks），
+        其他情况下是 <code>"single"</code>。</dd>
         <dt><code><strong>extend</strong>: bool</code></dt>
-        <dd>扩大选区还是创建新选区。默认按下 shift 并点击时扩大选区（true）。</dd>
+        <dd>应该扩大选区还是新建选区。默认按下 Shift 并点击时扩大（true）。</dd>
         <dt><code><strong>addNew</strong>: bool</code></dt>
-        <dd>创建新选区还是替换选区。
-        在Mac OS下默认按下command并点击时创建新选区（true），其他平台下按下control并点击时创建新选区（true）。</dd>
+        <dd>应该新建选区还是替换选区。默认在 Mac OS 中按下 Command 并点击时新建（true），在其他操作系统中按下 Control 并点击时新建（true）。</dd>
         <dt><code><strong>moveOnDrag</strong>: bool</code></dt>
-        <dd>鼠标在编辑器内拖拽内容时，应该复制（false）还是移动（true）。
-        在Mac OS下默认按下alt并点击时复制，其他平台下按下ctrl并点击时复制。</dd>
+        <dd>应该复试选区内容还是移动选区内容。默认在 Mac OS 中按下 Alt 并拖拽时复制（true），在其他操作系统中按下 Control 并拖拽时复制（true）。</dd>
       </dl>
     </dd>
 
     <dt id="option_lineWrapping"><code><strong>lineWrapping</strong>: boolean</code></dt>
-    <dd>超出编辑器的宽时自动滚动或换行。默认为 <code>false</code> （滚动）。</dd>
+    <dd>内容超过编辑器的宽时，应该滚动显示还是换行显示。默认为滚动（false）。</dd>
 
     <dt id="option_lineNumbers"><code><strong>lineNumbers</strong>: boolean</code></dt>
-    <dd>是否显示行号。</dd>
+    <dd>是否在编辑器的左侧显示行号。</dd>
 
     <dt id="option_firstLineNumber"><code><strong>firstLineNumber</strong>: integer</code></dt>
-    <dd>第一行的行号。默认1。</dd>
+    <dd>行号应从几开始计数。默认为 1。</dd>
 
     <dt id="option_lineNumberFormatter"><code><strong>lineNumberFormatter</strong>: function(line: integer) → string</code></dt>
-    <dd>格式化行号。把行号转换为显示在侧边栏的字符串。</dd>
+    <dd>行号格式化函数。把行号数字转换为要显示字符串。</dd>
 
     <dt id="option_gutters"><code><strong>gutters</strong>: array&lt;string | {className: string, style: ?string}&gt;</code></dt>
-    <dd>设置侧边栏（行号侧边栏除外）。
-    参数为：包含 <code>width</code> 属性的CSS样式名组成的数组。
-    修改 <code>CodeMirror-linenumbers</code> 样式 <em>可以</em>调整行号侧边栏的位置（默认最左侧）。
-    <a href="../api/#setGutterMarker"><code>setGutterMarker</code></a> 函数依赖于该数组。</dd>
+    <dd>用来添加侧边栏（除了行号侧边栏）。<br/>
+    参数是 CSS 样式名数组，或由 CSS 样式名及其样式组成的数组，两种都必须定义侧边栏的 <code>width</code>。<br/>
+    可以为侧边栏定义背景，或引入 <code>CodeMirror-linenumbers</code> 样式来调整行号侧边栏的位置（默认为所有侧边栏的右侧）。<br/>
+    这里的 CSS 样式名也被作为 <a href="../api/#setGutterMarker"><code>setGutterMarker</code></a> 函数的参数。</dd>
 
     <dt id="option_fixedGutter"><code><strong>fixedGutter</strong>: boolean</code></dt>
-    <dd>侧边栏应跟随内容水平滚动（false），还是固定在最左侧（默认true）。</dd>
+    <dd>侧边栏应跟随内容水平滚动（false），还是在水平滚动中保持固定（true，默认）。</dd>
 
     <dt id="option_scrollbarStyle"><code><strong>scrollbarStyle</strong>: string</code></dt>
-    <dd>滚动条的风格。
-    默认值 <code>"native"</code> 系统滚动条。
-    使用 <code>"null"</code> 时隐藏滚动条。
-    参考 <a href="../addons/#addon_simplescrollbars">滚动条插件</a> 。</dd>
+    <dd>选择一个滚动条的实现。<br/>
+    默认为 <code>"native"</code> 使用系统滚动条，<code>"null"</code> 时隐藏滚动条。<br/>
+    参考<a href="../addons/#addon_simplescrollbars">滚动条插件</a>。</dd>
 
     <dt id="option_coverGutterNextToScrollbar"><code><strong>coverGutterNextToScrollbar</strong>: boolean</code></dt>
-    <dd>当 <a href="#option_fixedGutter"><code>fixedGutter</code></a> 为 true 时，侧边栏默认固定在水平滚动条的左边。
-    该参数为 true 时，会用 <code>CodeMirror-gutter-filler</code> 元素覆盖侧边栏。</dd>
+    <dd><a href="#option_fixedGutter"><code>fixedGutter</code></a> 为 true 时，水平滚动条左边的侧边栏可见。
+    当该参数为 true 时，会使用样式名为 <code>CodeMirror-gutter-filler</code> 的 DOM 元素覆盖水平滚动条左边的部分侧边栏。</dd>
 
     <dt id="option_inputStyle"><code><strong>inputStyle</strong>: string</code></dt>
-    <dd>如何处理输入和焦点。
-    有 <code>"textarea"</code> 和 <code>"contenteditable"</code> 两种模式。
-    手机浏览器默认为 <code>"contenteditable"</code>。
-    桌面浏览器默认为 <code>"textarea"</code>。
-    <code>"contenteditable"</code> 对IME和屏幕阅读器的支持比较友好。</dd>
+    <dd>选择编辑器处理输入和获得焦点的方式。核心库提供 <code>"textarea"</code> 和 <code>"contenteditable"</code> 两种模式。<br/>
+    移动浏览器默认使用 <code>"contenteditable"</code>，桌面浏览器默认使用 <code>"textarea"</code>。<br/>
+    <code>"contenteditable"</code> 对 IME 和屏幕阅读器的支持比较好，未来会成为桌面浏览器的默认值。</dd>
 
     <dt id="option_readOnly"><code><strong>readOnly</strong>: boolean|string</code></dt>
-    <dd>是否只读。
-    使用特殊值 <code>"nocursor"</code>（代替 <code>true</code>）时，禁止编辑器获得焦点。</dd>
+    <dd>是否只读。特殊值 <code>"nocursor"</code> 可以禁止编辑器获得焦点。</dd>
 
     <dt id="option_showCursorWhenSelecting"><code><strong>showCursorWhenSelecting</strong>: boolean</code></dt>
-    <dd>选择时是否显示光标。
-    默认值false。</dd>
+    <dd>选择时是否显示光标。默认为 false。</dd>
 
     <dt id="option_lineWiseCopyCut"><code><strong>lineWiseCopyCut</strong>: boolean</code></dt>
-    <dd>默认开启。没有选区时，复制或剪切光标所在行的所有内容。</dd>
+    <dd>默认为 true，在没有选区时，复制或粘贴光标行的所有内容。</dd>
 
     <dt id="option_pasteLinesPerSelection"><code><strong>pasteLinesPerSelection</strong>: boolean</code></dt>
-    <dd>默认开启。从其他地方（非编辑器）粘贴内容时，如果复制内容的行数跟选区数一致，会将复制内容按行拆分并粘贴到对应选区处。</dd>
+    <dd>默认为 true，从其他地方（非编辑器中）复制内容并粘贴到编辑器中时，如果复制内容的行数与编辑器的选区数一致，将会为每个选区分配一行内容。</dd>
 
     <dt id="option_selectionsMayTouch"><code><strong>selectionsMayTouch</strong>: boolean</code></dt>
-    <dd>两个选区在接触时合并为一个选区。false，两个选区重叠时合并为一个选区。</dd>
+    <dd>默认为 false，两个选区在接触时合并。为 true 时，两个选区重叠时合并。</dd>
 
     <dt id="option_undoDepth"><code><strong>undoDepth</strong>: integer</code></dt>
-    <dd>可撤销次数。默认200。</dd>
+    <dd>最多可撤销次数，默认为 200。</dd>
 
     <dt id="option_historyEventDelay"><code><strong>historyEventDelay</strong>: integer</code></dt>
-    <dd>多长时间（毫秒）无操作后，创建新的历史记录。默认1250。</dd>
+    <dd>停止输入或删除多久后，创建新的历史事件。默认为 1250 微秒。</dd>
 
     <dt id="option_tabindex"><code><strong>tabindex</strong>: integer</code></dt>
-    <dd>编辑器的<a href="http://www.w3.org/TR/html401/interact/forms.html#adef-tabindex" target="_blank">tab index</a>。默认无。</dd>
+    <dd>编辑器的 <a href="http://www.w3.org/TR/html401/interact/forms.html#adef-tabindex" target="_blank">tab index</a>，默认为无。</dd>
 
     <dt id="option_autofocus"><code><strong>autofocus</strong>: boolean</code></dt>
-    <dd>是否自动获取焦点。默认false。
-    如果用 <code>fromTextArea</code> 函数初始化编辑器，在 textarea 已经获得焦点或有 <code>autofocus</code> 属性时，该选项永为 true 。</dd>
+    <dd>是否自动获取焦点，默认为 false。<br/>
+    使用 <code>fromTextArea</code> 函数初始化编辑器时，如果 Textarea 已经获得焦点，
+    或 Textarea 有 <code>autofocus</code> 属性且其他元素未获得焦点时，该值为 true。</dd>
 
     <dt id="option_phrases"><code><strong>phrases</strong>: ?object</code></dt>
-    <dd>句子翻译对照表。
-    有些插件使用 <a href="../api/#phrase"><code>phrase</code></a> 函数来实现翻译功能。
-    当该函数返回 null 或一个没有用原句做属性的对象时，返回值为原字符串，否则为对应的值。</dd>
+    <dd>有些插件基于 <a href="../api/#phrase"><code>phrase</code></a> 函数实现翻译功能。<br/>
+      <dl>
+        <dt>参数</dt>
+        <dd>null ：phrase 函数返回源句。</dd>
+        <dd>对象：含有与源句一致的键时，phrase 函数返回对应值，否则返回源句。</dd>
+      </dl>
+    </dd>
   </dl>
 
-  <p>下面是一些更细致、低优先级的选项。
-  这些选项在非常细致的情况下才会用到，第一次阅读该手册时可以选择跳过。</p>
+  <p>下面是不常用的配置，只有遇到非常具体的问题时才会用到，第一次阅读该手册时可以选择跳过。</p>
 
   <dl>
     <dt id="option_dragDrop"><code><strong>dragDrop</strong>: boolean</code></dt>
-    <dd>是否启用拖放。默认 true。</dd>
+    <dd>是否启用拖拽，默认为 true。</dd>
 
     <dt id="option_allowDropFileTypes"><code><strong>allowDropFileTypes</strong>: array&lt;string&gt;</code></dt>
-    <dd>规定哪些文件类型可以拖拽到编辑器中。默认为 <code>null</code>。
-    数组的元素为文件的MIME类型，该函数会自动检查与浏览器返回的 <code>File</code> <a href="https://w3c.github.io/FileAPI/#dfn-type" target="_blank"><code>type</code></a> 是否一致。</dd>
+    <dd>规定哪些文件可以拖进编辑器（默认为 <code>null</code>），参数是由 MIME 类型组成的数组。
+    编辑器会用浏览器返回的 <code>File</code> 的 <a href="https://w3c.github.io/FileAPI/#dfn-type" target="_blank"><code>type</code></a> 来确定其合法性。
 
     <dt id="option_cursorBlinkRate"><code><strong>cursorBlinkRate</strong>: number</code></dt>
-    <dd>光标的闪烁间隔。默认530（ms）。0禁用闪烁。负数隐藏光标。</dd>
+    <dd>光标闪烁的间隔，默认为 530 微秒，0 表示禁用闪烁，负数表示隐藏光标。</dd>
 
     <dt id="option_cursorScrollMargin"><code><strong>cursorScrollMargin</strong>: number</code></dt>
-    <dd>可滚动的文档中，当可视范围接近顶部或底部时，光标上下各保留多少间距。
-    默认为0。</dd>
+    <dd>在滚动显示的文档中，光标应与可视范围的顶部或底部保持多长的距离，默认为 0（像素）。</dd>
 
     <dt id="option_cursorHeight"><code><strong>cursorHeight</strong>: number</code></dt>
-    <dd>光标的高度。
-    默认1，一行的高度。
-    遇到一些很矮的字体时，可以设置为 <code>0.85</code> ，让光标与一行的底部保持一定的距离，视觉效果会更好。</dd>
+    <dd>光标的高度，默认为 1（即行高）。<br/>
+    当使用比较矮的字体时，降低光标的高度（比如 <code>0.85</code>）可以实现更好的视觉效果。</dd>
 
     <dt id="option_resetSelectionOnContextMenu"><code><strong>resetSelectionOnContextMenu</strong>: boolean</code></dt>
-    <dd>在当前选区外点击鼠标右键（菜单键）时，是否把光标移动到该位置。
-    默认 <code>true</code>。</dd>
+    <dd>在选区外点击鼠标右键时（会唤出菜单），是否把光标移动到该处。默认为 true。</dd>
 
     <dt id="option_workTime"><code id="option_wordkDelay"><strong>workTime</strong>, <strong>workDelay</strong>: number</code></dt>
-    <dd>高亮标注的后台线程，每工作 <code>workTime</code> 微秒后休眠 <code>workDelay</code> 微秒。
-    默认值为200和300。</dd>
+    <dd>处理高亮工作的伪后台线程在运行 <code>workTime</code> 微秒后休眠 <code>workDelay</code> 微秒，默认为200 和 300。</dd>
 
     <dt id="option_pollInterval"><code><strong>pollInterval</strong>: number</code></dt>
-    <dd>应该间隔多久从（获得焦点的）textarea拉一次数据。
-    大多数浏览器中的输入事件都可以捕获，但是IME和部分浏览器的事件不能捕获，因此需要拉取数据。
-    默认为100（微秒）。</dd>
+    <dd>间隔多久拉一次 Textarea 的值，默认为 100（微秒）。<br/>
+    一般情况下，输入值都可以通过输入事件来获取，但在 IME 和部分浏览器中无法捕获输入事件，所以需要从 Textarea 中拉取数据。</dd>
 
     <dt id="option_flattenSpans"><code><strong>flattenSpans</strong>: boolean</code></dt>
-    <dd>CodeMirror默认会将拥有相同class且相邻的两个元素合并为一个span。
-    这样可以使DOM树更清晰，性能更好。
-    但在特殊情况下（比如圆角）会使页面的外观发生变化，设置为false可以避免该情况的出现。</dd>
+    <dd>默认为 true，把拥有相同 class 且相邻的元素合并。<br/>
+    这样做可以使 DOM 树变得清晰，性能也会得到提升，但在特殊情况下（比如圆角），合并会使文档的外观发生变化。</dd>
 
     <dt id="option_addModeClass"><code><strong>addModeClass</strong>: boolean</code></dt>
-    <dd>启用时，每个单词都会用 <code>"cm-m-"</code> 前缀开头的CSS样式修饰。
-    比如 XML mode 下用 <code>cm-m-xml</code> 修饰。
-    默认为false。</dd>
+    <dd>为 true 时，每个 Token 都会被加上以 <code>"cm-m-"</code> 前缀开头的 CSS 样式，代表该 Token 是由哪个 <a href="../modeapi/#innerMode">inner</a> Mode 提供的，
+    比如 <code>cm-m-xml</code> 表示该 Token 来自 XML Mode。
+    默认为 false。</dd>
 
     <dt id="option_maxHighlightLength"><code><strong>maxHighlightLength</strong>: number</code></dt>
-    <dd>遇到非常大的文档时，CodeMirror为保证响应速度，会省略剩余行的高亮渲染。
-    默认 10000 行。
-    设置为 <code>Infinity</code> 可关闭。</dd>
+    <dd>默认为 10000（行），最多渲染行数，将剩余行渲染为普通文本来保证响应速度。<br/>
+    为 <code>Infinity</code> 时，渲染所有行。</dd>
 
     <dt id="option_viewportMargin"><code><strong>viewportMargin</strong>: integer</code></dt>
-    <dd>文档可见部分前后多少行启用渲染。该参数会影响滚动文档时的渲染工作量。默认值10。
-    设置为 <code>Infinity</code> 可保证整个文档都能被渲染，这时可以使用浏览器的搜索功能。
-    但处理大文档时<em>可能</em>会影响性能。</dd>
+    <dd>渲染可视范围前后的多少行。<br/>
+    该配置会影响滚动和更新等函数的工作量，一般建议使用默认值 10。<br/>
+    为 <code>Infinity</code> 时，渲染所有行，可以使用浏览器的搜索功能，但在渲染大文档时<em>会影响</em>编辑器的性能。</dd>
 
     <dt id="option_spellcheck"><code><strong>spellcheck</strong>: boolean</code></dt>
     <dd>是否启用拼写检查。</dd>
@@ -280,9 +280,10 @@
     <dd>是否启用自动校正。</dd>
 
     <dt id="option_autocapitalize"><code><strong>autocapitalize</strong>: boolean</code></dt>
-    <dd>是否启用自动转换成大写。</dd>
+    <dd>是否自动转换为大写。</dd>
   </dl>
 </section>
+
         </el-main>
       </el-container>
 

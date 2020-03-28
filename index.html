@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <title>CodeMirror中文用户手册_用户手册_Tun6</title>
-    <meta name="keywords" content="CodeMirror,中文,文档,手册,说明,API,"/>
-    <meta name="description" content="CodeMirror是一个可以嵌入到网页中运行的代码编辑器组件，CodeMirror官方说明文档的中文翻译版。">
+    <meta name="keywords" content="CodeMirror,编辑器,代码,在线,中文,文档,手册,说明,API,"/>
+    <meta name="description" content="CodeMirror 是一个运行在网页中的代码编辑器组件，这是 CodeMirror 官方用户手册的中文翻译版本，包含所有官方 Demo。">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-ui/lib/theme-chalk/index.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror/lib/codemirror.css">
@@ -57,83 +57,79 @@
 
   <p><a href="https://codemirror.net" target="_blank">官方网站</a>，<a href="https://github.com/codemirror/codemirror" target="_blank">源代码</a>。</p>
 
-  <p>CodeMirror是一个嵌入在网页中运行的代码编辑器。
-    核心库<em>只包含</em>编辑器组件，没有按钮、自动完成或其他类IDE的功能。
-    但你可以使用其丰富的API来实现这些功能。
-    参照发行版中的 <a href="./addons/#addons">插件</a> 或 <a href="https://github.com/codemirror/CodeMirror/wiki/CodeMirror-addons" target="_blank">第三方插件</a>
-    来实现这些功能。</p>
+  <p>CodeMirror 是一个运行在网页中的代码编辑器组件。
+  核心库<em>只提供</em>编辑器组件，没有按钮、自动完成或其他 IDE 功能，但可以使用 API 来实现这些功能，
+  参照 <a href="./addons/#addons">插件</a> 或 <a href="https://github.com/codemirror/CodeMirror/wiki/CodeMirror-addons" target="_blank">第三方插件</a>。</p>
 
-  <p>使用CodeMirror时至少指定一个mode。
-    参考发行版中的 <code>mode/</code>，或如何编写一个新的 <a href="./modeapi/#modeapi">mode</a>。</p>
+  <p>使用 CodeMirror 必须引入一个语言 Mode。Mode 是为编程语言高亮（缩进）代码的 JavaScript 程序。
+  参考发行版中的 <code>mode/</code>，或如何编写一个新的 <a href="./modeapi/#modeapi">mode</a>。</p>
 </section>
 
 <section id=usage>
   <h2>基本用法</h2>
 
-  <p>使用CodeMirror最简单的方法，就是加载 <code>lib/</code> 目录下的js和css，
-  和 <code>mode/</code> 目录下的一个mode。例如：</p>
+  <p>只需引入 <code>lib/</code> 目录下的 js 和 css 文件，和 <code>mode/</code> 目录下的任意一个 Mode。例如：</p>
 
   <pre data-lang="text/html">&lt;script src="lib/codemirror.js">&lt;/script>
-&lt;link rel="stylesheet" href="lib/codemirror.css">
+&lt;link href="lib/codemirror.css" rel="stylesheet">
 &lt;script src="mode/javascript/javascript.js">&lt;/script></pre>
 
-  <p>（也可以使用模块化加载（<a href="#modloader">稍后会谈到</a>））</p>
+  <p>（也可以用<a href="#modloader">模块化</a>方式）</p>
 
   <p>然后，创建编辑器实例：</p>
 
   <pre data-lang="javascript">var myCodeMirror = CodeMirror(document.body);</pre>
 
-  <p>一个使用指定mode的、空的编辑器会附加到body后。
-  <a href="./api/#CodeMirror"><code>CodeMirror</code></a> 构造函数第二个参数为配置参数：</p>
+  <p>这样就在 body 里创建了一个编辑器。
+  <a href="./api/#CodeMirror"><code>CodeMirror</code></a> 构造函数的另一个参数是配置对象：</p>
 
   <pre data-lang="javascript">var myCodeMirror = CodeMirror(document.body, {
   value: "function myScript(){return 100;}\n",
   mode:  "javascript"
 });</pre>
 
-  <p>这会创建一个包含初始代码，使用JavaScript mode的编辑器（可以用来加载多个mode）。
-  参考CodeMirror支持的<a href="./config/#config">所有配置参数</a></p>
+  <p>创建一个带有初始内容的，使用 JavaScript Mode 的编辑器（可同时引入多个 Mode）。
+  参考<a href="./config/#config">配置</a>章节。</p>
 
-  <p>如果你不想把编辑器附加到某个元素后，你可以用 <code>CodeMirror</code> 构造函数的第一个参数来实现，该参数可以是一个DOM元素，也可以是一个函数。
-  例如替换一个textarea为编辑器：</p>
+  <p>如果你不想把编辑器创建在某个元素里，可以用 <code>CodeMirror</code> 构造函数的第一个参数来实现，该参数可以是 DOM 元素，也可以是一个函数。
+  例如把 Textarea 替换成编辑器：</p>
 
   <pre data-lang="javascript">
 var myCodeMirror = CodeMirror(function(elt) {
   myTextArea.parentNode.replaceChild(elt, myTextArea);
 }, {value: myTextArea.value});</pre>
 
-  <p>该方法的快捷方式如下：</p>
+  <p>也可以用下面的方式来实现：</p>
 
   <pre data-lang="javascript">var myCodeMirror = CodeMirror.fromTextArea(myTextArea);</pre>
 
-  <p>该方法会确保在表单提交时，编辑器的内容与textarea一致。
-  参考 <a href="./config/#fromTextArea">API文档</a></p>
+  <p>该函数可以使 Textarea 的值与编辑器的内容保持一致。参考 <a href="./config/#fromTextArea">API</a> 章节。</p>
 
-  <h3 id=modloader>模块化加载</h3>
+  <h3 id=modloader>模块化</h3>
 
-  <p>CodeMirror支持在AMD或CommonJS环境下使用。
-  如果环境中有 <code>exports</code> 和 <code>module</code> 指令，将使用CommonJS-style (require)。
-  如果环境中有 <code>define</code> 方法和 <code>amd</code> 对象，将使用AMD-style (RequireJS)。</p>
+  <p>CodeMirror 也可以在 AMD 或 CommonJS 环境下使用。
+  如果环境定义了 <code>exports</code> 和 <code>module</code> ，使用 CommonJS-style （require）。
+  如果环境定义了 <code>define</code> 和 <code>amd</code> ，使用 AMD-style（RequireJS）。</p>
 
-  <p>可以用 <a href="http://browserify.org/" target="_blank">Browserify</a> 打包CodeMirror模块。
-  可以用 <a href="http://requirejs.org/" target="_blank">RequireJS</a> 在动态加载依赖。
-  两种方法均不占用全局命名空间，因此可以同时使用多个CodeMirror版本。</p>
+  <p>可以用 <a href="http://browserify.org/" target="_blank">Browserify</a> 或其他类似的工具打包 CodeMirror 模块。
+  或者用 <a href="http://requirejs.org/" target="_blank">RequireJS</a> 在使用时加载模块。
+  两种方法都没有使用全局命名空间，因此同时引入多个 CodeMirror 版本时不会互相影响。</p>
 
-  <p>使用RequireJS加载CodeMirror：</p>
+  <p>使用 RequireJS ：</p>
 
   <pre data-lang="javascript">
 require([
   "cm/lib/codemirror", "cm/mode/htmlmixed/htmlmixed"
   ], function(CodeMirror) {
-  CodeMirror.fromTextArea(document.getElementById("code"), {
-    lineNumbers: true,
-    mode: "htmlmixed"
-  });
+    CodeMirror.fromTextArea(document.getElementById("code"), {
+      lineNumbers: true,
+      mode: "htmlmixed"
+    });
 });</pre>
 
-  <p>该方法会自动加载 <code>htmlmixed</code> mode的依赖(XML, JavaScript, CSS)。
-  <em>不要</em>用 RequireJS 的 <code>paths</code> 参数配置CodeMirror路径，因为会打断从相对路径加载子模块的进程。
-  而应使用 <a href="http://requirejs.org/docs/api.html#packages" target="_blank"><code>packages</code></a> 参数，例如：</p>
+  <p>自动加载 <code>htmlmixed</code> Mode 的依赖模块（XML、JavaScript、CSS）。
+  应该用 RequireJS 的 <a href="http://requirejs.org/docs/api.html#packages" target="_blank"><code>packages</code></a> 属性设置 CodeMirror 的路径，
+  <em>而不是</em>使用 <code>paths</code> 属性。例如：</p>
 
   <pre data-lang=javascript>
 require.config({
