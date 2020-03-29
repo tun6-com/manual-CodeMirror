@@ -51,76 +51,88 @@
 <section id=events>
   <h2>事件</h2>
 
-  <p>多数与CodeMirror相关的对象都提供事件给客户端来响应不同的情况。
-  调用这些对象的 <a href="../api/#on"><code>on</code></a> 和 <a href="../api/#off"><code>off</code></a> 方法可以注册事件的响应方法。
-  使用 <code>CodeMirror.signal(target, name, args...)</code> 可以实现自定义事件，<code>target</code> 是non-DOM-node对象。</p>
+  <p>CodeMirror 的大部分对象都会生成各种事件，来让客户端代码应对不同的情况。<br/>
+  需要用 <a href="../api/#on"><code>on</code></a> 和 <a href="../api/#off"><code>off</code></a> 函数来绑定或取消事件。<br/>
+  <code>CodeMirror.signal(target, name, args...)</code> 函数可以用来自定义事件，<code>target</code> 非 DOM 元素。</p>
 
-  <p>创建一个编辑器实例会触发下面的事件。
-  <code>instance</code> 参数为编辑器实例本身。</p>
+  <p>编辑器实例有以下事件，<code>instance</code> 参数为编辑器实例：</p>
 
   <dl>
     <dt id="event_change"><code><strong>"change"</strong> (instance: CodeMirror, changeObj: object)</code></dt>
-    <dd>编辑器正文发生修改时触发。
-    第二个参数 <code>changeObj</code> 是一个包含所发生修改的 <code>{from, to, text, removed,origin}</code> 对象。
-    <code>from</code> 和 <code>to</code> 是修改区域的开始位置和结束位置（变更前的坐标），（比如 <code>{ch:0, line:18}</code> 表示#19行的行首）。
-    <code>text</code> 字符串数组（按行拆分）用来表示要替换的文本。
-    <code>removed</code> 是修改之前在 <code>from</code> 和 <code>to</code> 之间的文本。
-    该事件在一个 <a href="../api/#operation">operation</a> 结束<em>之前</em>，DOM更新前触发。</dd>
+    <dd>编辑器的内容发生改变时触发。
+    <dl>
+      <dt><code>changeObj</code>：<code>{from, to, text, removed, origin}</code></dt>
+      <dd><code>from</code> 和 <code>to</code>：从哪里修改到哪里（修改前的坐标，比如 <code>{ch:0, line:18}</code> 表示从 19 行的行首开始修改）。</dd>
+      <dd><code>text</code>：替换文本字符串数组（按行拆分的）。</dd>
+      <dd><code>removed</code>：原文本字符串数组。</dd>
+    </dl>
+    该事件在 <a href="../api/#operation">operation 函数</a>结束<em>之前</em>，更新 DOM 之前触发。</dd>
 
     <dt id="event_changes"><code><strong>"changes"</strong> (instance: CodeMirror, changes: array&lt;object&gt;)</code></dt>
-    <dd>与 <a href="#event_change"><code>"change"</code></a> 事件近似，但是在<a href="../api/#operation">operation</a>中所有的修改都被打包成一个数组。
-    在operation结束时触发，显示所有的修改会触发一个新的operation。</dd>
+    <dd>与 <a href="#event_change"><code>"change"</code></a> 事件类似，但会把一个 <a href="../api/#operation">operation</a> 中的所有修改打包成数组。<br/>
+    该事件在 operation 完成后触发，应用 operation 中的修改时会生成新的 operation。</dd>
 
     <dt id="event_beforeChange"><code><strong>"beforeChange"</strong> (instance: CodeMirror, changeObj: object)</code></dt>
-    <dd>在修改应用前触发，该事件的处理程序可以选择调整或取消该修改。
-    <code>changeObj</code> 对象有跟 <a href="#event_change"><code>"change"</code></a> 事件一样的 <code>from</code>, <code>to</code>, and <code>text</code> 属性。
-    该事件还有 <code>cancel()</code> 函数，可以取消不是来自undo和redo事件发出的修改，和一个可以调整修改的 <code>update(from, to, text)</code> 函数。
-    不能调整Undo或redo事件发出的修改，因为该修改包含过去的修改范围元信息。
-    <code>update</code> 函数的三个参数都是可选的，来保证存在的值不变。
-    <strong>提示：</strong>不能在 <code>"beforeChange"</code> 处理程序中做任何会导致文档改变的操作。
-    因为该事件的处理程序是从CodeMirror底层调用的，这么做可能会造成编辑器异常。</dd>
+    <dd>在应用修改前触发，可用来调整修改内容或取消修改。
+    <dl>
+      <dt><code>changeObj</code></dt>
+      <dd><code>from</code>、<code>to</code> 和 <code>text</code>：与 <a href="#event_change"><code>"change"</code></a> 一样。</dd>
+      <dd><code>cancel()</code>：取消修改（undo 和 redo 产生的事件除外）。</dd>
+      <dd><code>update(from, to, text)</code>：调整修改内容（undo 和 redo 产生的事件除外），该函数的三个参数都是可选的。</dd>
+    </dl>
+    <strong>注意！</strong>不能在 <code>"beforeChange"</code> 事件的处理函数中做任何影响编辑器内容的操作，
+    因为该事件是由编辑器底层产生的，这样做可能会使编辑器崩溃。</dd>
 
     <dt id="event_cursorActivity"><code><strong>"cursorActivity"</strong> (instance: CodeMirror)</code></dt>
-    <dd>光标或选区移动，或者正文的改变都会触发该事件。</dd>
+    <dd>移动光标或选区时触发，修改编辑器内容时触发。</dd>
 
     <dt id="event_keyHandled"><code><strong>"keyHandled"</strong> (instance: CodeMirror, name: string, event: Event)</code></dt>
-    <dd>按键后触发。
-    <code>name</code> 是要处理的键名（比如 <code>"Ctrl-X"</code> 或 <code>"'q'"</code>），<code>event</code> 是一个DOM的 <code>keydown</code> 或者 <code>keypress</code> 事件。</dd>
+    <dd>快捷键表中的按键被按下时触发。
+      <dl>
+        <dd><code>name</code>：捕获的按键名（如 <code>"Ctrl-X"</code>）。</dd>
+        <dd><code>event</code>：DOM 的 <code>keydown</code> 或 <code>keypress</code> 事件。</dd>
+      </dl>
+    </dd>
 
     <dt id="event_inputRead"><code><strong>"inputRead"</strong> (instance: CodeMirror, changeObj: object)</code></dt>
-    <dd>从隐藏的textarea读取输入时触发（不管是输入或粘贴）。</dd>
+    <dd>读取到输入时触发（输入或粘贴）。</dd>
 
     <dt id="event_electricInput"><code><strong>"electricInput"</strong> (instance: CodeMirror, line: integer)</code></dt>
-    <dd>当输入字符匹配<a href="../config/#option_electricChars">electric</a>正则时触发，会造成该行的改变。</dd>
+    <dd>当输入字符与 Mode 的 <a href="../config/#option_electricChars">electric</a> 匹配时触发。</dd>
 
     <dt id="event_beforeSelectionChange"><code><strong>"beforeSelectionChange"</strong> (instance: CodeMirror, obj: {ranges, origin, update})</code></dt>
-    <dd>在选区移动前触发。
-    该事件的处理程序需要校验选区列表参数，也就是由<code>{anchor, head}</code> 对象构成的数组（<code>obj</code> 参数的 <code>ranges</code> 属性），
-    通过调用该对象的<code>update</code> 函数可以调整修改，参数是与前面结构相同的选区数组。
-    这个对象也可能包含传递给selection-changing函数的原始字符串 <code>origin</code> 属性。
-    处理这个事件有跟 <a href="#event_beforeChange"><code>"beforeChange"</code></a> 的处理程序相同的限制 -- 不能直接更新编辑器的状态。</dd>
+    <dd>移动选区前触发。
+    <dl>
+      <dd><code>obj.ranges</code>：由 <code>{anchor, head}</code> 组成的数组。</dd>
+      <dd><code>obj.origin</code>：字符串，可选的。</dd>
+      <dd><code>obj.update</code>：调整移动的位置。</dd>
+    </dl>
+    跟 <a href="#event_beforeChange"><code>"beforeChange"</code></a> 相同，不能在该事件处理函数中修改编辑器的状态。</dd>
 
     <dt id="event_viewportChange"><code><strong>"viewportChange"</strong> (instance: CodeMirror, from: number, to: number)</code></dt>
-    <dd>当<a href="../api/#getViewport">view port</a> 改变时触发（滚动、编辑或其他）。
-    <code>from</code> 和 <code>to</code> 参数提供了新viewport的开始和结束。</dd>
+    <dd>编辑器的<a href="../api/#getViewport">可视区域</a>改变时触发（滚动、编辑等）。<br/>
+    <code>from</code> 和 <code>to</code> 是新的可视区域的开始和结束位置。</dd>
 
     <dt id="event_swapDoc"><code><strong>"swapDoc"</strong> (instance: CodeMirror, oldDoc: Doc)</code></dt>
-    <dd>当编辑的正文被 <a href="../api/#swapDoc"><code>swapDoc</code></a> 函数替换时触发。</dd>
+    <dd>使用 <a href="../api/#swapDoc"><code>swapDoc</code></a> 函数更换编辑器的内容对象时触发。</dd>
 
     <dt id="event_gutterClick"><code><strong>"gutterClick"</strong> (instance: CodeMirror, line: integer, gutter: string, clickEvent: Event)</code></dt>
-    <dd>当编辑器的侧边栏（行号区域）被点击时触发。
-    第一个参数为编辑器实例，
-    第二个参数是所点击的行号（从0计），
-    第三个参数是所点击的侧边栏的CSS样式，
-    第四个参数是 <code>mousedown</code> 事件对象。</dd>
+    <dd>点击编辑器的侧边栏时触发。
+      <dl>
+        <dd><code>line</code>：行号（从 0 开始）。</dd>
+        <dd><code>gutter</code>：点击的侧边栏的 CSS 样式名。</dd>
+        <dd><code>clickEvent</code>：<code>mousedown</code> 事件。</dd>
+      </dl>
+    </dd>
 
     <dt id="event_gutterContextMenu"><code><strong>"gutterContextMenu"</strong> (instance: CodeMirror, line: integer, gutter: string, contextMenu: Event: Event)</code></dt>
-    <dd> 当编辑器的侧边栏（行号区域）收到 <code>contextmenu</code> 事件时触发。
-    第一个参数为编辑器实例，
-    第二个参数是所点击的行号（从0计），
-    第三个参数是所点击的侧边栏的CSS样式，
-    第四个参数是 <code>mousedown</code> 事件对象。
-    你可以 <code>preventDefault</code> 事件来让CodeMirror不再处理该事件。</dd>
+    <dd>在编辑器的侧边栏上点击鼠标右键时触发（菜单键）。
+      <dl>
+        <dd><code>line</code>：行号（从 0 开始）。</dd>
+        <dd><code>gutter</code>：点击的侧边栏的 CSS 样式名。</dd>
+        <dd><code>contextMenu</code>：<code>contextmenu</code> 事件，可以使用 <code>preventDefault</code> 来终止对该事件的响应。</dd>
+      </dl>
+    </dd>
 
     <dt id="event_focus"><code><strong>"focus"</strong> (instance: CodeMirror, event: Event)</code></dt>
     <dd>编辑器获得焦点时触发。</dd>
@@ -129,27 +141,26 @@
     <dd>编辑器失去焦点时触发。</dd>
 
     <dt id="event_scroll"><code><strong>"scroll"</strong> (instance: CodeMirror)</code></dt>
-    <dd>编辑器滚动时触发。</dd>
+    <dd>滚动编辑器内容时触发。</dd>
 
     <dt id="event_refresh"><code><strong>"refresh"</strong> (instance: CodeMirror)</code></dt>
-    <dd>当编辑器 <a href="../api/#refresh">refreshed</a> 或 <a href="../api/#setSize">resized</a> 后触发。
-    主要用来清空依赖于编辑器的缓存值或字符大小的缓存值。</dd>
+    <dd>编辑器<a href="../api/#refresh">刷新</a>或<a href="../api/#setSize">调整大小</a>后触发。
+    主要用来清除依赖于编辑器或字符数的变量。</dd>
 
     <dt id="event_optionChange"><code><strong>"optionChange"</strong> (instance: CodeMirror, option: string)</code></dt>
-    <dd>通过 <a href="../api/#setOption"><code>setOption</code></a> 修改配置时触发。</dd>
+    <dd><a href="../api/#setOption"><code>setOption</code></a> 函数被调用后触发。</dd>
 
     <dt id="event_scrollCursorIntoView"><code><strong>"scrollCursorIntoView"</strong> (instance: CodeMirror, event: Event)</code></dt>
-    <dd>当编辑器尝试把光标移动到可视范围内时触发。
-    可以用来处理在编辑器周围可以滚动的容器。
-    当event参数调用了 <code>preventDefault</code> 函数时，CodeMirror不会尝试滚动窗口。</dd>
+    <dd>编辑器尝试把可视范围滚动到光标处时触发。<br/>
+    借助该事件可以让其他内容跟随编辑器滚动。</dd>
 
     <dt id="event_update"><code><strong>"update"</strong> (instance: CodeMirror)</code></dt>
-    <dd>CodeMirror更新DOM时触发。</dd>
+    <dd>更新 DOM 时触发。</dd>
 
     <dt id="event_renderLine"><code><strong>"renderLine"</strong> (instance: CodeMirror, line: LineHandle, element: Element)</code></dt>
-    <dd>当某行被（重新）渲染成DOM时触发。
-    在DOM元素创建后，添加到文档<em>之前</em> 触发。
-    该事件的处理函数可以修改DOM元素的样式，或者添加事件，但是<em>不能</em>修改编辑器的状态。</dd>
+    <dd>把一行的内容渲染为 DOM 时触发。<br/>
+    更具体的，构造 DOM 元素后，添加到文档<em>之前</em>时触发。<br/>
+    可以在该事件的处理函数中修改 DOM 元素的样式或为其绑定事件，但<em>不能</em>修改编辑器的状态。</dd>
 
     <dt id="event_dom"><code><strong>"mousedown"</strong>,
     <strong>"dblclick"</strong>, <strong>"touchstart"</strong>, <strong>"contextmenu"</strong>,
@@ -159,68 +170,69 @@
     <strong>"dragover"</strong>, <strong>"dragleave"</strong>,
     <strong>"drop"</strong>
     (instance: CodeMirror, event: Event)</code></dt>
-    <dd>当CodeMirror处理这些DOM事件时触发。
-    你可以 <code>preventDefault</code> 事件，或者提供一个 <code>codemirrorIgnore</code> 属性，来提醒CodeMirror不要处理。</dd>
+    <dd>这些 DOM 事件触发时触发。<br/>
+    可以使用 <code>preventDefault</code> 来终止对这些事件的响应。</dd>
   </dl>
 
-  <p>文档对象（<a href="../api/#Doc"><code>CodeMirror.Doc</code></a>）有以下事件：</p>
+  <p>内容对象（<a href="../api/#Doc"><code>CodeMirror.Doc</code></a>）有以下事件：</p>
 
   <dl>
     <dt id="event_doc_change"><code><strong>"change"</strong> (doc: CodeMirror.Doc, changeObj: object)</code></dt>
-    <dd>文档被修改时触发。
-    <code>changeObj</code> 参数比编辑器的 <a href="#event_change"><code>"change"</code></a> 事件的参数更简单。</dd>
+    <dd>修改内容时触发。<code>changeObj</code> 参数与编辑器实例的 <a href="#event_change"><code>"change"</code></a> 事件的参数一致。</dd>
 
     <dt id="event_doc_beforeChange"><code><strong>"beforeChange"</strong> (doc: CodeMirror.Doc, change: object)</code></dt>
-    <dd>参考编辑器的<a href="#event_beforeChange">同名事件</a>。</dd>
+    <dd>参考编辑器实例的 <a href="#event_beforeChange"><code>"beforeChange"</code></a> 事件。</dd>
 
     <dt id="event_doc_cursorActivity"><code><strong>"cursorActivity"</strong> (doc: CodeMirror.Doc)</code></dt>
-    <dd>光标或选区在文档中改变时触发。</dd>
+    <dd>移动光标或改变选区时触发。</dd>
 
     <dt id="event_doc_beforeSelectionChange"><code><strong>"beforeSelectionChange"</strong> (doc: CodeMirror.Doc, selection: {head, anchor})</code></dt>
-    <dd>参考编辑器的<a href="#event_beforeSelectionChange">同名事件</a>。</dd>
+    <dd>参考编辑器实例的 <a href="#event_beforeSelectionChange"><code>"beforeSelectionChange"</code></a> 事件。</dd>
   </dl>
 
-  <p>行处理事件（<a href="../api/#getLineHandle"><code>getLineHandle</code></a> 函数的返回值）有这些：</p>
+  <p>行对象（例如 <a href="../api/#getLineHandle"><code>getLineHandle</code></a> 函数的返回值）有以下事件：</p>
 
   <dl>
     <dt id="event_delete"><code><strong>"delete"</strong> ()</code></dt>
-    <dd>行对象删除时触发。
-    <em>开始新行</em>时会创建行对象。
-    最有用的是找出何时<a href="../api/#setGutterMarker">gutter markers</a>会被删除</dd>
+    <dd>删除行对象时触发。<br/>
+    一般用来确定某行的<a href="../api/#setGutterMarker">侧边栏标记</a>何时被删除。</dd>
 
     <dt id="event_line_change"><code><strong>"change"</strong> (line: LineHandle, changeObj: object)</code></dt>
-    <dd>行中的文本内容被修改时触发（除了删除行）。
-    <code>change</code> 对象跟编辑器的 <a href="#event_change">change 事件</a> 中的参数一致。</dd>
+    <dd>修改某行的内容时触发（行对象并未被删除）。<br/>
+    <code>changeObj</code> 参数与编辑器实例的 <a href="#event_change"><code>"change"</code></a> 事件的参数一致。</dd>
   </dl>
 
-  <p>区域标记事件（<code>CodeMirror.TextMarker</code>），
-  也就是 <a href="../api/#markText"><code>markText</code></a> 和 <a href="../api/#setBookmark"><code>setBookmark</code></a> 的返回值，
-  有以下事件：</p>
+  <p>文本标记对象（<code>CodeMirror.TextMarker</code>，
+  <a href="../api/#markText"><code>markText</code></a> 函数和 <a href="../api/#setBookmark"><code>setBookmark</code></a> 函数的返回值）有以下事件：</p>
 
   <dl>
     <dt id="event_beforeCursorEnter"><code><strong>"beforeCursorEnter"</strong> ()</code></dt>
-    <dd>光标进入标记范围时触发。
-    在该事件响应函数中，可以检查但<em>不可以</em>修改编辑器的状态，但可以用来清除该事件的响应函数。</dd>
+    <dd>光标进入标记范围时触发。<br/>
+    <em>不能</em>在该事件的处理函数中修改编辑器的状态，但可以删除触发该事件的标记。</dd>
 
     <dt id="event_clear"><code><strong>"clear"</strong> (from: {line, ch}, to: {line, ch})</code></dt>
-    <dd>标记被清除时触发，在 <a href="../api/#mark_clearOnEnter"><code>clearOnEnter</code></a> 时也会触发，在 <code>clear()</code> 时也会触发。
-    只会触发一次事件。
-    注意：编辑时删除标记不会触发该事件，因为撤销操作可以恢复标记。
-    <code>from</code> 和 <code>to</code> 是被删除的部分文档。</dd>
+    <dd>删除标记时触发。<br/>
+    如果启用了 <a href="../api/#mark_clearOnEnter"><code>clearOnEnter</code></a> ，在光标进入标记范围时触发。<br/>
+    调用文本标记对象的 <code>clear()</code> 函数触发。<br/>
+    注意：通过输入来删除标记时不会触发该事件，因为撤销操作可以使标记还原。<br/>
+    <code>from</code> 和 <code>to</code> 是标记的起止位置。</dd>
 
     <dt id="event_hide"><code><strong>"hide"</strong> ()</code></dt>
-    <dd>编辑时删除标记的最后一个字符时触发。</dd>
+    <dd>通过输入删除标记的最后一个字符时触发。</dd>
 
     <dt id="event_unhide"><code><strong>"unhide"</strong> ()</code></dt>
-    <dd>在编辑时删除标记后，或撤销恢复标记时触发。</dd>
+    <dd>通过输入删除标记后，又通过撤销还原标记时触发。</dd>
   </dl>
 
-  <p><a href="../api/#addLineWidget"><code>addLineWidget</code></a> 函数返回的行内小部件（<code>CodeMirror.LineWidget</code>）有以下事件：</p>
+  <p>行内小部件对象（<code>CodeMirror.LineWidget</code>，
+  <a href="../api/#addLineWidget"><code>addLineWidget</code></a> 函数的返回值）有以下事件：</p>
 
   <dl>
     <dt id="event_redraw"><code><strong>"redraw"</strong> ()</code></dt>
-    <dd>当插入新的小部件时触发。
-    在添加小部件后触发一次（在可视范围内），在滚动到可视范围时或滚出可视范围时会再次触发，在编辑器的配置修改时触发，或小部件所在行要求重绘时触发。</dd>
+    <dd>增加新的小部件时触发。<br/>
+    滚出可视区域后又滚回可视区域时触发。<br/>
+    更新编辑器配置时触发。<br/>
+    所在行要求重绘时触发。</dd>
   </dl>
 </section>
 
