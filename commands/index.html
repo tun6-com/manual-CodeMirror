@@ -2,9 +2,9 @@
 <html lang="zh-cn">
   <head>
     <meta charset="utf-8">
-    <title>命令__CodeMirror_用户手册_Tun6</title>
+    <title>命令_CodeMirror_用户手册_Tun6</title>
     <meta name="keywords" content="CodeMirror,命令,指令,中文,文档,手册,说明,API,"/>
-    <meta name="description" content="CodeMirror是一个可以嵌入到网页中运行的代码编辑器组件，CodeMirror官方说明文档的中文翻译版。">
+    <meta name="description" content="命令是作用于编辑器的操作，主要用于处理按键事件，为 CodeMirror.commands 对象添加属性可定义命令。">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-ui/lib/theme-chalk/index.css">
     <link rel="stylesheet" href="../common.css">
@@ -51,112 +51,109 @@
           <section id=commands>
               <h2>命令</h2>
 
-              <p>命令是编辑器可以执行的操作。
-              主要用于按键绑定。
-              命令在 <code>CodeMirror.commands</code> 对象中定义。
-              核心库提供了一些通用的命令，大多数都用来实现默认的按键绑定。
-              命令函数只能有一个参数（编辑器实例）。</p>
+              <p>命令是作用于编辑器的操作，主要用于处理按键事件。<br/>
+              为 <code>CodeMirror.commands</code> 对象添加属性可定义命令。<br/>
+              核心库定义了许多通用命令，多数用于 <code>default</code> 按键表。<br/>
+              命令必须是只有一个参数（编辑器实例）的函数。</p>
 
-              <p>某些出现在默认按键表中的命令不包含在核心库中。这些命令应该由用户或插件来实现。</p>
+              <p>下面某些命令引用自 <code>default</code> 按键表，核心库中没有定义，可由用户或插件定义。</p>
 
-              <p>命令也可以通过 <a href="#execCommand"><code>execCommand</code></a> 函数调用。</p>
+              <p>调用 <a href="../api/#execCommand"><code>execCommand</code></a> 函数来使用命令。</p>
 
               <dl>
                 <dt class=command id=command_selectAll><code><strong>selectAll</strong></code><span class=keybinding>Ctrl-A (PC), Cmd-A (Mac)</span></dt>
-                <dd>选择编辑器的所有内容。</dd>
+                <dd>选择所有内容。</dd>
 
                 <dt class=command id=command_singleSelection><code><strong>singleSelection</strong></code><span class=keybinding>Esc</span></dt>
-                <dd>当有多个选区时，只保留第一个选区。</dd>
+                <dd>当有多个选区时，取消其他选区，保留主选区。</dd>
 
                 <dt class=command id=command_killLine><code><strong>killLine</strong></code><span class=keybinding>Ctrl-K (Mac)</span></dt>
-                <dd>Emacs的整行删除方式。
-                删除该行在光标后的内容。
-                如果光标后全是空白字符，该行的换行符也会被删除。</dd>
+                <dd>Emacs 风格的整行删除：删除某行光标后的内容，如果光标后只有空白字符，同时删除该行的换行符。</dd>
 
                 <dt class=command id=command_deleteLine><code><strong>deleteLine</strong></code><span class=keybinding>Ctrl-D (PC), Cmd-D (Mac)</span></dt>
                 <dd>删除光标所在行，包括换行符。</dd>
 
                 <dt class=command id=command_delLineLeft><code><strong>delLineLeft</strong></code></dt>
-                <dd>删除该行光标前的内容。</dd>
+                <dd>删除某行光标前的内容。</dd>
 
                 <dt class=command id=command_delWrappedLineLeft><code><strong>delWrappedLineLeft</strong></code><span class=keybinding>Cmd-Backspace (Mac)</span></dt>
-                <dd>删除该行光标前的内容，不包含缩进。</dd>
+                <dd>删除虚拟行（内容超出并自动换行时产生）光标左边的内容。</dd>
 
                 <dt class=command id=command_delWrappedLineRight><code><strong>delWrappedLineRight</strong></code><span class=keybinding>Cmd-Delete (Mac)</span></dt>
-                <dd>删除该行光标后的内容，不包含缩进。</dd>
+                <dd>删除虚拟行（内容超出并自动换行时产生）光标右边的内容。</dd>
 
                 <dt class=command id=command_undo><code><strong>undo</strong></code><span class=keybinding>Ctrl-Z (PC), Cmd-Z (Mac)</span></dt>
-                <dd>还原。
-                请注意，由于浏览器不允许脚本自定义（响应）鼠标右键菜单，所以从鼠标右键菜单选择撤销（重做）无效。</dd>
+                <dd>撤销最后一次更改。<br/>
+                注意：由于浏览器不允许脚本响应或自定义鼠标右键菜单，所以从鼠标右键菜单点击撤销（或重做）无效。</dd>
 
                 <dt class=command id=command_redo><code><strong>redo</strong></code><span class=keybinding>Ctrl-Y (PC), Shift-Cmd-Z (Mac), Cmd-Y (Mac)</span></dt>
-                <dd>重做。</dd>
+                <dd>重做最后一次更改。</dd>
 
                 <dt class=command id=command_undoSelection><code><strong>undoSelection</strong></code><span class=keybinding>Ctrl-U (PC), Cmd-U (Mac)</span></dt>
-                <dd>还原选区操作，如果最后的操作历史不是选区操作，将执行undo命令。</dd>
+                <dd>撤销最后一次选区更改，如果最后一次更改不是选区更改，撤销最后一次更改。</dd>
 
                 <dt class=command id=command_redoSelection><code><strong>redoSelection</strong></code><span class=keybinding>Alt-U (PC), Shift-Cmd-U (Mac)</span></dt>
-                <dd>重做选区操作，如果最后的操作历史不是选区操作，将执行redo命令。</dd>
+                <dd>重做最后一次选区更改，如果最后一次更改不是选区更改，重做最后一次更改。</dd>
 
                 <dt class=command id=command_goDocStart><code><strong>goDocStart</strong></code><span class=keybinding>Ctrl-Home (PC), Cmd-Up (Mac), Cmd-Home (Mac)</span></dt>
-                <dd>移动光标到文档的开始位置。</dd>
+                <dd>把光标移动到文档头处。</dd>
 
                 <dt class=command id=command_goDocEnd><code><strong>goDocEnd</strong></code><span class=keybinding>Ctrl-End (PC), Cmd-End (Mac), Cmd-Down (Mac)</span></dt>
-                <dd>移动光标到文档的结束位置。</dd>
+                <dd>把光标移动到文档尾处。</dd>
 
                 <dt class=command id=command_goLineStart><code><strong>goLineStart</strong></code><span class=keybinding>Alt-Left (PC), Ctrl-A (Mac)</span></dt>
-                <dd>移动光标到该行的开始位置。</dd>
+                <dd>把光标移动到行首。</dd>
 
                 <dt class=command id=command_goLineStartSmart><code><strong>goLineStartSmart</strong></code><span class=keybinding>Home</span></dt>
-                <dd>移动光标到该行的文本开始位置，如果光标已经在文本的开始位置，则移动到该行的开始位置（包含空白字符）。</dd>
+                <dd>把光标移动到行首，如果光标已在行首，则移动到真正的行首（包含缩进）。</dd>
 
                 <dt class=command id=command_goLineEnd><code><strong>goLineEnd</strong></code><span class=keybinding>Alt-Right (PC), Ctrl-E (Mac)</span></dt>
-                <dd>移动光标到该行的结束位置。</dd>
+                <dd>把光标移动到行尾。</dd>
 
                 <dt class=command id=command_goLineRight><code><strong>goLineRight</strong></code><span class=keybinding>Cmd-Right (Mac)</span></dt>
-                <dd>移动光标到该虚拟行的右边。</dd>
+                <dd>把光标移动到虚拟行的行尾。</dd>
 
                 <dt class=command id=command_goLineLeft><code><strong>goLineLeft</strong></code><span class=keybinding>Cmd-Left (Mac)</span></dt>
-                <dd>移动光标到该虚拟行的左边。If this line is wrapped, that may not be the start of the line.</dd>
+                <dd>把光标移动到虚拟行的行首。</dd>
 
                 <dt class=command id=command_goLineLeftSmart><code><strong>goLineLeftSmart</strong></code></dt>
-                <dd>移动光标到该虚拟行的左边。If that takes it to the start of the line, behave like <a href="#command_goLineStartSmart"><code>goLineStartSmart</code></a>.</dd>
+                <dd>把光标移动到虚拟行的行首。如果光标已在行首，则移动到真正的行首（包含缩进）。</dd>
 
                 <dt class=command id=command_goLineUp><code><strong>goLineUp</strong></code><span class=keybinding>Up, Ctrl-P (Mac)</span></dt>
-                <dd>移动光标到上一行。</dd>
+                <dd>把光标移动到上一行。</dd>
 
                 <dt class=command id=command_goLineDown><code><strong>goLineDown</strong></code><span class=keybinding>Down, Ctrl-N (Mac)</span></dt>
-                <dd>移动光标到下一行。</dd>
+                <dd>把光标移动到下一行。</dd>
 
                 <dt class=command id=command_goPageUp><code><strong>goPageUp</strong></code><span class=keybinding>PageUp, Shift-Ctrl-V (Mac)</span></dt>
-                <dd>向上滚动一页，并将光标向上移动一页。</dd>
+                <dd>向上滚动一页。</dd>
 
                 <dt class=command id=command_goPageDown><code><strong>goPageDown</strong></code><span class=keybinding>PageDown, Ctrl-V (Mac)</span></dt>
-                <dd>向下滚动一页，并将光标向下移动一页。</dd>
+                <dd>向下滚动一页。</dd>
 
                 <dt class=command id=command_goCharLeft><code><strong>goCharLeft</strong></code><span class=keybinding>Left, Ctrl-B (Mac)</span></dt>
-                <dd>光标向左移动一个字符，如果在行首则移动到上一行的行尾。</dd>
+                <dd>把光标向左移动一个字符，如果在行首则移动到上一行的行尾。</dd>
 
                 <dt class=command id=command_goCharRight><code><strong>goCharRight</strong></code><span class=keybinding>Right, Ctrl-F (Mac)</span></dt>
-                <dd>光标向右移动一个字符，如果在行尾则移动到下一行的行首。</dd>
+                <dd>把光标向右移动一个字符，如果在行尾则移动到下一行的行首。</dd>
 
                 <dt class=command id=command_goColumnLeft><code><strong>goColumnLeft</strong></code></dt>
-                <dd>光标向左移动一个字符，仅在该行移动。</dd>
+                <dd>把光标向左移动一个字符，仅在该行内移动。</dd>
 
                 <dt class=command id=command_goColumnRight><code><strong>goColumnRight</strong></code></dt>
-                <dd>光标向右移动一个字符，仅在该行移动。</dd>
+                <dd>把光标向左移动一个字符，仅在该行内移动。</dd>
 
                 <dt class=command id=command_goWordLeft><code><strong>goWordLeft</strong></code><span class=keybinding>Alt-B (Mac)</span></dt>
-                <dd>光标移动到上个单词的左边。</dd>
+                <dd>把光标移动到单词的左边。</dd>
 
                 <dt class=command id=command_goWordRight><code><strong>goWordRight</strong></code><span class=keybinding>Alt-F (Mac)</span></dt>
-                <dd>光标移动到下个单词的右边。</dd>
+                <dd>把光标移动到单词的右边。</dd>
 
                 <dt class=command id=command_goGroupLeft><code><strong>goGroupLeft</strong></code><span class=keybinding>Ctrl-Left (PC), Alt-Left (Mac)</span></dt>
-                <dd>移动光标到一组符号的左边。可以是一组字母、一组标点符号、新的一行，或是<em>多个</em>空白符号。</dd>
+                <dd>把光标移动到一组字符的左边。一组字符可以是字母、标点符号、换行符或<em>多个</em>空白字符。</dd>
 
                 <dt class=command id=command_goGroupRight><code><strong>goGroupRight</strong></code><span class=keybinding>Ctrl-Right (PC), Alt-Right (Mac)</span></dt>
-                <dd>移动光标到一组符号的右边（参考 <a href="#command_goGroupLeft">上个命令</a>）。</dd>
+                <dd>把光标移动到一组字符的的右边。参考 <a href="#command_goGroupLeft">goGroupLeft</a>。</dd>
 
                 <dt class=command id=command_delCharBefore><code><strong>delCharBefore</strong></code><span class=keybinding>Shift-Backspace, Ctrl-H (Mac)</span></dt>
                 <dd>删除光标前的字符。</dd>
@@ -177,23 +174,22 @@
                 <dd>删除光标后的<a href="#command_goGroupLeft">一组字符</a>。</dd>
 
                 <dt class=command id=command_indentAuto><code><strong>indentAuto</strong></code><span class=keybinding>Shift-Tab</span></dt>
-                <dd>自动缩进该行或选区。</dd>
+                <dd>自动缩进某行或选区。</dd>
 
                 <dt class=command id=command_indentMore><code><strong>indentMore</strong></code><span class=keybinding>Ctrl-] (PC), Cmd-] (Mac)</span></dt>
-                <dd>该行或选区缩进一个<a href="#option_indentUnit">单位</a>。</dd>
+                <dd>为某行或选区增加<a href="../config/#option_indentUnit">一个缩进</a>。</dd>
 
                 <dt class=command id=command_indentLess><code><strong>indentLess</strong></code><span class=keybinding>Ctrl-[ (PC), Cmd-[ (Mac)</span></dt>
-                <dd>该行或选区取消缩进一个<a href="#option_indentUnit">单位</a>。</dd>
+                <dd>为某行或选区减少<a href="../config/#option_indentUnit">一个缩进</a>。</dd>
 
                 <dt class=command id=command_insertTab><code><strong>insertTab</strong></code></dt>
-                <dd>在光标处插入一个tab。</dd>
+                <dd>在光标处插入一个 Tab 字符。</dd>
 
                 <dt class=command id=command_insertSoftTab><code><strong>insertSoftTab</strong></code></dt>
-                <dd>在光标处插入多个空格来代替一个tab。</dd>
+                <dd>在光标处插入多个空格来代替一个 Tab 字符。</dd>
 
                 <dt class=command id=command_defaultTab><code><strong>defaultTab</strong></code><span class=keybinding>Tab</span></dt>
-                <dd>如果有选区，选区缩进一个<a href="#option_indentUnit">单位</a>。
-                如果没选区，插入一个tab。</dd>
+                <dd>如果有选区，为选区增加<a href="../config/#option_indentUnit">一个缩进</a>。如果没选区，插入一个 Tab 字符。</dd>
 
                 <dt class=command id=command_transposeChars><code><strong>transposeChars</strong></code><span class=keybinding>Ctrl-T (Mac)</span></dt>
                 <dd>交换光标前后的字符。</dd>
@@ -202,18 +198,17 @@
                 <dd>新增一行并自动缩进。</dd>
 
                 <dt class=command id=command_toggleOverwrite><code><strong>toggleOverwrite</strong></code><span class=keybinding>Insert</span></dt>
-                <dd>Flip the <a href="#toggleOverwrite">overwrite</a> flag.</dd>
+                <dd>切换 <a href="../api/#toggleOverwrite">overwrite</a> 状态。</dd>
 
                 <dt class=command id=command_save><code><strong>save</strong></code><span class=keybinding>Ctrl-S (PC), Cmd-S (Mac)</span></dt>
-                <dd>核心库中没有具体的实现，只绑定了快捷键。
-                这么做是为了方便用户来实现保存命令。</dd>
+                <dd>引用自按键表，核心库中没有定义，可由用户自行定义。</dd>
 
                 <dt class=command id=command_find><code><strong>find</strong></code><span class=keybinding>Ctrl-F (PC), Cmd-F (Mac)</span></dt>
                 <dt class=command id=command_findNext><code><strong>findNext</strong></code><span class=keybinding>Ctrl-G (PC), Cmd-G (Mac)</span></dt>
                 <dt class=command id=command_findPrev><code><strong>findPrev</strong></code><span class=keybinding>Shift-Ctrl-G (PC), Shift-Cmd-G (Mac)</span></dt>
                 <dt class=command id=command_replace><code><strong>replace</strong></code><span class=keybinding>Shift-Ctrl-F (PC), Cmd-Alt-F (Mac)</span></dt>
                 <dt class=command id=command_replaceAll><code><strong>replaceAll</strong></code><span class=keybinding>Shift-Ctrl-R (PC), Shift-Cmd-Alt-F (Mac)</span></dt>
-                <dd>核心库中没有实现，由 <a href="#addon_search">search addon</a>（或自定义插件）实现。</dd>
+                <dd>核心库中没有定义，但<a href="../addons/#addon_search">搜索插件</a>中有定义（可自行定义）。</dd>
 
               </dl>
 
