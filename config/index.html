@@ -29,7 +29,7 @@
             <li><a href="../">基本用法</a></li>
             <li>配置</li>
             <li><a href="../events/">事件</a></li>
-            <li><a href="../keymaps/">快捷键</a></li>
+            <li><a href="../keymaps/">按键表</a></li>
             <li><a href="../commands/">命令</a></li>
             <li><a href="../styling/">样式</a></li>
             <li><a href="../api/">API调用</a></li>
@@ -65,7 +65,6 @@
     <dt id="option_mode"><code><strong>mode</strong>: string|object</code></dt>
     <dd>语言 Mode。
       <dl>
-        <dt>参数</dt>
         <dd>字符串：Mode 名或 Mode 的 <a href="http://en.wikipedia.org/wiki/MIME" target="_blank">MIME</a> 类型。</dd>
         <dd><code>"null"</code>：不处理代码高亮。</dd>
         <dd>对象：必须含有 <code>name</code> 属性，可含有配置参数（如：<code>{name: "javascript", json: true}</code>）。</dd>
@@ -77,7 +76,6 @@
     <dt id="option_lineSeparator"><code><strong>lineSeparator</strong>: string|null</code></dt>
     <dd>行分割符。
       <dl>
-        <dt>参数</dt>
         <dd>字符串：文档和输出值都用该字符串分割。</dd>
         <dd><code>"null"</code>：文档使用 CRLFs 分割（CRs+LFs），输出值使用 LF 分割 （如使用 <a href="../api/#getValue"><code>getValue</code></a> 获取值时）。</dd>
       </dl>
@@ -86,7 +84,6 @@
     <dt id="option_theme"><code><strong>theme</strong>: string</code></dt>
     <dd>主题样式。<br/>
       <dl>
-        <dt>参数</dt>
         <dd><code>"default"</code>：默认值，在 <code>codemirror.css</code> 中定义。</dd>
         <dd>字符串：主题名，可同时使用多个主题，如 <code>"foo bar"</code> 表示同时使用 <code>cm-s-foo</code> 和 <code>cm-s-bar</code>。</dd>
       </dl>
@@ -218,7 +215,6 @@
     <dt id="option_phrases"><code><strong>phrases</strong>: ?object</code></dt>
     <dd>有些插件基于 <a href="../api/#phrase"><code>phrase</code></a> 函数实现翻译功能。<br/>
       <dl>
-        <dt>参数</dt>
         <dd>null ：phrase 函数返回源句。</dd>
         <dd>对象：含有与源句一致的键时，phrase 函数返回对应值，否则返回源句。</dd>
       </dl>

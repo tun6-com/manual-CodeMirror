@@ -13,6 +13,7 @@ body{display: flex;justify-content: center;margin: 0;}
 .el-row{margin-bottom: 10px;align-items: center;}
 .el-col{display: flex;align-items: center;}
 
+dt{margin-top: 20px;}
 h1{font-size: 20px;}
 h2{font-size: 18px;}
 h3{font-size: 16px;}

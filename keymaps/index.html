@@ -2,9 +2,9 @@
 <html lang="zh-cn">
   <head>
     <meta charset="utf-8">
-    <title>快捷键_CodeMirror_用户手册_Tun6</title>
-    <meta name="keywords" content="CodeMirror,快捷键,按键,中文,文档,手册,说明,API,"/>
-    <meta name="description" content="CodeMirror是一个可以嵌入到网页中运行的代码编辑器组件，CodeMirror官方说明文档的中文翻译版。">
+    <title>按键表_CodeMirror_用户手册_Tun6</title>
+    <meta name="keywords" content="CodeMirror,快捷键,按键表,中文,文档,手册,说明,API,"/>
+    <meta name="description" content="按键表通过为鼠标或按键绑定函数来实现相应的功能，CodeMirror 的发行版中包含 Emacs、Vim 和 Sublime Text 风格的按键表。">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-ui/lib/theme-chalk/index.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror/lib/codemirror.css">
@@ -31,7 +31,7 @@
             <li><a href="../">基本用法</a></li>
             <li><a href="../config/">配置</a></li>
             <li><a href="../events/">事件</a></li>
-            <li>按键绑定</li>
+            <li>按键表</li>
             <li><a href="../commands/">命令</a></li>
             <li><a href="../styling/">样式</a></li>
             <li><a href="../api/">API调用</a></li>
@@ -51,21 +51,18 @@
           </el-alert>
 
 <section id=keymaps>
-    <h2>按键绑定</h2>
+    <h2>按键表</h2>
 
-    <p>快捷键可以给按键和鼠标绑定功能。
-    一个快捷键对象，标识了按键与功能对应关系。</p>
+    <p>按键表通过为鼠标或按键绑定函数来实现相应的功能。</p>
 
-    <p>CodeMirror发行版带有<a href="../demo/demos/emacs.html">Emacs</a>、<a href="../demo/demos/vim.html">Vim</a>
-    和 <a href="../demo/demos/sublime.html">Sublime Text</a>风格的快捷键。</p>
+    <p>CodeMirror 的发行版中包含 <a href="../demo/demos/emacs.html">Emacs</a>、<a href="../demo/demos/vim.html">Vim</a>
+    和 <a href="../demo/demos/sublime.html">Sublime Text</a> 风格的按键表。</p>
 
-    <p>可以通用名字或键值来标识快捷键。
-    <code>CodeMirror.keyNames</code> 对象定义了常用键的名字和ID。
-    名字如<code>Enter</code>、<code>F5</code>、<code>Q</code> 等。
-    可以与<code>Shift-</code>、<code>Cmd-</code>、<code>Ctrl-</code>、<code>Alt-</code> 组合使用。
-    比如 <code>Shift-Ctrl-Space</code> 就是一个有效的快捷键。</p>
+    <p>可以使用按键名或编号来指定按键。
+    <code>CodeMirror.keyNames</code> 对象定义了常用的按键名和按键 ID，如 <code>Enter</code>、<code>F5</code>、<code>Q</code> 等，
+    可以增加 <code>Shift-</code>、<code>Cmd-</code>、<code>Ctrl-</code>、<code>Alt-</code> 等前缀，如 <code>Shift-Ctrl-Space</code>。</p>
 
-    <p>下面是替换Tab键为空格的例子：</p>
+    <p>案例，使用 Tab 键插入空格：</p>
 
     <pre data-lang="javascript">
 editor.setOption("extraKeys", {
@@ -75,40 +72,39 @@ editor.setOption("extraKeys", {
   }
 });</pre>
 
-    <p>也可以直接定义一个字符需要用单引号包围，比如 <code>'$'</code> 或 <code>'q'</code> 。
-      由于按键事件是浏览器触发的，所以可能实现不了该效果。</p>
+    <p>也可以使用单个字符来指定按键，如 <code>'$'</code>、<code>'q'</code>，但由于按键事件是由浏览器触发的，所以该方法不能为按键增加前缀。</p>
 
-    <p>鼠标的按键可以用 <code>LeftClick</code>、<code>MiddleClick</code> 和 <code>RightClick</code> 来绑定。
-      这些名字也可以加前修饰词，<code>Double</code>、<code>Triple</code> 可以放在 <code>Click</code> 前（如<code>LeftDoubleClick</code>）来说明点击次数。
-      The function for such a binding is passed the position that was clicked as second argument.</p>
+    <p>使用 <code>LeftClick</code>、<code>MiddleClick</code> 和 <code>RightClick</code> 来绑定鼠标按键。<br/>
+    鼠标按键也可以增加前缀，在 <code>Click</code> 之前可以增加 <code>Double</code>、<code>Triple</code>（如 <code>LeftDoubleClick</code> ）。<br/>
+    鼠标按键的处理函数的第二个参数是点击的位置。</p>
 
-    <p id="normalizeKeyMap">用空格把多个键名分开，可以形成组合键，比如 <code>Ctrl-X Ctrl-V</code>。
-    当按键绑定中有组合键或前修饰键时（<code>Shift-Cmd-Ctrl-Alt</code>），必须调用 <code>CodeMirror.normalizeKeyMap</code> 后才能正常使用。
-    这个函数会调整按键绑定顺序。
-    返回调整后的按键绑定。</p>
+    <p id="normalizeKeyMap">用空格把多个按键名分开后可以形成组合键，如 <code>Ctrl-X Ctrl-V</code>。<br/>
+    当按键表包含组合键或特殊前缀时（非 <code>Shift-Cmd-Ctrl-Alt</code>），必须在使用之前调用 <code>CodeMirror.normalizeKeyMap</code> 函数，
+    该函数会调整按键表的前缀顺序并识别组合键，参数为按键表，返回值是调整后的按键表。</p>
 
-    <p><code>CodeMirror.keyMap</code> 对象用名字区分了几种快捷键组。
-    用户可以基于这个对象来定义新的快捷键。
-    定义新快捷键时应该检查该对象中是否已经存在。
-    该对象提供 <code>"default"</code> 快捷键组，包含一些默认快捷键。</p>
+    <p><code>CodeMirror.keyMap</code> 对象包含已经定义的按键表，用户定义的按键表需要添加到该对象中，因为在根据名字查找按键表时会检查该对象。<br/>
+    该对象包含 <code>"default"</code> 按键表。</p>
 
-    <p>按键对应的值可以是带有一个参数（CodeMirror实例）的函数，也可以是字符串，或者<code>false</code>。
-    值为字符串时，参考<a href="../commands/#commands">commands</a>。
-    值为 <code>false</code>时，CodeMirror将不再响应该按键。
-    值为函数时，该函数可以返回 <code>CodeMirror.Pass</code> 来声明不再响应该按键。</p>
+    <p>按键表中按键的值：
+      <dl>
+        <dd>函数：只有一个参数，CodeMirror 实例。返回 <code>CodeMirror.Pass</code> 时表明不再处理该按键事件。</dd>
+        <dd>字符串：参考<a href="../commands/#commands">commands</a>。</dd>
+        <dd><code>false</code>：把按键事件的处理交给浏览器。</dd>
+      </dl>
+    </p>
 
-    <p>按键绑定值为 <code>"go"</code> 开头的命令时，
-    或带有 <code>motion</code> 属性（本来用于光标移动）的函数时，
-    即使有用 <code>Shift</code> 修饰的值，也会被触发（比如 <code>"Up": "goLineUp"</code> 会同时触发 up 和 shift-up）。
-    这么做是为了简化shift-selection。</p>
+    <p>按键的值是以 <code>"go"</code> 开头的命令或有 <code>motion</code> 参数（一般用于移动光标）的函数时，
+    按键即使带有 <code>Shift</code> 前缀，也会被触发（如：<code>"Up": "goLineUp"</code> 会同时触发 up 和 shift-up 事件），
+    这是为了简化 shift-selection 。</p>
 
-    <p>快捷键可以定义 <code>fallthrough</code> 属性来延迟执行。
-    当没有在当前按键表中找到按键时，这个值用来指定间隔多久后去别的按键表中查找。
-    这个值支持单表或多表。</p>
+    <p>按键表可以定义 <code>fallthrough</code> 属性来应对，没有在当前按键表中找到按键时，可以前往哪几个按键表中继续查找按键。<br/>
+    该属性可以是单个按键表名或由多个按键表名组成的数组。</p>
 
-    <p>按键表创建时会调用<code>attach</code>属性，销毁时会调用<code>detach</code>属性，属性值为带有编辑器实例和按键表的函数。
-    请注意，这个只在 <a href="../config/#option_keyMap">top-level keymap</a> 有效，
-    通过 <a href="../config/#option_extraKeys"><code>extraKeys</code></a> 或 <a href="../api/#addKeyMap"><code>addKeyMap</code></a> 添加的按键表无效。</p>
+    <p>如果按键表需要在创建或销毁时处理一些事情，可以为按键表添加 <code>attach</code> 和 <code>detach</code> 属性，
+    其对应值为函数，函数的参数包括编辑器实例、上一个、下一个按键表。<br/>
+    注意：该属性只对 <a href="../config/#option_keyMap">top-level</a> 按键表有效，
+    对 <code>fallthrough</code> 中的按键表和通过 <a href="../config/#option_extraKeys"><code>extraKeys</code></a> 或 <a href="../api/#addKeyMap"><code>addKeyMap</code></a>
+    添加的按键表无效。</p>
 </section>
 
         </el-main>
@@ -122,9 +118,6 @@ editor.setOption("extraKeys", {
     <script src="https://cdn.jsdelivr.net/npm/codemirror/addon/runmode/runmode.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/codemirror/addon/runmode/colorize.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/codemirror/mode/javascript/javascript.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/codemirror/mode/xml/xml.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/codemirror/mode/css/css.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/codemirror/mode/htmlmixed/htmlmixed.js"></script>
     <script type="text/javascript">
     var app = new Vue({
       el: '#app',

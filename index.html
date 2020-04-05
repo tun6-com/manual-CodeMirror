@@ -29,7 +29,7 @@
             <li>基本用法</li>
             <li><a href="./config/">配置</a></li>
             <li><a href="./events/">事件</a></li>
-            <li><a href="./keymaps/">快捷键</a></li>
+            <li><a href="./keymaps/">按键表</a></li>
             <li><a href="./commands/">命令</a></li>
             <li><a href="./styling/">样式</a></li>
             <li><a href="./api/">API调用</a></li>
@@ -157,8 +157,6 @@ require.config({
     <script src="https://cdn.jsdelivr.net/npm/codemirror/addon/runmode/colorize.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/codemirror/mode/javascript/javascript.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/codemirror/mode/xml/xml.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/codemirror/mode/css/css.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/codemirror/mode/htmlmixed/htmlmixed.js"></script>
     <script type="text/javascript">
     var app = new Vue({
       el: '#app',
@@ -170,9 +168,8 @@ require.config({
       mounted:function(){
         if(this.pw>1200) this.ch=this.ph+'px';
 
-        var myCodeMirror=CodeMirror.fromTextArea(document.getElementById('editor'),{
+        var cm=CodeMirror.fromTextArea(document.getElementById('editor'),{
           lineNumbers:true,
-          mode:'htmlmixed',
         });
 
         CodeMirror.colorize();
