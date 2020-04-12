@@ -9,17 +9,21 @@ body{display: flex;justify-content: center;margin: 0;}
 @media (min-width: 1200px) { .page{width: 1200px;} .el-container{flex-wrap: nowrap!important;} }
 
 .el-container{flex-wrap: wrap;}
-
+.el-aside ul{list-style: none;padding-left: 0;font-size: 16px;}
+.el-aside ul li{margin-bottom: 4px;color: #409EFF;}
+.el-aside ul li ul{font-size: 14px;margin-top: 4px;padding-left: 20px;}
+.el-aside ul li a{text-decoration: none;}
+.el-main{position: relative;}
 .el-row{margin-bottom: 10px;align-items: center;}
 .el-col{display: flex;align-items: center;}
 
-.el-main{position: relative;}
-
 span.keybinding{position:absolute;right:0;font-size:80%;color:#555;}
 
-dt{margin-top: 20px;}
 h1{font-size: 20px;}
 h2{font-size: 18px;}
 h3{font-size: 16px;}
-
+dd{margin-bottom: 10px;margin-left: 20px;}
+dt{margin-top: 10px;}
 pre{padding-left: 15px;border-left: 2px solid #ddd;}
+a{color: #303133;}
+a:hover{color: #409EFF;}
