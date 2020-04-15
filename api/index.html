@@ -43,10 +43,10 @@
                 <li><a href="#api_doc">文档对象</a></li>
                 <li><a href="#api_history">历史记录</a></li>
                 <li><a href="#api_marker">文本标记</a></li>
-                <li><a href="#api_decoration">小部件, 侧边栏, 装饰</a></li>
-                <li><a href="#api_sizing">尺寸，滚动，定位</a></li>
+                <li><a href="#api_decoration">小部件、侧边栏和样式</a></li>
+                <li><a href="#api_sizing">尺寸、滚动和定位</a></li>
                 <li><a href="#api_mode">Mode、state 和与 token 有关的函数</a></li>
-                <li><a href="#api_misc">其他方法</a></li>
+                <li><a href="#api_misc">杂项</a></li>
                 <li><a href="#api_static">静态属性</a></li>
               </ul>
             </li>
@@ -404,7 +404,7 @@
       <dt id="mark_replacedWith"><code><strong>replacedWith</strong>: Element</code></dt>
       <dd>使用 DOM 元素来代表折叠起来的标记或原子标记，该元素<em>必须</em>是行内元素（不能是块级元素）。</dd>
 
-      <dt><code><strong>handleMouseEvents</strong>: boolean</code></dt>
+      <dt id="mark_handleMouseEvents"><code><strong>handleMouseEvents</strong>: boolean</code></dt>
       <dd>当使用 <code>replacedWith</code> 时，判断是否需要捕获 DOM 元素的点击和拖拽事件。<br/>
       默认为 false，不捕获。</dd>
 
@@ -433,190 +433,195 @@
       默认只在当前对象中标记。</dd>
     </dl>
 
-    该函数的返回值是 <code>CodeMirror.TextMarker</code> 对象，有三个方法：
-    <code><strong>clear</strong>()</code>： 删除标记。
-    <code><strong>find</strong>()</code>：返回 <code>{from, to}</code> 对象，表示标记范围，标记不存在时返回 <code>undefined</code>。
-    <code><strong>changed</strong>()</code>：当做了可能修改标记范围的操作时
-    （比如修改 <a href="#mark_replacedWith"><code>replacedWith</code></a> 元素的内容），
-    调用该函数可以刷新显示。</dd>
+    该函数的返回是标记对象（<code>CodeMirror.TextMarker</code>），包含三个函数：
+    <dl>
+      <dd><code><strong>clear</strong>()</code>：删除标记。</dd>
+      <dd><code><strong>find</strong>()</code>：返回标记的起止坐标（<code>{from, to}</code>），标记被删除时返回 <code>undefined</code>。</dd>
+      <dd><code><strong>changed</strong>()</code>：标记被修改时（如 <a href="#mark_replacedWith"><code>replacedWith</code></a>），可以用该函数来刷新标记。</dd>
+    </dl>
+    </dd>
 
     <dt id="setBookmark"><code><strong>doc.setBookmark</strong>(pos: {line, ch}, ?options: object) → TextMarker</code></dt>
-    <dd>在指定位置插入一个书签。
-    一个书签对象有两个函数 <code>find()</code> 和 <code>clear()</code> 。
-    第一个函数返回当前书签的位置。
-    第二个函数用来删除书签。
-    options 参数可选，支持以下选项：
+    <dd>插入一个书签，在编辑时，书签会跟着左右两边的正文移动。<br/>
+    书签对象包含两个函数：
+    <dl>
+      <dd><code>find()</code>：返回书签的坐标。</dd>
+      <dd><code>clear()</code>：删除书签。</dd>
+    </dl>
+    支持的配置如下：
     <dl>
       <dt><code><strong>widget</strong>: Element</code></dt>
-      <dd>可以在书签的位置显示一个DOM元素
-      （与 <a href="#markText"><code>markText</code></a> 函数的 <a href="#mark_replacedWith"><code>replacedWith</code></a> 选项相同）。</dd>
+      <dd>使用 DOM 元素代表书签（参考 <a href="#markText"><code>markText</code></a> 函数的 <a href="#mark_replacedWith"><code>replacedWith</code></a> 选项）。</dd>
 
       <dt><code><strong>insertLeft</strong>: boolean</code></dt>
-      <dd>当光标在书签上时，输入的内容默认出现在书签的右边。
-      设置为true可以改为左边。</dd>
+      <dd>默认地，光标在书签上时输入，将内容插入到书签的右侧。为 true 时插入到左侧。</dd>
 
       <dt><code><strong>shared</strong>: boolean</code></dt>
-      <dd>参考 <code>markText</code> 函数的<a href="#mark_shared">该选项</a> 。</dd>
+      <dd>同 <code>markText</code> 函数的 <a href="#mark_shared">shared</a> 配置。</dd>
+
       <dt><code><strong>handleMouseEvents</strong>: boolean</code></dt>
-      <dd>同 <a href="#markText"><code>markText</code></a>，判断书签小部件的鼠标事件是否该由CodeMirror捕获。
-      默认为false。</dd>
+      <dd>同 <code>markText</code> 函数的 <a href="#mark_handleMouseEvents">handleMouseEvents</a> 配置。</dd>
     </dl></dd>
 
     <dt id="findMarks"><code><strong>doc.findMarks</strong>(from: {line, ch}, to: {line, ch}) → array&lt;TextMarker&gt;</code></dt>
-    <dd>获取指定范围内的所有书签和标记(non-inclusive)。</dd>
+    <dd>获取指定范围内的所有书签和标记。</dd>
     <dt id="findMarksAt"><code><strong>doc.findMarksAt</strong>(pos: {line, ch}) → array&lt;TextMarker&gt;</code></dt>
     <dd>获取指定位置的所有书签和标记。</dd>
     <dt id="getAllMarks"><code><strong>doc.getAllMarks</strong>() → array&lt;TextMarker&gt;</code></dt>
-    <dd>获取文档对象中的所有标记。</dd>
+    <dd>获取指定文档中的所有书签和标记。</dd>
   </dl>
 
-  <h3 id="api_decoration">小部件，侧边栏，装饰</h3>
+  <h3 id="api_decoration">小部件、侧边栏和样式</h3>
 
   <dl>
     <dt id="setGutterMarker"><code><strong>doc.setGutterMarker</strong>(line: integer|LineHandle, gutterID: string, value: Element) → LineHandle</code></dt>
-    <dd>侧边栏标记。
-    <code>gutterID</code> 是CSS的class名，参考 <a href="#option_gutters"><code>gutters</code></a> 配置。
-    <code>value</code> 为null时将删除标记，为DOM元素时将添加标记。
-    DOM元素将在指定行的侧边栏中出现。</dd>
+    <dd>为指定行的指定侧边栏（参考 <a href="../config/#option_gutters"><code>gutters</code></a>）设置值。<br/>
+    值为 <code>null</code> 时删除侧边栏，为 DOM 元素时出现在指定行的侧边栏处。</dd>
 
     <dt id="clearGutter"><code><strong>doc.clearGutter</strong>(gutterID: string)</code></dt>
-    <dd>删除所有的侧边栏标记。</dd>
+    <dd>删除所有的指定侧边栏（<a href="../config/#option_gutters"><code>gutters</code></a>）。</dd>
 
     <dt id="addLineClass"><code><strong>doc.addLineClass</strong>(line: integer|LineHandle, where: string, class: string) → LineHandle</code></dt>
-    <dd>为某行添加CSS class。
-    <code>line</code> 为数字或行句柄。
-    <code>where</code> 用来判断该样式应该添加到哪个元素上，可以是
-    <code>"text"</code> （text 元素，选区顶的元素），
-    <code>"background"</code> （选区底层的元素），
-    <code>"gutter"</code> （该行的侧边栏位置），或
-    <code>"wrap"</code> （该行所有元素的父级）。
-    <code>class</code> 是要添加的样式名。</dd>
+    <dd>为指定添加 CSS 样式。<br/>
+    <code>line</code> 可以是行号数字或行句柄。<br/>
+    <code>where</code> 指定添加到哪个元素上，可以是：
+    <dl>
+      <dd><code>"text"</code>：正文，选区的上层。</dd>
+      <dd><code>"background"</code>：背景，选区的下层。</dd>
+      <dd><code>"gutter"</code>：侧边栏。</dd>
+      <dd><code>"wrap"</code>：表示折叠的元素。</dd>
+    </dl>
+    <code>class</code> 是样式名。</dd>
 
     <dt id="removeLineClass"><code><strong>doc.removeLineClass</strong>(line: integer|LineHandle, where: string, class: string) → LineHandle</code></dt>
-    <dd>删除某行的CSS class。
-    <code>line</code> 为数字或行句柄。
-    <code>where</code> 可以是 <code>"text"</code> ，<code>"background"</code> ，
-    <code>"gutter"</code> ，或 <code>"wrap"</code> （参考 <a href="#addLineClass"><code>addLineClass</code></a>）。
-    <code>class</code> 为空时删除该行的所有样式，不为空时只删除指定的样式。</dd>
+    <dd>删除某行的 CSS 样式。<br/>
+    <code>line</code> 可以是行号数字或行句柄。<br/>
+    <code>where</code> 可以是 <code>"text"</code>、<code>"background"</code> 或 <code>"wrap"</code>（同 <a href="#addLineClass"><code>addLineClass</code></a>）。<br/>
+    <code>class</code> 为空时删除所有样式，非空时删除指定样式。</dd>
 
     <dt id="lineInfo"><code><strong>doc.lineInfo</strong>(line: integer|LineHandle) → object</code></dt>
-    <dd>返回某行的行号、文本内容、标记状态。
-    返回对象的结构是 <code>{line, handle, text, gutterMarkers, textClass, bgClass, wrapClass, widgets}</code>，
-    <code>gutterMarkers</code> 对象包含该行所有标记区域的ID，
-    <code>widgets</code> 数组包含该行所有的 <a href="#addLineWidget">行内小部件</a>，
-    还有几种通过 <a href="#addLineClass"><code>addLineClass</code></a> 函数添加的样式名。</dd>
+    <dd>返回指定行的行号、正文、标记。</br>
+    返回值是 <code>{line, handle, text, gutterMarkers, textClass, bgClass, wrapClass, widgets}</code> 对象，</br>
+    <code>gutterMarkers</code> 包含侧边栏的 ID 与其对应的 DOM 元素，</br>
+    <code>widgets</code> 数组包含该行的所有 <a href="#addLineWidget">行内小部件</a>，</br>
+    还有几个通过 <a href="#addLineClass"><code>addLineClass</code></a> 函数添加的样式名。</dd>
 
     <dt id="addWidget"><code><strong>cm.addWidget</strong>(pos: {line, ch}, node: Element, scrollIntoView: boolean)</code></dt>
-    <dd>添加一个绝对定位的DOM元素（<code>node</code>）到指定位置（<code>{line, ch}</code>）的右下角。
-    <code>scrollIntoView</code> 为true时，编辑器将尽可能的让整个元素可见。
-    可以使用DOM函数来移除该小部件（移动到别的位置，或者使用 <code>removeChild</code> 函数）。</dd>
+    <dd>添加一个绝对定位的DOM元素（<code>node</code>）到指定位置（<code>{line, ch}</code>）的右下方。<br/>
+    <code>scrollIntoView</code> 为 true 时，编辑器会确保该元素在可视区域内。<br/>
+    可以用 DOM 函数来删除小部件（如 <code>removeChild</code> 函数）。</dd>
 
     <dt id="addLineWidget"><code><strong>doc.addLineWidget</strong>(line: integer|LineHandle, node: Element, ?options: object) → LineWidget</code></dt>
-    <dd>在某行下面添加一个行内小部件，并将该行后的内容往下移一行。
-    <code>line</code> 为数字或行句柄。
-    <code>node</code> 为DOM元素。
-    可选的 <code>options</code> 为控制该小部件行为的对象，支持的选项如下（默认全部为flase）：
+    <dd>添加行内小部件，行内小部件是填满一整行的，在指定行底部出现的元素。</br>
+    <code>line</code> 是行号数字或行句柄。</br>
+    <code>node</code> 是代表行内小部件的 DOM 元素。</br>
+    支持的 <code>options</code> 如下（全部默认为 flase）：
       <dl>
         <dt><code><strong>coverGutter</strong>: boolean</code></dt>
         <dd>是否覆盖侧边栏。</dd>
 
         <dt><code><strong>noHScroll</strong>: boolean</code></dt>
-        <dd>水平滚动时是否应该固定位置。</dd>
+        <dd>水平滚动时是否固定在最左侧。</dd>
 
         <dt><code><strong>above</strong>: boolean</code></dt>
-        <dd>是否要在该行的上方插入。</dd>
+        <dd>是否出现在顶部。</dd>
 
         <dt><code><strong>handleMouseEvents</strong>: boolean</code></dt>
-        <dd>编辑器是否应该捕获该小组件的鼠标和拖拽事件。
-        默认为false，将由浏览器捕获，或由该小部件绑定的处理函数捕获。</dd>
+        <dd>是否捕获小部件的点击和拖拽事件。<br/>
+        默认为false，将由浏览器捕获，或由绑定的处理函数捕获。</dd>
 
         <dt><code><strong>insertAt</strong>: integer</code></dt>
-        <dd>该小部件默认添加在其他小部件的后方。
-        该选项可以改变该位置（0为最顶层，N为N层的下方）。
-        注意：仅在创建时有用。
+        <dd>默认添加到其他小部件的底部。<br/>
+        该选项用来控制顺序（0 为最顶层，N 为第 N 个小部件的底部）。<br/>
+        注意：仅在创建时有用。</dd>
+
         <dt><code><strong>className</strong>: string</code></dt>
-        <dd>Add an extra CSS class name to the wrapper element
-        created for the widget.</dd>
+        <dd>为小部件添加样式名。</dd>
       </dl>
-    注意：小部件元素为CodeMirror元素的后代，父类元素有可能对小部件产生影响。
-    该函数的返回值为小部件的位置对象，
-    该对象包含指向目标行的 <code>line</code> 属性，和下面的函数：
+    注意：小部件元素包含以 <code>"CodeMirror-"</code> 开头的样式名，有可能会影响小部件的外观。</br>
+    该函数的返回值包含 <code>line</code> 属性，指向小部件的所在行，还有下面两个函数：
       <dl>
         <dt id="widget_clear"><code><strong>clear</strong>()</code></dt>
-        <dd>删除该小部件。</dd>
+        <dd>删除小部件。</dd>
 
         <dt id="widget_changed"><code><strong>changed</strong>()</code></dt>
-        <dd>当修改小部件的DOM元素，影响到高度时调用该函数。
-        该函数强制CodeMirror更新该行的高度。</dd>
+        <dd>修改小部件的 DOM 元素并影响到高度时调用该函数，强制 CodeMirror 更新所在行的高度。</dd>
       </dl>
     </dd>
   </dl>
 
-  <h3 id="api_sizing">尺寸，滚动，定位</h3>
+  <h3 id="api_sizing">尺寸、滚动和定位</h3>
 
   <dl>
     <dt id="setSize"><code><strong>cm.setSize</strong>(width: number|string, height: number|string)</code></dt>
-    <dd>设置编辑器的高度（覆盖<a href="#css-resize">CSS rules</a>）。
-    <code>width</code> 和 <code>height</code> 可以是数字（px）或CSS（如 <code>"100%"</code>）字符串。
-    传递 <code>null</code> 时不会修改尺寸。</dd>
+    <dd>设置编辑器的宽高（覆盖 <a href="#css-resize">CSS 样式</a>）。<br/>
+    <code>width</code> 和 <code>height</code> 可以是数字（代表多少个像素）或 CSS 单位（如 <code>"100%"</code>），
+    任意一项为 <code>null</code> 时表示该项不做修改。</dd>
 
     <dt id="scrollTo"><code><strong>cm.scrollTo</strong>(x: number, y: number)</code></dt>
-    <dd>向指定的方向（px）滚动编辑器。
-    两个参数都可以是 <code>null</code> 或 <code>undefined</code>。
-    </dd>
+    <dd>滚动编辑器到指定位置（像素），两个参数都可以是 <code>null</code> 或 <code>undefined</code> 代表不滚动。</dd>
 
     <dt id="getScrollInfo"><code><strong>cm.getScrollInfo</strong>() → {left, top, width, height, clientWidth, clientHeight}</code></dt>
-    <dd>返回 <code>{left, top, width, height, clientWidth, clientHeight}</code> 对象，
-    包含当前滚动的位置，滚动区域的尺寸，可见区域的尺寸（不含滚动条）。</dd>
+    <dd>获取滚动信息，<code>{left, top, width, height, clientWidth, clientHeight}</code> 对象包含当前的滚动位置，滚动区域的尺寸，可见区域的尺寸（不含滚动条）。</dd>
 
     <dt id="scrollIntoView"><code><strong>cm.scrollIntoView</strong>(what: {line, ch}|{left, top, right, bottom}|{from, to}|null, ?margin: number)</code></dt>
-    <dd>把指定位置滚动到可视区域。
-    <code>what</code> 为 <code>null</code> 时滚动光标到可视区域，
-    为 <code>{line, ch}</code> 时滚动该段落到可视区域，
-    也可以是 {left, top, right, bottom} 像素坐标（编辑器内部坐标），
-    还可以是 <code>{from, to}</code> 对象（包含两个段落位置或两个像素坐标）。
-    <code>margin</code> 参数可选，用来定义指定区域的外边距，可以达到更好的视觉效果。</dd>
+    <dd>把指定位置滚动到可视范围内。</br>
+      <dl>
+        <dt><code>what</code></dt>
+        <dd><code>null</code>：光标。</dd>
+        <dd><code>{line, ch}</code>：坐标。</dd>
+        <dd>{left, top, right, bottom}：区域（像素，编辑器的坐标）。</dd>
+        <dd><code>{from, to}</code>：两个坐标或两个区域。</dd>
+      </dl>
+    <code>margin</code> 给指定区域增加上下间距（像素）。</dd>
 
     <dt id="cursorCoords"><code><strong>cm.cursorCoords</strong>(where: boolean|{line, ch}, mode: string) → {left, top, bottom}</code></dt>
-    <dd>返回 <code>{left, top, bottom}</code> 对象代表光标当前的坐标。
-    <code>mode</code> 为 <code>"local"</code> 时，返回值为相对于文档可编辑区域左上角的坐标，
-    为 <code>"page"</code> 或空值时，返回值为相对于页面左上角的坐标，
-    为 <code>"window"</code> 时，返回值为相对于当前可视窗口（滚动）左上角的坐标。
-    <code>where</code> 为布尔值时，判断是否开始（true）或结束（false）选择，
-    为 <code>{line, ch}</code> 对象时，返回值为相对于该位置的坐标。</dd>
+    <dd>获取光标的坐标。
+      <dl>
+        <dt><code>where</code></dt>
+        <dd>true：选区起始处的坐标。</dd>
+        <dd>false：选区截止处的坐标。</dd>
+        <dd><code>{line, ch}</code>：获取该处的坐标。</dd>
+      </dl>
+      <dl>
+        <dt><code>mode</code></dt>
+        <dd><code>"local"</code>：相对于文档左上角的坐标。</dd>
+        <dd><code>"page"</code> 或 空值：相对于页面左上角的坐标。</dd>
+        <dd><code>"window"</code>：相对于窗口的当前可视区域（滚动的）左上角的坐标。</dd>
+      </dl>
+    </dd>
 
     <dt id="charCoords"><code><strong>cm.charCoords</strong>(pos: {line, ch}, ?mode: string) → {left, right, top, bottom}</code></dt>
-    <dd>返回某字符的位置和尺寸。
-    <code>pos</code> 是 <code>{line, ch}</code> 对象。
-    与 <code>cursorCoords</code> 函数不同的是，该函数会提供字符的尺寸，而不是只有光标所在的位置。</dd>
+    <dd>获取任意字符的坐标和尺寸。<br/>
+    与 <code>cursorCoords</code> 函数不同的是，该函数会返回字符的尺寸，而不是只有坐标。</dd>
 
     <dt id="coordsChar"><code><strong>cm.coordsChar</strong>(object: {left, top}, ?mode: string) → {line, ch}</code></dt>
-    <dd>提供 <code>{left, top}</code> 对象（比如鼠标事件的坐标）返回 <code>{line, ch}</code> 位置对象。
-    可选参数 <code>mode</code> 指定参考系是什么，可以是 <code>"window"</code>，<code>"page"</code> (默认)，<code>"local"</code>。</dd>
+    <dd>基于 <code>{left, top}</code>（比如鼠标事件的坐标）获取对应的 <code>{line, ch}</code> 对象。<br/>
+    <code>mode</code> 是参考系，可以是 <code>"window"</code>、<code>"page"</code>（默认值）或 <code>"local"</code>。</dd>
 
     <dt id="lineAtHeight"><code><strong>cm.lineAtHeight</strong>(height: number, ?mode: string) → number</code></dt>
-    <dd>用给的高度（px）计算行号。
-    <code>mode</code> 参考 <a href="#coordsChar"><code>coordsChar</code></a> 。</dd>
+    <dd>用给的高度（像素）计算行号。<br/>
+    <code>mode</code> 同 <a href="#coordsChar"><code>coordsChar</code></a>。</dd>
 
     <dt id="heightAtLine"><code><strong>cm.heightAtLine</strong>(line: integer|LineHandle, ?mode: string, ?includeWidgets: bool) → number</code></dt>
-    <dd>计算某行距离参考系顶部的高度，参考系（<a href="#coordsChar"><code>coordsChar</code></a>）默认为 <code>"page"</code>。
-    如果该行比当前文档的行号大，将返回最后一行的高度。
-    <code>includeWidgets</code> 为true时，并且该行有行内小部件，将返回第一个小部件上方的高度。</dd>
+    <dd>计算某行的高度，<code>mode</code> 同（<a href="#coordsChar"><code>coordsChar</code></a>）。<br/>
+    给定行大于总行数时，按照实际的最后一行计算。<br/>
+    默认从实际的正文处计起，<code>includeWidgets</code> 为 true 时，并且该行有行内小部件时，从第一个行内小部件出计起。</dd>
 
     <dt id="defaultTextHeight"><code><strong>cm.defaultTextHeight</strong>() → number</code></dt>
-    <dd>返回编辑器默认字体的行高。</dd>
+    <dd>获取默认字体的行高。</dd>
 
     <dt id="defaultCharWidth"><code><strong>cm.defaultCharWidth</strong>() → number</code></dt>
-    <dd>返回编辑器默认字体下'x'字符的宽度。
-    注意：对非等宽字体或非ASCII字符不适用该方法。</dd>
+    <dd>获取默认字体中 'x' 字符的宽度。<br/>
+    注意：对非等宽字体或非ASCII字符无效。</dd>
 
     <dt id="getViewport"><code><strong>cm.getViewport</strong>() → {from: number, to: number}</code></dt>
-    <dd>返回 <code>{from, to}</code> 对象，表示文档当前渲染部分的开始（不包含）和结束（包含）。
-    CodeMirror在处理大文档时，只渲染可见的部分，隐藏其他部分，参考 <a href="#event_viewportChange"><code>viewportChange</code></a> 事件。</dd>
+    <dd>获取文档的渲染范围。<br/>
+    CodeMirror 处理大文档时，只渲染该范围内的正文，参考 <a href="#event_viewportChange"><code>viewportChange</code></a> 事件。</dd>
 
     <dt id="refresh"><code><strong>cm.refresh</strong>()</code></dt>
-    <dd>如果改变了编辑器的尺寸（不包含调整浏览器窗口）或隐藏后重新显示，应该调用该方法来确保编辑器显示正常。
-    参考 <a href="#addon_autorefresh">autorefresh addon</a> 。</dd>
+    <dd>修改了编辑器元素的宽高后，或隐藏编辑器后又要显示时，需要调用该函数来确保编辑器正常显示，
+    参考 <a href="../addons/#addon_autorefresh">autorefresh</a> 插件。</dd>
   </dl>
 
   <h3 id="api_mode">Mode、state 和与 token 有关的函数</h3>
@@ -678,55 +683,52 @@
     <code>precise</code> 在 <code>getTokenAt()</code> 中定义。</dd>
   </dl>
 
-  <h3 id="api_misc">其他函数</h3>
+  <h3 id="api_misc">杂项</h3>
 
   <dl>
     <dt id="operation"><code><strong>cm.operation</strong>(func: () → any) → any</code></dt>
-    <dd>CodeMirror内部会缓存所有的修改，但是执行某些操作只会更新DOM结构。
-    如果需要执行大量的操作，可以使用此函数。
-    该函数会调用传递的函数并缓存所有修改，并且只会在函数返回时更新一次。
-    该函数的返回值为传递函数的返回值。</dd>
+    <dd>CodeMirror 在处理操作时，会先缓存所有修改，然后在处理完后只更新一次 DOM 结构，这样做有助于性能的提升。<br/>
+    当有大量的操作时，应使用该函数来封装所有的操作，这样可以保证 DOM 结构仅被更新一次。<br/>
+    该函数的返回值是回调函数的返回值。</dd>
 
     <dt id="startOperation"><code><strong>cm.startOperation</strong>()</code></dt>
     <dt id="endOperation"><code><strong>cm.endOperation</strong>()</code></dt>
-    <dd>一般情况可以使用上面的 <code>operation</code> 函数。
-    但是如果需要异步缓存操作，或者不能封装成一个回调函数，
-    可以调用 <code>startOperation</code> 来开始缓存，
-    调用 <code>endOperation</code> 来执行更新。
-    注意：如果调用了该函数，但是忘记调用 <code>endOperation</code> ，编辑器将不会执行更新。</dd>
+    <dd>一般情况应使用 <code>operation</code> 函数。<br/>
+    但是，当需要异步缓存操作时，或不能将所有的操作封装为一个回调函数时，可以使用 <code>startOperation</code> 来开始缓存，
+    并使用 <code>endOperation</code> 来结束缓存、更新 DOM。<br/>
+    注意：如果忘记调用 <code>endOperation</code>，将不会更新 DOM。</dd>
 
     <dt id="indentLine"><code><strong>cm.indentLine</strong>(line: integer, ?dir: string|integer)</code></dt>
     <dd>
-    设置某行的缩进。支持的第二个参数如下（默认 <code>"smart"</code>）：
+    判断某行的缩进，第二个参数的可选值如下（默认 <code>"smart"</code>）：
       <dl>
         <dt><code><strong>"prev"</strong></code></dt>
         <dd>与上一行保持一致。</dd>
         <dt><code><strong>"smart"</strong></code></dt>
-        <dd>使用mode支持的智能缩进，如果不支持则使用 <code>"prev"</code>。</dd>
+        <dd>使用 Mode 的智能缩进，不可用时使用 <code>"prev"</code>。</dd>
         <dt><code><strong>"add"</strong></code></dt>
-        <dd>缩进一个<a href="#option_indentUnit">单位</a>。</dd>
+        <dd>增加一个<a href="#option_indentUnit">缩进单位</a>。</dd>
         <dt><code><strong>"subtract"</strong></code></dt>
-        <dd>减小该行的缩进。</dd>
+        <dd>减少一个缩进单位。</dd>
         <dt><code><strong>&lt;integer></strong></code></dt>
-        <dd>添加（正数）或减少（负数）多少缩进。</dd>
+        <dd>增加（正数）或减少（负数）多少个空格。</dd>
       </dl></dd>
 
     <dt id="toggleOverwrite"><code><strong>cm.toggleOverwrite</strong>(?value: boolean)</code></dt>
-    <dd>切换输入（无值）和覆盖（有值）的状态。</dd>
+    <dd>未指定值时，切换插入与覆盖的状态。指定值时，切换为对应的状态。</dd>
 
     <dt id="isReadOnly"><code><strong>cm.isReadOnly</strong>() → boolean</code></dt>
-    <dd>获取编辑器是否只读。</dd>
+    <dd>获取正文是否只读。</dd>
 
     <dt id="lineSeparator"><code><strong>doc.lineSeparator</strong>()</code></dt>
-    <dd>返回使用<a href="#option_lineSeparator">选项</a>设置的行分隔符。
-    当该选项为 <code>null</code> 时，返回 <code>"\n"</code> 。</dd>
+    <dd>获取行分隔符，参考<a href="../config/#option_lineSeparator">配置</a>，默认为 <code>"\n"</code>。</dd>
 
     <dt id="execCommand"><code><strong>cm.execCommand</strong>(name: string)</code></dt>
-    <dd>通过名字执行<a href="#commands">命令</a>。</dd>
+    <dd>执行<a href="../commands/#commands">命令</a>。</dd>
 
     <dt id="posFromIndex"><code><strong>doc.posFromIndex</strong>(index: integer) → {line, ch}</code></dt>
-    <dd>计算并返回编辑器文本中某字符（<code>index</code>，从0开始）的位置（<code>{line, ch}</code> 对象）。
-    如果 <code>index</code> 超出文本的范围，则返回文本的开始位置或结束位置（取决于哪边溢出）。</dd>
+    <dd>计算并返回正文第 <code>index</code>（从 0 开始）个字符的坐标（<code>{line, ch}</code>）。<br/>
+    如果 <code>index</code> 超出正文范围，则返回正文的起始坐标或截止坐标（取决于哪边溢出）。</dd>
 
     <dt id="indexFromPos"><code><strong>doc.indexFromPos</strong>(object: {line, ch}) → integer</code></dt>
     <dd>与 <a href="#posFromIndex"><code>posFromIndex</code></a> 相反。</dd>
@@ -735,91 +737,86 @@
     <dd>使编辑器获得焦点。</dd>
 
     <dt id="phrase"><code><strong>cm.phrase</strong>(text: string) → string</code></dt>
-    <dd>使用<a href="#option_phrases"><code>phrases</code> 选项</a>翻译字符串。</dd>
+    <dd>基于 <a href="../config/#option_phrases"><code>phrases</code></a> 配置翻译给定字符串。</dd>
 
     <dt id="getInputField"><code><strong>cm.getInputField</strong>() → Element</code></dt>
-    <dd>获取编辑器的input元素。
-    可能是textarea或可编辑的div，取决于 <a href="#option_inputStyle"><code>inputStyle</code></a> 选项的值。</dd>
+    <dd>获取编辑器的输入元素。<br/>
+    可能是 TextArea 或可编辑的 Div，取决于 <a href="../config/#option_inputStyle"><code>inputStyle</code></a> 配置。</dd>
 
     <dt id="getWrapperElement"><code><strong>cm.getWrapperElement</strong>() → Element</code></dt>
-    <dd>返回编辑器的DOM元素，可以修改它的尺寸，或者通过删除该元素来删除编辑器实例。</dd>
+    <dd>获取编辑器的 DOM 元素，可以修改元素的尺寸或通过删除该元素来删除编辑器实例。</dd>
 
     <dt id="getScrollerElement"><code><strong>cm.getScrollerElement</strong>() → Element</code></dt>
-    <dd>获取负责编辑器滚动的DOM元素。</dd>
+    <dd>获取负责编辑器滚动的 DOM 元素。</dd>
 
     <dt id="getGutterElement"><code><strong>cm.getGutterElement</strong>() → Element</code></dt>
-    <dd>获取编辑器侧边栏的DOM元素。</dd>
+    <dd>获取编辑器侧边栏的 DOM 元素。</dd>
   </dl>
 
   <h3 id="api_static">静态属性</h3>
-  <p><code>CodeMirror</code> 对象提供了一些非常有用的属性。</p>
+  <p><code>CodeMirror</code> 的静态属性。</p>
 
   <dl>
     <dt id="version"><code><strong>CodeMirror.version</strong>: string</code></dt>
-    <dd>返回核心库的版本号。
-    版本号由三个数字组成（<code>"major.minor.patch"</code>），
-    <code>patch</code> 为0时表示稳定版，其他为先行版。</dd>
+    <dd>获取版本号。<br/>
+    版本号由三个数字组成（<code>"major.minor.patch"</code>），<code>patch</code> 为 0 时表示稳定版，其他为先行版。</dd>
 
     <dt id="fromTextArea"><code><strong>CodeMirror.fromTextArea</strong>(textArea: TextAreaElement, ?config: object)</code></dt>
-    <dd>另外一种初始化编辑器的方法。
-    第一个参数为DOM元素textare，第二个可选参数为配置对象。
-    该函数会使用CodeMirror实例覆盖textare，同时也会将编辑器正文写入textarea。
-    textarea中的文本将会作为编辑器的文本。
-    通过此函数创建的实例有三个额外函数：
+    <dd>另一种初始化编辑器的方法。<br/>
+    第一个参数为 TextArea 元素，第二个参数为配置对象。<br/>
+    该函数会用 CodeMirror 实例替换 TextArea，同时也会将编辑器的正文同步给 TextArea，来确保在提交表单时 TextArea 中包含正文。<br/>
+    使用该函数创建的实例包含以下额外的函数：
     <dl>
       <dt id="save"><code><strong>cm.save</strong>()</code></dt>
-      <dd>拷贝编辑器的内容到textarea。</dd>
+      <dd>拷贝正文到 TextArea。</dd>
 
       <dt id="toTextArea"><code><strong>cm.toTextArea</strong>()</code></dt>
-      <dd>删除编辑器，转换为原始的textare（带有内容）。
-      如果动态删除由`fromTextArea`创建的实例，并且没有删除所在的form表单时，
-      必须先调用`toTextArea`删除编辑器，否则`"submit"`时会造成内存泄漏。</dd>
+      <dd>删除编辑器实例，还原最初的 TextArea（带有正文）。<br/>
+      在删除使用 <code>fromTextArea</code> 创建的实例时，如果没有销毁原 TextArea 的 Form 表单，
+      则必须调用 <code>toTextArea</code> 来删除编辑器实例，否则表单在提交时会造成内存泄漏。</dd>
 
       <dt id="getTextArea"><code><strong>cm.getTextArea</strong>() → TextAreaElement</code></dt>
-      <dd>获取编辑器实例绑定的textare。</dd>
+      <dd>获取原 TextArea。</dd>
     </dl>
     </dd>
 
     <dt id="defaults"><code><strong>CodeMirror.defaults</strong>: object</code></dt>
-    <dd>获取所有<a href="#config">配置</a>的默认值。
-    可以修改该返回值来编辑默认选项（已经创建的编辑器实例不受影响）。</dd>
+    <dd>获取<a href="../config/#config">配置</a>的默认值。<br/>
+    默认配置是可以修改的（已创建的实例不受影响）。</dd>
 
     <dt id="defineExtension"><code><strong>CodeMirror.defineExtension</strong>(name: string, value: any)</code></dt>
-    <dd>为CodeMirror的API扩充额外的函数。
-    为所有后来创建的编辑器实例添加提供的值（一般为函数）。</dd>
+    <dd>扩充 CodeMirror 的 API，在此之后创建的实例可以使用新增的 API。</dd>
 
     <dt id="defineDocExtension"><code><strong>CodeMirror.defineDocExtension</strong>(name: string, value: any)</code></dt>
-    <dd>为 <a href="#Doc"><code>Doc</code></a> 扩充额外的函数，类似 <a href="#defineExtension"><code>defineExtension</code></a>。</dd>
+    <dd>扩充 <a href="#Doc"><code>Doc</code></a> 的 API，同 <a href="#defineExtension"><code>defineExtension</code></a>。</dd>
 
-    <dt id="defineOption"><code><strong>CodeMirror.defineOption</strong>(name: string,
-    default: any, updateFunc: function)</code></dt>
-    <dd>为CodeMirror扩充新的配置。
-    当编辑器初始化或使用 <a href="#setOption"><code>setOption</code></a> 函数修改配置时会调用 <code>updateFunc</code>。</dd>
+    <dt id="defineOption"><code><strong>CodeMirror.defineOption</strong>(name: string, default: any, updateFunc: function)</code></dt>
+    <dd>扩充 CodeMirror 的配置。<br/>
+    编辑器初始化时或使用 <a href="#setOption"><code>setOption</code></a> 函数修改配置时会调用 <code>updateFunc</code>。</dd>
 
     <dt id="defineInitHook"><code><strong>CodeMirror.defineInitHook</strong>(func: function)</code></dt>
-    <dd>当自定义扩展需要在编辑器初始化后执行一些操作时，可以使用该函数。
-    编辑器的实例创建后会调用传递的函数（参数为编辑器实例本身）。</dd>
+    <dd>当需要在编辑器初始化后执行一些操作时，可以使用该函数来实现。<br/>
+    <code>func</code> 函数会在初始化后调用，参数为编辑器实例。</dd>
 
     <dt id="registerHelper"><code><strong>CodeMirror.registerHelper</strong>(type: string, name: string, value: helper)</code></dt>
-    <dd>在指定命名空间（<code>type</code>）使用 <code>name</code> 创建一个帮助变量。
-    使用 <code>type</code> 为 <code>CodeMirror</code> 对象创建一个属性（如果没有），指向一个map对象。
-    比如：调用 <code>CodeMirror.registerHelper("hint", "foo", myFoo)</code> 后 <code>CodeMirror.hint.foo</code> 的值为 <code>myFoo</code>。</dd>
+    <dd>在 <code>type</code> 命名空间中创建一个名为 <code>name</code> 的帮助变量。<br/>
+    该函数在 <code>CodeMirror</code> 对象中创建名为 <code>type</code> 的属性，指向一个 Map 对象。</br>
+    例如：执行 <code>CodeMirror.registerHelper("hint", "foo", myFoo)</code> 后，<code>CodeMirror.hint.foo</code> 的值为 <code>myFoo</code>。</dd>
 
     <dt id="registerGlobalHelper"><code><strong>CodeMirror.registerGlobalHelper</strong>(type: string, name: string, predicate: fn(mode, CodeMirror), value: helper)</code></dt>
-    <dd>类似 <a href="#registerHelper"><code>registerHelper</code></a> ，但是该函数会将帮助值设置为全局的，
-    本mode或编辑器调用 <code>predicate</code> 都返回 true，该帮助值包含在 <a href="#getHelpers"><code>getHelpers</code></a> 里。</dd>
+    <dd>类似 <a href="#registerHelper"><code>registerHelper</code></a>，
+    but also registers this helper as 'global',
+    meaning that it will be included by <a href="#getHelpers"><code>getHelpers</code></a> whenever the given <code>predicate</code> returns true when called with the local mode and editor.</dd>
 
     <dt id="Pos"><code><strong>CodeMirror.Pos</strong>(line: integer, ?ch: integer, ?sticky: string)</code></dt>
-    <dd>光标对象的构造函数。
-    <code>sticky</code> 默认为null，可以是 <code>"before"</code> 或 <code>"after"</code> 来指定在字符前或后。</dd>
+    <dd>光标的构造函数。<br/>
+    <code>sticky</code> 默认为 null，可以是 <code>"before"</code> 或 <code>"after"</code>，用来说明坐标的坐标应在字符前还是字符后。</dd>
 
     <dt id="changeEnd"><code><strong>CodeMirror.changeEnd</strong>(change: object) → {line, ch}</code></dt>
-    <dd>计算一次修改的结束位置（参数与 <a href="#event_change">事件处理</a> 函数的参数相同，
-    带有 <code>from</code>，<code>to</code> 和 <code>text</code> 属性的对象）。
-    返回值为应用修改后，修改区域的结束位置。</dd>
+    <dd>计算修改范围末尾处的坐标。参数包含 <code>from</code>、<code>to</code> 和 <code>text</code>，同 <a href="../events/#event_change">change</a> 事件。</dd>
 
     <dt id="countColumn"><code><strong>CodeMirror.countColumn</strong>(line: string, index: number, tabSize: number) → number</code></dt>
-    <dd>用指定制表符计算指定字符串下标的列位置。</dd>
+    <dd>计算字符串指定下标处的列数（以 tabSize 计）。</dd>
   </dl>
 </section>
 
